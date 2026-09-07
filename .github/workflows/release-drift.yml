@@ -114,7 +114,8 @@ jobs:
               echo "missing, and the tag's own message is the notes:"
               echo
               echo '```bash'
-              echo "gh release create v$version --verify-tag --notes-from-tag --latest"
+              echo "git tag -l --format='%(contents)' v$version | node scripts/release-notes.js v$version > /tmp/n.md"
+              echo "gh release create v$version --verify-tag --notes-file /tmp/n.md --latest"
               echo '```'
               echo
               echo "Or, if the bump was premature, revert the version in \`package.json\`."

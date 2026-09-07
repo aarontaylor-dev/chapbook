@@ -55,6 +55,7 @@
     "chapbook-theme.js",
     "src/measure.js",
     "src/conformance.js",
+    "scripts/release-notes.js",
     "audit.js",
     "system.md",
     "llms.txt",

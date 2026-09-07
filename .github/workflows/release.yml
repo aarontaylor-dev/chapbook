@@ -127,16 +127,37 @@ jobs:
       # failed to reach the registry is worse than no Release: it is a link
       # people follow to something that is not there.
       #
-      # --notes-from-tag uses the annotated tag's own message, so the release
-      # notes and the tag cannot drift. Write the reasoning once, in the tag.
+      # The notes come from the annotated tag, so the reasoning is written once
+      # and the two cannot drift — but NOT via --notes-from-tag, which passes
+      # the message through unchanged.
+      #
+      # The two formats disagree about newlines. A tag message is hard-wrapped
+      # near 76 columns because it is read in a terminal by `git show`, which
+      # does not reflow. GitHub renders a release body with hard line breaks
+      # PRESERVED, so a single newline becomes a <br> — and a message wrapped
+      # for the terminal lands on the releases page as ragged forced breaks at
+      # a width the reader never chose. scripts/release-notes.js translates
+      # between them, joining prose while leaving lists and code alone.
       - name: Create the GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          version="${GITHUB_REF_NAME#v}"
+          # The tag object itself, not just the ref it points at — checkout
+          # fetches the ref, and %(contents) needs the annotation.
+          git fetch --force origin "refs/tags/$GITHUB_REF_NAME:refs/tags/$GITHUB_REF_NAME"
+
+          message="$(git tag -l --format='%(contents)' "$GITHUB_REF_NAME")"
+          if [ -z "$message" ]; then
+            echo "::error::$GITHUB_REF_NAME is a lightweight tag and carries no message — the release notes come from it"
+            exit 1
+          fi
+
+          printf '%s\n' "$message" | node scripts/release-notes.js "$GITHUB_REF_NAME" > /tmp/notes.md
+          echo "Release notes:"; cat /tmp/notes.md
+
           gh release create "$GITHUB_REF_NAME" \
             --verify-tag \
-            --notes-from-tag \
+            --notes-file /tmp/notes.md \
             --title "$GITHUB_REF_NAME" \
             --latest
 
