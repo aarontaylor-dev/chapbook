@@ -445,9 +445,19 @@ checks for Rules 01, 02, 03 and 09 are in `src/rules.js` beside it.
 - **Obey Rule 02.** If your addition needs a border-radius or a shadow, it is
   probably a card, and the system does not have cards.
 - **Do not add a third rule weight** (Rule 03) or a third face (Rule 01).
-- **A component earns its place after two builds**, not one. That is why
-  margin notes, form controls, styled tables and grid utilities are not in
-  v1 — each is a real gap, and none has been built twice.
+- **A component earns its place after two builds**, not one. That is why form
+  controls and grid utilities are not here — each is a real gap, and neither
+  has been built twice. Form controls in particular are the point at which
+  this stops being a document system.
+
+**Queued for 1.1.0:** styled tables, a sub-heading inside `.body`, a bordered
+text control, lists and blockquotes as components, a container query for the
+rail, `forced-colors` support, `::selection` — and **margin notes**, which are
+admitted ahead of the two-build rule on purpose. The rail is already half of
+that component: Rule 04 is a sticky column carrying mono metadata, and a margin
+note is the same column carrying prose. The exception and its reasoning are in
+the changelog, because an exception written down is a different object from a
+rule that quietly stopped being followed.
 
 ## Versioning
 

@@ -7,6 +7,69 @@ Versions follow the system, not the site. A **token rename or a removed
 primitive** bumps the major, because those are the only two changes that can
 break a site downstream. Everything else is additive.
 
+## Unreleased — 1.1.0
+
+The additive release. 1.0.1 was fixes only and added no class names; this is
+where the components go, and `/v1/` picks it up without anyone changing a
+`<link>`.
+
+### Margin notes
+
+**Admitted ahead of the two-build rule, deliberately.** They exist on Working
+Notes and nowhere else, so by the rule that kept v1 small they should still be
+waiting. Recording the exception rather than quietly making it:
+
+The rail is already half of this component. Rule 04 is a sticky column beside
+the content carrying mono metadata; a margin note is the same column carrying
+prose. The structural work — the grid, the stickiness, the `align-self: start`
+that makes it work at all, the collapse to a line above the content below 52rem
+— is built, shipped and documented. What is missing is a second thing to put in
+a column that already exists.
+
+That is the difference between this and the other held-back components. Tables
+and form controls would each be new machinery. This is a second tenant for
+machinery the system already carries, which is a much weaker claim on the
+system's size, and the two-build rule exists to police size.
+
+The rule still stands for everything else. An exception that is written down,
+with its reasoning, is a different object from a rule that quietly stopped
+being followed.
+
+### The rest
+
+Each of these reached two builds honestly, most of them across `specimen.css`
+and the v1.0.1 review page.
+
+- **A sub-heading inside `.body`.** An `<h3>` currently measures 19.89px at
+  weight 400 against 17px body text, which is a difference no reader sees. One
+  class, not a scale — a scale is the beginning of a framework.
+- **Tables.** Held at one build in v1.0.0 with the note that the specimen
+  styled them in its own stylesheet. That was right then. Hairlines only, a 2px
+  ink head rule, and no zebra fill, because the system has one fill and it is
+  the row hover.
+- **A bordered text control.** Rule 08 describes the pattern and ships half of
+  it: `.theme` is the icon form and lives in the system, `.skinbtn` is the text
+  form and lives in `specimen.css`. Pressed state is a border in ink.
+- **Lists and blockquotes as styled components.** v1.0.1 fixed their spacing
+  inside `.body` but gave them no treatment of their own.
+- **A container query for the rail.** The 52rem collapse is measured against
+  the viewport, so the rail stays a 10rem column inside a 24rem sidebar. Add
+  `@container` alongside the media query rather than replacing it.
+- **`forced-colors` and `prefers-contrast`.** The gap that sits least
+  comfortably beside Rule 07. A system that fails its own build over 4.5:1 has
+  nothing to say about Windows High Contrast, where the grain overlay, the
+  hairline redraw on `.row::after` and the 1px borders are exactly what forced
+  colours disturb.
+- **`::selection`.** Two declarations from existing tokens. Currently the
+  browser default blue is the one colour on the page the palette did not
+  choose.
+
+### Still held
+
+- **Form controls.** No site in the family has a form, and a control set is
+  where this stops being a document system.
+- **Grid utilities.** The system has one layout. A second is a framework.
+
 ## 1.0.1 — 7 September 2026
 
 A review release. No new class names, no new components, and four more rules
