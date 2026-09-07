@@ -56,9 +56,14 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      # v7 matters here rather than being merely current: it removed the dummy
+      # NODE_AUTH_TOKEN export that earlier versions wrote into .npmrc. That
+      # placeholder points at an environment variable this workflow no longer
+      # sets, which is the classic way an OIDC publish fails with an auth error
+      # that has nothing to do with OIDC.
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org
