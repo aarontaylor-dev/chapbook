@@ -209,6 +209,22 @@ the CSP is only exercised on Pages.
 A **token rename or a removed primitive** bumps the major. Those are the only
 two changes that can break a site downstream; everything else is additive.
 
+A release is three steps, and the third is the one that publishes:
+
+1. Bump `version` in `package.json`, and write the release into the changelog.
+2. Commit and push to `main`. **This never publishes.**
+3. `git tag -a v1.1.0 -m "Chapbook v1.1.0" && git push origin v1.1.0`
+
+`release.yml` triggers on the tag and refuses to publish if the tag disagrees
+with `package.json`, or if that version already exists on npm.
+
+`release-drift.yml` guards the other direction, which is the one that actually
+bit: it runs daily and fails if `main` names a version that has no tag or is
+not on npm. It is a schedule rather than a push trigger on purpose — right
+after a version-bump merge, "no tag yet" is the correct state, and a check that
+went red every time a release went right would be trained out of people within
+a month. The fault worth catching is drift that persists.
+
 [CHANGELOG.md](CHANGELOG.md) records why a thing changed, not only that it did.
 
 ## Why "Chapbook"

@@ -115,6 +115,27 @@ The components. Scoped for 1.1.0 and moved here unbuilt, because 1.1.0 filled
 up with the print and provenance work instead. Nothing here has changed except
 the number it is waiting on.
 
+### The release-drift guard
+
+1.1.0 was bumped, changelogged, merged and deployed — and never tagged.
+`release.yml` triggers on `push: tags`, so it was never invoked. Nothing
+failed, because nothing ran, and for a while `main` and chapbook.page
+advertised 1.1.0 while `npm i chapbook` still gave you 1.0.1. The only thing
+between that and it staying true indefinitely was somebody remembering.
+
+`release-drift.yml` runs daily and fails when `main` names a version that has
+no matching tag, or that is not on the registry. Both are checked, because a
+tag does not prove a publish: the workflow can fail after the tag is pushed,
+and then the tag exists and the package does not.
+
+It is a schedule rather than a push trigger, and that is the whole design.
+Immediately after a version-bump merge, "main names a version with no tag" is
+the correct state — the tag cannot exist until the merge commit does, and a
+rebase merge does not settle the hash until afterwards. A push-triggered check
+would go red at exactly the moment a release was going right, which is how a
+red build stops meaning anything. The fault worth catching is drift that
+persists, and a day is soon enough to catch it.
+
 ### Margin notes
 
 **Admitted ahead of the two-build rule, deliberately.** They exist on Working

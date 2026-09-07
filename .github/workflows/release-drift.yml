@@ -1,0 +1,103 @@
+# Does main still claim a version it never shipped?
+#
+# release.yml already guards the other direction: a tag that disagrees with
+# package.json cannot publish. This is the direction that was open, and it is
+# the one that actually bit.
+#
+# WHAT HAPPENED. 1.1.0 was bumped in package.json, written up in the changelog,
+# merged to main and deployed to the site — and never tagged. The release
+# workflow triggers on `push: tags`, so it was never invoked. Nothing failed,
+# because nothing ran. For a while main and chapbook.page advertised 1.1.0
+# while npm still served 1.0.1, and the only thing standing between that and
+# staying true indefinitely was somebody remembering.
+#
+# WHY THIS IS A SCHEDULE AND NOT A PUSH TRIGGER. Immediately after a
+# version-bump merge, "main names a version with no tag" is the correct and
+# expected state — the tag cannot be created until the merge commit exists,
+# and under a rebase merge its hash is not known until after the merge. A check
+# on push would therefore fail every release at exactly the moment the release
+# is going right, which is how a red build gets trained out of people.
+#
+# The fault we are catching is not momentary drift, it is drift that PERSISTS.
+# A daily cadence ignores the former and surfaces the latter within a day,
+# which is soon enough for a project that releases occasionally, and never
+# cries wolf. Run it by hand from the Actions tab if you want an answer now.
+
+name: Release drift
+
+on:
+  schedule:
+    # 08:00 UTC daily. Cron here is best-effort — GitHub delays scheduled runs
+    # under load, sometimes by a lot — which is fine, because nothing about
+    # this check is time-critical.
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    steps:
+      # fetch-depth: 0 because the default shallow clone brings no tags, and
+      # the absence of a tag is the entire thing being tested. A shallow clone
+      # would report every release as missing.
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: main's version must be tagged and published
+        run: |
+          name="$(node -p "require('./package.json').name")"
+          version="$(node -p "require('./package.json').version")"
+          echo "main declares $name@$version"
+
+          failed=0
+
+          # 1. The tag. This is what triggers release.yml, so a missing tag is
+          #    the proximate cause of an unpublished release rather than a
+          #    symptom of one.
+          if git rev-parse -q --verify "refs/tags/v$version" >/dev/null; then
+            echo "tag v$version exists"
+          else
+            echo "::error::main declares $version but there is no v$version tag — the release was never triggered"
+            failed=1
+          fi
+
+          # 2. The registry. Checked separately because the tag existing does
+          #    not prove the publish succeeded; the workflow can fail after the
+          #    tag is pushed, and then the tag is there and the package is not.
+          if npm view "$name@$version" version >/dev/null 2>&1; then
+            echo "$name@$version is on npm"
+          else
+            echo "::error::$name@$version is not published on npm"
+            failed=1
+          fi
+
+          # The site deploys from main, so a gap here is not merely internal
+          # bookkeeping: chapbook.page/v$version/ is already live and serving a
+          # stylesheet that `npm i chapbook` cannot get you.
+          if [ "$failed" = "1" ]; then
+            {
+              echo "### Release drift"
+              echo
+              echo "\`main\` declares **$name@$version**, and that version is not fully released."
+              echo
+              echo "The site deploys from \`main\`, so \`/v$version/\` is already live while npm is behind."
+              echo
+              echo "Finish it:"
+              echo
+              echo '```bash'
+              echo "git tag -a v$version -m \"Chapbook v$version\" && git push origin v$version"
+              echo '```'
+              echo
+              echo "Or, if the bump was premature, revert the version in \`package.json\`."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          exit $failed
