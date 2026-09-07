@@ -45,7 +45,9 @@ nothing to initialise.
     DOES something gets a border; links that only GO somewhere do not. A
     pressed state is a border in ink, never a fill.
 09. It prints. Ink on white, controls gone, structural blocks kept whole, and
-    href expanded after content links. Every token in the print block carries
+    href expanded after content links. The sheet is set rather than left to the
+    browser: @page { margin: 18mm } outside the print query, orphans: 3 and
+    widows: 3 on p/li/dd/blockquote, break-after: avoid on h1-h4. Every token in the print block carries
     !important: a media query does not change specificity, so :root at (0,1,0)
     would otherwise lose to every theme and skin selector at (0,2,0). A skin
     must never mark a token !important.

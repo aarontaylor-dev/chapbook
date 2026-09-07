@@ -16,6 +16,13 @@
 /chapbook-theme.js
   Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=3600
+# The social card. Fetched by scrapers on other origins rather than by the
+# page, so it carries CORS like the distributable does. Cached for a day: it
+# changes about as often as the logo does, and the networks cache it anyway.
+/og.png
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=86400
+
 /system.md
   Access-Control-Allow-Origin: *
   Content-Type: text/markdown; charset=utf-8
@@ -35,6 +42,9 @@
   Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=31536000, immutable
 /v1.0.1/*
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=31536000, immutable
+/v1.1.0/*
   Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=31536000, immutable
 /v1/*

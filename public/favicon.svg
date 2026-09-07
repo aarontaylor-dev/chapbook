@@ -1,7 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" fill="#fcfcfc"/>
-  <rect x="5" y="7" width="22" height="2" fill="#111"/>
-  <rect x="5" y="14" width="22" height="1" fill="#111" opacity=".45"/>
-  <rect x="5" y="19" width="22" height="1" fill="#111" opacity=".45"/>
-  <rect x="5" y="24" width="22" height="2" fill="#111"/>
+  <!-- Rule 03 as a mark: 2px opens and closes, 1px separates the peers
+       between. Both palettes are declared because a favicon is painted
+       against the browser's chrome, not against the page, and a fixed light
+       ground turns into a white block in a dark tab, in dark GitHub, and in
+       every dark-mode bookmark bar. The four colours are the paper and ink
+       tokens of the neutral skin; keep them in step with chapbook.css. -->
+  <style>
+    .paper { fill: #fcfcfc; }
+    .ink   { fill: #111; }
+    @media (prefers-color-scheme: dark) {
+      .paper { fill: #111; }
+      .ink   { fill: #ededed; }
+    }
+  </style>
+  <rect class="paper" width="32" height="32"/>
+  <rect class="ink" x="5" y="7" width="22" height="2"/>
+  <rect class="ink" x="5" y="14" width="22" height="1" opacity=".45"/>
+  <rect class="ink" x="5" y="19" width="22" height="1" opacity=".45"/>
+  <rect class="ink" x="5" y="24" width="22" height="2"/>
 </svg>

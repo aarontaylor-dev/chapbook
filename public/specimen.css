@@ -182,12 +182,66 @@
    a printed copy carries every palette rather than whichever one happened to
    be on screen. */
 
+/* --- For / not for -------------------------------------------------------
+   Two stacks of the same row. No fill and no border box around either column:
+   the hairline between rows is the only separation, which is Rule 02 applied
+   to a component that every other system would have drawn as two cards. */
+
+.forpair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 0 2.5rem;
+  margin-top: 1.75rem;
+}
+
+.forcol .label { margin-bottom: 0.35rem; }
+
+.forrow {
+  padding: 0.8rem 0;
+  border-top: 1px solid var(--rule);
+}
+
+.forcol .forrow:first-of-type { border-top: 2px solid var(--ink); }
+
+.forrow-t {
+  margin: 0;
+  color: var(--ink);
+}
+
+.forrow-d {
+  margin: 0.15rem 0 0;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+/* The one sentence the page is willing to be reduced to. A 2px rule opens it,
+   which is the weight the system reserves for opening a document. */
+.claim {
+  margin-top: 2rem;
+  padding-top: 1.35rem;
+  border-top: 2px solid var(--ink);
+  max-width: var(--measure);
+  font-size: 1.0625rem;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
 @media print {
   .skinpick { display: none !important; }
   .skinpanel { display: block !important; }
   .skinpanel[hidden] { display: block !important; }
   .rule,
-  .tbl tr { break-inside: avoid; }
+  .tbl tr,
+  .forrow,
+  .claim { break-inside: avoid; }
+
+  /* Two columns at 174mm of text gives about 46 characters a line, which is
+     below the floor a measure should hold. On paper the pair becomes one
+     column and the two lists read in sequence — For, then Not for, which is
+     the order they are argued in anyway. */
+  .forpair { display: block; }
+  .forcol + .forcol { margin-top: 1.25rem; }
   .tablewrap { overflow-x: visible; }
   .tbl { white-space: normal; font-size: 8pt; }
 }

@@ -6,7 +6,7 @@
  * from src/measure.js and are numbers.
  */
 
-import { site, hero, rules, skins, typeScale, files } from './content.js';
+import { site, hero, purpose, rules, skins, typeScale, files } from './content.js';
 
 const esc = (s) =>
   String(s)
@@ -78,13 +78,57 @@ const heroBlock = () => `
       </div>`;
 
 /*
+ * For and not-for, side by side, because the second column is the one that
+ * does the work. A list of capabilities invites the reader to check whether
+ * their case is covered; a list of exclusions tells them to leave, which is
+ * the kinder outcome when the answer is no.
+ *
+ * No new machinery: two stacks of the same label-and-prose pair the system
+ * already sets everywhere else.
+ */
+const purposeBlock = () =>
+  block({
+    n: 1,
+    id: 'for',
+    heading: 'What it is for',
+    body: `          <p class="lede">${purpose.lede}</p>
+
+          <div class="forpair">
+            <div class="forcol">
+              <p class="label">For</p>
+${purpose.for
+  .map(
+    ([t, d]) => `              <div class="forrow">
+                <p class="forrow-t">${t}</p>
+                <p class="forrow-d">${d}</p>
+              </div>`
+  )
+  .join('\n')}
+            </div>
+            <div class="forcol">
+              <p class="label">Not for</p>
+${purpose.not
+  .map(
+    ([t, d]) => `              <div class="forrow">
+                <p class="forrow-t">${t}</p>
+                <p class="forrow-d">${d}</p>
+              </div>`
+  )
+  .join('\n')}
+            </div>
+          </div>
+
+          <p class="claim">${purpose.claim}</p>`,
+  });
+
+/*
  * The nine rules. Not an index — nothing here is a link — so it uses the row
  * anatomy without the row's affordances: mono number, title in the display
  * face, prose, and a mono line carrying the implementation.
  */
 const rulesBlock = () =>
   block({
-    n: 1,
+    n: 2,
     id: 'rules',
     heading: 'The rules',
     body: `          <p class="lede">Nine rules, each already followed by two independently built sites before it was written down here. A rule that has survived one build is a preference; these survived two, with different palettes and different faces.</p>
@@ -140,7 +184,7 @@ ${p.tokens
 
 const tokensBlock = (palettes) =>
   block({
-    n: 2,
+    n: 3,
     id: 'tokens',
     heading: 'Tokens',
     body: `          <p class="lede">Eight colour tokens, and the names are the contract. Change every value you like; keep the names, so a diff between two sites built on this system shows only the differences that were intended.</p>
@@ -178,7 +222,7 @@ ${paletteTable(palettes.find((p) => p.id === s.id))}
 
 const typeBlock = () =>
   block({
-    n: 3,
+    n: 4,
     id: 'type',
     heading: 'Type',
     body: `          <p class="lede">Two faces do all the work. If a piece of text tells you <em>what kind of thing</em> you are looking at, it is mono, uppercase and tracked. If it <em>says something</em>, it is the language face. That test decides every case, which is why the system needs no third face.</p>
@@ -207,7 +251,7 @@ ${typeScale
 
 const componentsBlock = () =>
   block({
-    n: 4,
+    n: 5,
     id: 'components',
     heading: 'Components',
     body: `          <p class="lede">Every component below is live. Hover a row to see Rule 05, press the toggle in the masthead to see Rule 06, and print the page to see Rule 09.</p>
@@ -231,7 +275,7 @@ ${row({ status: 'External', title: 'A row that leaves', href: site.repo, desc: '
 
 const takeBlock = () =>
   block({
-    n: 5,
+    n: 6,
     id: 'take',
     heading: 'Take it',
     body: `          <p class="lede">There is no install step, no package to configure and nothing to initialise. Link one file and use the class names.</p>
@@ -302,7 +346,7 @@ ${files.map((f) => row({ ...f, external: f.href.startsWith('http') })).join('\n'
 
 const versionBlock = () =>
   block({
-    n: 6,
+    n: 7,
     id: 'version',
     heading: 'Version',
     body: `          <p class="lede">The <em>system</em> carries the version, not the site. <code>/v${site.version}/</code> never changes, so a page that links it never breaks.</p>
@@ -320,7 +364,28 @@ ${row({ status: `v${site.version}`, title: 'Changelog', href: `${site.repo}/blob
 
 /* ----------------------------------------------------------------- shell -- */
 
-const head = ({ title, description, canonical, noindex, themeScript }) => `<meta charset="utf-8">
+/*
+ * The card. `og` arrives from build.js, which has looked on disk: either the
+ * measured dimensions of public/og.png or null.
+ *
+ * The card type is conditional on the file existing, and that is the whole
+ * point of doing this in the build rather than by hand. `summary_large_image`
+ * promises a 1200x630 image; a page that claims it and then serves no image
+ * renders as a broken panel on some networks and silently degrades on others,
+ * which is worse than the small card it replaced. So the claim and the asset
+ * are decided together, from one fact, and cannot drift apart.
+ */
+const card = (og) =>
+  og
+    ? `<meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" content="${site.url}og.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="${og.width}">
+<meta property="og:image:height" content="${og.height}">
+<meta property="og:image:alt" content="${esc(og.alt)}">`
+    : `<meta name="twitter:card" content="summary">`;
+
+const head = ({ title, description, canonical, noindex, themeScript, og }) => `<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${title}</title>
 ${noindex ? '<meta name="robots" content="noindex">' : `<meta name="description" content="${description}">\n<link rel="canonical" href="${canonical}">`}
@@ -329,7 +394,7 @@ ${noindex ? '<meta name="robots" content="noindex">' : `<meta name="description"
 <meta property="og:title" content="${title}">
 <meta property="og:description" content="${description}">
 <meta property="og:url" content="${canonical}">
-<meta name="twitter:card" content="summary">
+${card(og)}
 
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 
@@ -360,21 +425,23 @@ const footer = () => `
     <footer class="wrap">
       <div class="foot">
         <b>${site.brand} v${site.version}</b>
-        <span>MIT. Take it, change it, do not credit me.</span>
+        <span>MIT. Take it, change it, do not credit me. <a href="/colophon">Colophon</a>.</span>
       </div>
     </footer>`;
 
 /* ----------------------------------------------------------------- pages -- */
 
-export function indexPage({ palettes, themeScript, demoScript }) {
+export function indexPage({ palettes, themeScript, demoScript, og }) {
   return shell({
     headHtml: head({
       title: `${site.title} — a small CSS system`,
       description: site.description,
       canonical: site.url,
       themeScript,
+      og,
     }),
     bodyHtml: `${masthead([
+      ['#for', 'For'],
       ['#rules', 'Rules'],
       ['#tokens', 'Tokens'],
       ['#components', 'Components'],
@@ -383,6 +450,7 @@ export function indexPage({ palettes, themeScript, demoScript }) {
 
     <main class="wrap" id="main">
 ${heroBlock()}
+${purposeBlock()}
 ${rulesBlock()}
 ${tokensBlock(palettes)}
 ${typeBlock()}
@@ -420,6 +488,120 @@ ${row({ status: 'Back', title: 'The system', href: '/', meta: 'chapbook.page' })
 ${row({ status: 'Required', title: 'chapbook.css', href: '/chapbook.css', meta: 'the whole thing' })}
 ${row({ status: 'For agents', title: 'system.md', href: '/system.md', meta: 'the chapbook spec' })}
           </nav>`,
+})}
+    </main>
+${footer()}`,
+  });
+}
+
+/*
+ * The colophon.
+ *
+ * A real convention of the object this system is named after: the note at the
+ * back saying who set the thing, in what, and on what. It is the natural home
+ * for the facts that are true of the whole system rather than of any one
+ * section — the faces, the sheet, the measured floors, the licence — and it
+ * keeps them off the specimen, which is already carrying its own weight.
+ *
+ * Every number on it is measured at build time. Nothing here is typed by hand,
+ * for the same reason nothing in the token table is.
+ */
+export function colophonPage({ palettes, themeScript }) {
+  const setting = [
+    ['Mono', 'ui-monospace, SF Mono, Menlo, Consolas — a system stack, deliberately'],
+    ['Language', 'ui-sans-serif, system-ui — the site&rsquo;s own face, and the only one it should change'],
+    ['Measure', '34em, expressed in em so it tracks the type rather than the window'],
+    ['Rail', '10rem, sticky, collapsing below 52rem'],
+    ['Page', '62rem maximum, gutter clamped 1.25–2.75rem'],
+  ];
+
+  const sheet = [
+    ['Sheet margin', '18mm, set by @page rather than left to the print dialogue'],
+    ['Body', '10.5pt on 1.4 — ten and a half on fourteen point seven'],
+    ['Orphans and widows', 'Three lines, the conventional floor'],
+    ['Breaks', 'Headings do not end a sheet; blocks and rows do not split'],
+    ['Palette', 'Ink on white, grain to zero, every declaration !important'],
+  ];
+
+  const pair = (rows) => rows
+    .map(
+      ([t, d]) => `              <div class="forrow">
+                <p class="forrow-t">${t}</p>
+                <p class="forrow-d">${d}</p>
+              </div>`
+    )
+    .join('\n');
+
+  return shell({
+    headHtml: head({
+      title: `Colophon — ${site.title}`,
+      description: `How ${site.title} v${site.version} is set: the faces, the sheet, and the measured contrast floors for every palette it ships.`,
+      canonical: `${site.url}colophon`,
+      themeScript,
+    }),
+    bodyHtml: `${masthead([['/#for', 'For'], ['/#rules', 'Rules'], ['/#take', 'Take it']])}
+
+    <main class="wrap" id="main">
+      <div class="hero">
+        <p class="eyebrow">v${site.version} &middot; set by build.js</p>
+        <h1 class="name">Colophon</h1>
+        <p class="intro">What this system is set in, what it does to a sheet of paper, and every contrast ratio it measures on the way past. Nothing on this page is typed by hand.</p>
+      </div>
+${block({
+  id: 'setting',
+  heading: 'The setting',
+  body: `          <div class="forpair">
+            <div class="forcol">
+              <p class="label">Faces and measure</p>
+${pair(setting)}
+            </div>
+            <div class="forcol">
+              <p class="label">The sheet</p>
+${pair(sheet)}
+            </div>
+          </div>`,
+})}
+${block({
+  id: 'measured',
+  heading: 'Measured',
+  body: `          <p class="lede">Every text token in every palette, measured against the worst-case grain pixel rather than the flat ground. The build exits non-zero if any of them drops below 4.5:1, so this table cannot go stale and a failing value cannot reach the page.</p>
+          <div class="tablewrap">
+            <table class="tbl">
+              <caption class="vh">Tightest measured contrast ratio for each palette, light and dark</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Palette</th>
+                  <th scope="col">Surface</th>
+                  <th scope="col">Tightest</th>
+                  <th scope="col">Sunk</th>
+                  <th scope="col">Verdict</th>
+                </tr>
+              </thead>
+              <tbody>
+${palettes
+  .flatMap((pal) =>
+    [pal.light, pal.dark].map((a) => {
+      const worst = Math.min(...a.rows.map((r) => r.grain));
+      return `                <tr>
+                  <th scope="row">${pal.label} ${a.mode}</th>
+                  <td><span class="chip" style="--c:${a.surface}"></span>${a.surface}</td>
+                  <td class="num">${worst.toFixed(2)}:1</td>
+                  <td class="num">${a.sunk.toFixed(2)}:1</td>
+                  <td>${a.pass ? 'AA' : 'FAIL'}</td>
+                </tr>`;
+    })
+  )
+  .join('\n')}
+              </tbody>
+            </table>
+          </div>
+          <p class="small footnote">The sunk column is the row hover, and it is meant to be felt rather than seen. If you can identify its colour it is too strong.</p>`,
+})}
+${block({
+  id: 'licence',
+  heading: 'The licence',
+  body: `          <p class="lede">MIT, and it means it. Take it, change it, ship it, no credit needed.</p>
+          <p class="small">A chapbook was made to be cheap, read, and passed on, and the licence is the part of this system that takes that literally. If you build something with it I would like to see it, but that is a wish rather than a condition.</p>`,
 })}
     </main>
 ${footer()}`,

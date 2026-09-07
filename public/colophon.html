@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Colophon — Chapbook</title>
+<meta name="description" content="How Chapbook v1.1.0 is set: the faces, the sheet, and the measured contrast floors for every palette it ships.">
+<link rel="canonical" href="https://chapbook.page/colophon">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chapbook">
+<meta property="og:title" content="Colophon — Chapbook">
+<meta property="og:description" content="How Chapbook v1.1.0 is set: the faces, the sheet, and the measured contrast floors for every palette it ships.">
+<meta property="og:url" content="https://chapbook.page/colophon">
+<meta name="twitter:card" content="summary">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
+<!-- Applies a stored theme before first paint. Inlined rather than fetched
+     because a round trip here is a flash of the wrong colour; the CSP carries
+     its hash, so this costs no 'unsafe-inline'. -->
+<script>(function () {
+  var d = document.documentElement;
+  var K = 'theme';
+
+  /* Runs before first paint. Everything below it can wait for the DOM. */
+  try {
+    var saved = localStorage.getItem(K);
+    if (saved === 'light' || saved === 'dark') d.setAttribute('data-theme', saved);
+  } catch (e) {}
+
+  function current() {
+    return d.getAttribute('data-theme') ||
+      (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var btn = document.getElementById('theme');
+    if (!btn) return;
+    btn.hidden = false;
+    btn.setAttribute('aria-pressed', current() === 'dark' ? 'true' : 'false');
+    btn.addEventListener('click', function () {
+      var next = current() === 'dark' ? 'light' : 'dark';
+      /* Colours cross-fade only while the theme is actually changing. */
+      d.classList.add('theming');
+      d.setAttribute('data-theme', next);
+      btn.setAttribute('aria-pressed', next === 'dark' ? 'true' : 'false');
+      try { localStorage.setItem(K, next); } catch (e) {}
+      setTimeout(function () { d.classList.remove('theming'); }, 320);
+    });
+  });
+})();
+</script>
+
+<link rel="stylesheet" href="/chapbook.css">
+<link rel="stylesheet" href="/chapbook-skins.css">
+<link rel="stylesheet" href="/specimen.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+    <header class="wrap bar">
+      <a class="brand" href="/">chapbook</a>
+      <div class="bar-end">
+        <nav class="barlinks" aria-label="Sections">
+          <a href="/#for">For</a>
+          <a href="/#rules">Rules</a>
+          <a href="/#take">Take it</a>
+        </nav>
+
+      <button class="theme" id="theme" type="button" hidden>
+        <svg class="tsvg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle class="ring" cx="12" cy="12" r="8.4" fill="none"/>
+          <path class="half" d="M12 3.6 A8.4 8.4 0 0 1 12 20.4 Z"/>
+        </svg>
+        <span class="vh">Switch theme</span>
+      </button>
+      </div>
+    </header>
+
+    <main class="wrap" id="main">
+      <div class="hero">
+        <p class="eyebrow">v1.1.0 &middot; set by build.js</p>
+        <h1 class="name">Colophon</h1>
+        <p class="intro">What this system is set in, what it does to a sheet of paper, and every contrast ratio it measures on the way past. Nothing on this page is typed by hand.</p>
+      </div>
+
+      <section class="blk" id="setting">
+        <div class="rail">
+          <h2>The setting</h2>
+        </div>
+        <div class="body">
+          <div class="forpair">
+            <div class="forcol">
+              <p class="label">Faces and measure</p>
+              <div class="forrow">
+                <p class="forrow-t">Mono</p>
+                <p class="forrow-d">ui-monospace, SF Mono, Menlo, Consolas — a system stack, deliberately</p>
+              </div>
+              <div class="forrow">
+                <p class="forrow-t">Language</p>
+                <p class="forrow-d">ui-sans-serif, system-ui — the site&rsquo;s own face, and the only one it should change</p>
+              </div>
+              <div class="forrow">
+                <p class="forrow-t">Measure</p>
+                <p class="forrow-d">34em, expressed in em so it tracks the type rather than the window</p>
+              </div>
+              <div class="forrow">
+                <p class="forrow-t">Rail</p>
+                <p class="forrow-d">10rem, sticky, collapsing below 52rem</p>
+              </div>
+              <div class="forrow">
+                <p class="forrow-t">Page</p>
+                <p class="forrow-d">62rem maximum, gutter clamped 1.25–2.75rem</p>
+              </div>
+            </div>
+            <div class="forcol">
+              <p class="label">The sheet</p>
+              <div class="forrow">
+                <p class="forrow-t">Sheet margin</p>
+                <p class="forrow-d">18mm, set by @page rather than left to the print dialogue</p>
+              </div>
+              <div class="forrow">
+                <p class="forrow-t">Body</p>
+                <p class="forrow-d">10.5pt on 1.4 — ten and a half on fourteen point seven</p>
+              </div>
+              <div class="forrow">
+                <p class="forrow-t">Orphans and widows</p>
+                <p class="forrow-d">Three lines, the conventional floor</p>
+              </div>
+              <div class="forrow">
+                <p class="forrow-t">Breaks</p>
+                <p class="forrow-d">Headings do not end a sheet; blocks and rows do not split</p>
+              </div>
+              <div class="forrow">
+                <p class="forrow-t">Palette</p>
+                <p class="forrow-d">Ink on white, grain to zero, every declaration !important</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="blk" id="measured">
+        <div class="rail">
+          <h2>Measured</h2>
+        </div>
+        <div class="body">
+          <p class="lede">Every text token in every palette, measured against the worst-case grain pixel rather than the flat ground. The build exits non-zero if any of them drops below 4.5:1, so this table cannot go stale and a failing value cannot reach the page.</p>
+          <div class="tablewrap">
+            <table class="tbl">
+              <caption class="vh">Tightest measured contrast ratio for each palette, light and dark</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Palette</th>
+                  <th scope="col">Surface</th>
+                  <th scope="col">Tightest</th>
+                  <th scope="col">Sunk</th>
+                  <th scope="col">Verdict</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Neutral light</th>
+                  <td><span class="chip" style="--c:#f5f5f5"></span>#f5f5f5</td>
+                  <td class="num">5.27:1</td>
+                  <td class="num">1.07:1</td>
+                  <td>AA</td>
+                </tr>
+                <tr>
+                  <th scope="row">Neutral dark</th>
+                  <td><span class="chip" style="--c:#161616"></span>#161616</td>
+                  <td class="num">5.24:1</td>
+                  <td class="num">1.07:1</td>
+                  <td>AA</td>
+                </tr>
+                <tr>
+                  <th scope="row">Green light</th>
+                  <td><span class="chip" style="--c:#fbfaf7"></span>#fbfaf7</td>
+                  <td class="num">4.97:1</td>
+                  <td class="num">1.09:1</td>
+                  <td>AA</td>
+                </tr>
+                <tr>
+                  <th scope="row">Green dark</th>
+                  <td><span class="chip" style="--c:#121412"></span>#121412</td>
+                  <td class="num">4.99:1</td>
+                  <td class="num">1.09:1</td>
+                  <td>AA</td>
+                </tr>
+                <tr>
+                  <th scope="row">Clay light</th>
+                  <td><span class="chip" style="--c:#f5f3ee"></span>#f5f3ee</td>
+                  <td class="num">5.06:1</td>
+                  <td class="num">1.10:1</td>
+                  <td>AA</td>
+                </tr>
+                <tr>
+                  <th scope="row">Clay dark</th>
+                  <td><span class="chip" style="--c:#181613"></span>#181613</td>
+                  <td class="num">4.92:1</td>
+                  <td class="num">1.08:1</td>
+                  <td>AA</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="small footnote">The sunk column is the row hover, and it is meant to be felt rather than seen. If you can identify its colour it is too strong.</p>
+        </div>
+      </section>
+
+      <section class="blk" id="licence">
+        <div class="rail">
+          <h2>The licence</h2>
+        </div>
+        <div class="body">
+          <p class="lede">MIT, and it means it. Take it, change it, ship it, no credit needed.</p>
+          <p class="small">A chapbook was made to be cheap, read, and passed on, and the licence is the part of this system that takes that literally. If you build something with it I would like to see it, but that is a wish rather than a condition.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="wrap">
+      <div class="foot">
+        <b>chapbook v1.1.0</b>
+        <span>MIT. Take it, change it, do not credit me. <a href="/colophon">Colophon</a>.</span>
+      </div>
+    </footer>
+
+</body>
+</html>
