@@ -19,9 +19,20 @@
     "type": "git",
     "url": "git+https://github.com/aarontaylor-dev/plain-text-system.git"
   },
-  "bugs": "https://github.com/aarontaylor-dev/plain-text-system/issues",
+  "bugs": {
+    "url": "https://github.com/aarontaylor-dev/plain-text-system/issues"
+  },
   "license": "MIT",
-  "author": "Aaron Taylor (https://aarontaylor.me)",
+  "author": {
+    "name": "Aaron Taylor",
+    "url": "https://aarontaylor.me"
+  },
+  "contributors": [
+    {
+      "name": "Aaron Taylor",
+      "url": "https://github.com/aarontaylor-dev"
+    }
+  ],
   "type": "module",
   "sideEffects": [
     "*.css"
@@ -54,6 +65,9 @@
     "test": "node build.js",
     "prepack": "node build.js && node scripts/sync-dist.js",
     "start": "node build.js && python3 -m http.server 4400 --directory public"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "engines": {
     "node": ">=18"

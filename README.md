@@ -149,3 +149,17 @@ and [weindie.com](https://weindie.com) — as CSS comments in two repositories
 that had already drifted from each other. v1 reconciles them and freezes the
 result. [notes.aarontaylor.me](https://notes.aarontaylor.me) is the third
 build, and the first one that did not have to be ported by eye.
+
+## Who made this
+
+Built by **Aaron Taylor** — an engineer in Norfolk, UK, working across
+front-end systems, product engineering, AI workflows and internal tools.
+
+- [aarontaylor.me](https://aarontaylor.me) — an index of what I am building
+- [github.com/aarontaylor-dev](https://github.com/aarontaylor-dev) — the code
+- [notes.aarontaylor.me](https://notes.aarontaylor.me) — working notes
+- [hi@aarontaylor.me](mailto:hi@aarontaylor.me)
+
+MIT, and the licence means it: take it, change it, ship it, no credit needed.
+If you build something with it I would like to see it, but that is a wish
+rather than a condition.
