@@ -11,7 +11,7 @@ export const site = {
   repo: 'https://github.com/aarontaylor-dev/chapbook',
   title: 'Chapbook',
   brand: 'chapbook',
-  version: '1.2.0',
+  version: '1.2.1',
   /* Alt text for the social card. Networks surface this, and so do readers
      who never see the image — so it describes the system, not the picture. */
   cardAlt:
