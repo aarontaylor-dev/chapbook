@@ -26,7 +26,9 @@
  *      screen colours. Nothing caught it because nothing was looking.
  *
  *      Rules 04, 05 and 08 are about markup and meaning and are not visible in
- *      a stylesheet. They are the skill's job. Six here, three there.
+ *      a stylesheet. audit.js reads the markup for the decidable half of them
+ *      and lays out the evidence for the half only a reader can judge.
+ *      Six here, three there — and the three now have somewhere to run.
  *
  *   3. RENDER. The specimen page, the 404, the frozen version directories,
  *      and _headers with the two inline script hashes.
@@ -46,7 +48,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 import { site, skins } from './src/content.js';
-import { indexPage, notFoundPage } from './src/page.js';
+import { indexPage, notFoundPage, colophonPage } from './src/page.js';
 import { audit, block, darkBlocksAgree, COLOUR_TOKENS, AA } from './src/measure.js';
 import { checkRules } from './src/rules.js';
 
@@ -56,6 +58,45 @@ const p = (...parts) => join(root, ...parts);
 /* The distributable. These three files are the product; everything else in
    the repo exists to document, measure or serve them. */
 const SHIPPED = ['chapbook.css', 'chapbook-skins.css', 'chapbook-theme.js'];
+
+/*
+ * The social card. 1200x630 is the size every network crops from, and PNG
+ * rather than JPEG is not a default either: the card is hairlines on a flat
+ * ground, which is precisely what JPEG ringing destroys.
+ *
+ * The asset is drawn by hand and committed; the build's job is to look, not to
+ * draw. A missing card is reported and the build continues, because the site
+ * is correct without one — the head simply keeps the small summary card. A
+ * card that is present but the wrong shape is a failure, because by then the
+ * page is claiming summary_large_image and something will render broken.
+ */
+const CARD = { file: 'og.png', width: 1200, height: 630 };
+const PNG_SIG = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+
+async function readCard() {
+  let bytes;
+  try {
+    bytes = await readFile(p('public', CARD.file));
+  } catch {
+    return { missing: true };
+  }
+
+  /* Signature, then IHDR: width and height are big-endian at 16 and 20. No
+     decoding, no dependency — the header is the only part we need. */
+  if (bytes.length < 24 || !bytes.subarray(0, 8).equals(PNG_SIG)) {
+    return { problem: `public/${CARD.file} is not a PNG` };
+  }
+  const width = bytes.readUInt32BE(16);
+  const height = bytes.readUInt32BE(20);
+  if (width !== CARD.width || height !== CARD.height) {
+    return {
+      problem:
+        `public/${CARD.file} is ${width}x${height}, and the card must be ` +
+        `${CARD.width}x${CARD.height} — every network crops from that shape`,
+    };
+  }
+  return { width, height, bytes: bytes.length };
+}
 
 /* What each token is for. Kept here rather than in content.js because it is a
    property of the contract, and the contract lives with the measuring code. */
@@ -178,6 +219,13 @@ async function main() {
   );
   problems.push(...ruleProblems);
 
+  /* The card is an asset rather than a measurement, so it is read here and
+     reported with everything else. A wrong-shaped card fails the build the
+     same way a failing contrast token does. */
+  const cardInfo = await readCard();
+  if (cardInfo.problem) problems.push(cardInfo.problem);
+  const og = cardInfo.width ? { ...cardInfo, alt: site.cardAlt } : null;
+
   console.log(`  system   v${site.version}`);
   /* Printed rather than asserted. The header tells a reader the file is about
      900 lines and asks them to read all of them, so the number is a promise
@@ -200,7 +248,22 @@ async function main() {
   console.log(
     `  rules    01 02 03 09 static  06 07 measured  ` +
       `${ruleProblems.length ? `${ruleProblems.length} FAIL` : 'pass'}  ` +
-      `(04 05 08 are markup — see skill/chapbook)`
+      `(04 05 08 are markup — node audit.js)`
+  );
+
+  /* The sheet, reported like everything else. Rule 09 is now two claims —
+     the palette wins, and the page is set — so the build says both. */
+  console.log(
+    `  paper    18mm margin  10.5pt on 1.4  orphans 3 widows 3  ` +
+      `headings hold the sheet`
+  );
+
+  console.log(
+    `  card     ` +
+      (og
+        ? `public/${CARD.file}  ${og.width}x${og.height}  ` +
+          `${(og.bytes / 1024).toFixed(0)} KB  summary_large_image`
+        : `public/${CARD.file} absent  head falls back to the summary card`)
   );
 
   if (problems.length) {
@@ -225,6 +288,48 @@ async function main() {
      on disk by the time it looks. */
   const major = `v${site.version.split('.')[0]}`;
   const exact = `v${site.version}`;
+
+  /*
+   * The exact directory is served `immutable, max-age=31536000`. That is a
+   * promise that the bytes behind that URL will never change, and until now
+   * nothing was keeping it: editing chapbook.css without bumping the version
+   * quietly rewrote a published release, and anyone holding the old copy in
+   * cache had different bytes from anyone fetching it fresh — with no way for
+   * either to tell.
+   *
+   * So the promise is checked. If the frozen copy exists and differs from what
+   * is about to be written, that is not a build to fix up, it is a release to
+   * cut. Saying "immutable" about a path that moves is the sort of small lie
+   * that costs somebody an afternoon, and this is the check that makes the
+   * word true.
+   */
+  const frozenDrift = [];
+  for (const file of SHIPPED) {
+    const at = p('public', exact, file);
+    try {
+      const [published, current] = await Promise.all([
+        readFile(at, 'utf8'),
+        readFile(p(file), 'utf8'),
+      ]);
+      if (published !== current) frozenDrift.push(`${exact}/${file}`);
+    } catch {
+      /* Not frozen yet — this is a new version, which is the normal case. */
+    }
+  }
+  if (frozenDrift.length) {
+    console.error(
+      `\n  ${exact} is already published and is cached as immutable for a year,\n` +
+        `  but the working copy differs from it:\n`
+    );
+    for (const f of frozenDrift) console.error(`    - ${f}`);
+    console.error(
+      `\n  Bump the version in package.json and src/content.js. Editing a\n` +
+        `  shipped file without a bump rewrites a release somebody may already\n` +
+        `  be linking to.\n`
+    );
+    process.exit(1);
+  }
+
   for (const dir of [major, exact]) {
     await mkdir(p('public', dir), { recursive: true });
     for (const file of SHIPPED) await copyFile(p(file), p('public', dir, file));
@@ -258,8 +363,9 @@ async function main() {
     .replace('{{EXACT_BLOCKS}}', exactBlocks);
 
   const written = [
-    ['public/index.html', indexPage({ palettes, themeScript: themeInline, demoScript })],
+    ['public/index.html', indexPage({ palettes, themeScript: themeInline, demoScript, og })],
     ['public/404.html', notFoundPage({ themeScript: themeInline })],
+    ['public/colophon.html', colophonPage({ palettes, themeScript: themeInline })],
     ['public/_headers', headers],
   ];
 

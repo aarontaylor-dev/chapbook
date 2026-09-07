@@ -238,6 +238,49 @@ export function checkPrint(sheets, tokens) {
  * problems, which build.js turns into a non-zero exit exactly as it does for
  * the contrast audit — a rule that only warns is a rule that gets ignored.
  */
+/*
+ * Rule 09, the other half.
+ *
+ * checkPrint above proves the print palette WINS. It says nothing about
+ * whether the page is SET — and for eight months "it prints" meant only that
+ * the colours were right, which is how a page can pass every check and still
+ * come off the printer with a heading stranded at the foot of a sheet and a
+ * margin decided by whichever dialogue the reader happened to open.
+ *
+ * Three declarations, and each one owns a decision the stylesheet otherwise
+ * hands to the browser. They are checked as presence rather than as values:
+ * 18mm is a judgement and a fork may reasonably disagree, but a stylesheet
+ * claiming Rule 09 while leaving the page unset is making a claim it has not
+ * paid for.
+ */
+export function checkPaged(sheets) {
+  const problems = [];
+  const css = sheets.map((s) => stripComments(s.css)).join('\n');
+  const printBlock = sheets
+    .map((s) => atRule(stripComments(s.css), '@media print'))
+    .filter(Boolean)
+    .join('\n');
+
+  const page = atRule(css, '@page');
+  if (!page) {
+    problems.push('Rule 09 — no @page rule, so the sheet margin is the print dialogue’s default');
+  } else if (!/\bmargin\s*:/.test(page)) {
+    problems.push('Rule 09 — @page sets no margin, which is the only reason to declare it');
+  }
+
+  for (const prop of ['orphans', 'widows']) {
+    if (!new RegExp(`\\b${prop}\\s*:`).test(printBlock)) {
+      problems.push(`Rule 09 — the print block never sets ${prop}, so lines strand across page breaks`);
+    }
+  }
+
+  if (!/\b(?:page-)?break-after\s*:\s*avoid/.test(printBlock)) {
+    problems.push('Rule 09 — nothing sets break-after: avoid, so a heading can end a sheet alone');
+  }
+
+  return problems;
+}
+
 export function checkRules(sheets, tokens) {
   const product = sheets.filter((s) => s.name.endsWith('.css'));
   return [
@@ -245,5 +288,6 @@ export function checkRules(sheets, tokens) {
     ...product.flatMap((s) => checkCards(s.css).map((p) => `${p}  (${s.name})`)),
     ...product.flatMap((s) => checkWeights(s.css).map((p) => `${p}  (${s.name})`)),
     ...checkPrint(product, tokens),
+    ...checkPaged(product),
   ];
 }

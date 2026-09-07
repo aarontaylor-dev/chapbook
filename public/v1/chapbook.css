@@ -858,6 +858,24 @@ footer {
    "read more" prints as a dead end.
    ------------------------------------------------------------------------ */
 
+/*
+ * The sheet itself.
+ *
+ * Outside @media print on purpose: @page only ever applies to paged media, so
+ * wrapping it in a media query says nothing extra and buries it inside a block
+ * that is already about colour.
+ *
+ * 18mm is the one measurement on the page that nobody was making. Left to the
+ * browser's print dialogue it is a per-installation default, which means the
+ * same document printed in two offices is set two different ways — the one
+ * outcome a system like this exists to prevent. The prose components carry
+ * their own measure in `em` on top of this, so the page margin is a decision
+ * about the edge of the sheet rather than about line length.
+ */
+@page {
+  margin: 18mm;
+}
+
 @media print {
   /*
    * EVERY DECLARATION HERE IS !important, AND THAT IS LOAD-BEARING.
@@ -897,6 +915,30 @@ footer {
   /* Tighter than a document meant to be read at length, because an index
      wants to stay on one page. */
   body { font-size: 10.5pt; line-height: 1.4; }
+
+  /*
+   * Orphans and widows: a line stranded at the foot of a sheet, or alone at
+   * the head of the next. Print's oldest fault, and CSS has carried the
+   * properties for two decades. Three is the conventional floor — two admits
+   * a stranded pair that still reads as broken, and four starts pushing whole
+   * paragraphs across for the sake of one line.
+   *
+   * These are the paged-media equivalent of the break-inside rules below: the
+   * page break is the one piece of layout the stylesheet cannot see, so every
+   * instruction about it has to be given in advance.
+   */
+  p,
+  li,
+  dd,
+  blockquote { orphans: 3; widows: 3; }
+
+  /* A heading at the foot of a sheet with its section overleaf is a heading
+     that has stopped doing its job. `avoid` is a request rather than a
+     guarantee — the browser honours it where the next block will fit. */
+  h1,
+  h2,
+  h3,
+  h4 { break-after: avoid; }
 
   .skip,
   .barlinks,

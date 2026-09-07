@@ -74,7 +74,9 @@ black on pure white.
 pressed state is a border in ink, never a fill.
 
 **09 — It prints.** Ink on white, controls gone, structural blocks kept whole,
-`href` expanded after content links.
+`href` expanded after content links. The sheet is set, not surrendered:
+`@page { margin: 18mm }`, `orphans: 3; widows: 3`, and `break-after: avoid` on
+headings. If you write a print block without those three, the build fails.
 
 ## How to build a page
 

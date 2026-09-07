@@ -14,7 +14,7 @@ MIT. Take it, change it, no credit needed.
 ## Use it
 
 ```html
-<link rel="stylesheet" href="https://chapbook.page/v1.0.1/chapbook.css">
+<link rel="stylesheet" href="https://chapbook.page/v1.1.0/chapbook.css">
 ```
 
 Or vendor it, which is better — one request less, it survives this domain
@@ -36,7 +36,27 @@ There is no build step, no configuration and nothing to initialise. Link one
 file and use the class names. The complete list is in
 [system.md](public/system.md), and it is exhaustive.
 
-## What it is not
+## What it is for, and what it is not
+
+A chapbook was a distribution technology rather than a look — standard formats,
+shared stock, no design per title, cheap enough to give away. This system
+inherits that, including the parts that sound like limitations.
+
+**For:** documents that are read (specifications, notes, changelogs, internal
+docs, a site that is mostly writing); anything that has to survive leaving the
+screen; giving a person or an agent a settled default so no time is spent
+deciding how it should look; being taken and edited.
+
+**Not for:** applications — there are no form controls, no grid utilities and
+no cards, and a dashboard wants a different tool rather than this one with
+additions. Not for looking unique; that is an explicit anti-goal, and two sites
+built on this should look related. Not for teams wanting configuration, because
+there are no options and the file is the API. Not for being a brand — it is
+stock, in the printer's sense.
+
+> Chapbook is not a way to make your documents look distinctive. It is a way to
+> stop having the conversation, so the writing can start — and it holds up when
+> the page leaves the screen.
 
 Not a framework and not a component library. No JavaScript requirement and no
 utility classes. It styles a named set of components and leaves the rest of the
@@ -71,7 +91,8 @@ The rules are the system; the CSS is only their implementation.
 7. **Contrast is measured, and the measurement is written down** — against the
    worst-case grain pixel, not the flat background.
 8. **A bordered control, not another word in a row of words.**
-9. **It prints.**
+9. **It prints** — and the sheet is set, not surrendered: `@page` owns the
+   margin, paragraphs carry orphans and widows, headings do not end a sheet.
 
 Long form: [system.md](public/system.md).
 
@@ -87,13 +108,33 @@ six of the nine and **exits non-zero** on any of them:
 | 03 | Border widths are 1px or 2px, and 2px only ever with `var(--ink)` |
 | 06 | The two dark declarations of the palette are diffed against each other |
 | 07 | Every text token is measured against the worst-case grain pixel, AA floor |
-| 09 | The print palette is proved to beat every other palette, by specificity or by `!important` |
+| 09 | The print palette is proved to beat every other palette, by specificity or by `!important` — **and** the sheet is proved to be set: `@page` margin, orphans, widows, `break-after` |
 
 Rules **04, 05 and 08** are about markup and meaning — whether a rail sticks,
 whether every list shares one row anatomy, whether a control that *does*
 something is bordered. None of that is visible in a stylesheet, and a check
-that pretended otherwise would be theatre. They are [the skill's](skill/chapbook)
-job. Six here, three there.
+that pretended otherwise would be theatre.
+
+## The audit reads the markup, and an agent reads the meaning
+
+```bash
+node audit.js
+```
+
+`audit.js` splits a built page into sections and reports two different kinds of
+thing, which it never mixes. **Problems** are decidable — a section with no
+rail, two row anatomies in one list, a `<button>` with no bordered class, an
+inline style carrying a radius — and they exit non-zero like any other check.
+**Evidence** is not: whether a row's label is honest, whether a control earned
+its border, whether the number on a rail means anything. That needs a reader.
+
+The evidence is laid out in the same shape every time so two readers are
+looking at the same thing. Hand that output and
+[skill/chapbook/AUDIT.md](skill/chapbook/AUDIT.md) — which carries the rubric
+and a 0–3 scale — to an agent, and it will rank the document section by
+section.
+
+Six enforced by the build, three by the audit and a reader together.
 
 06 and 07 shipped in v1.0.0. The other four arrived in v1.0.1, after Rule 09
 turned out to have been false since the beginning — see the changelog.
@@ -106,15 +147,17 @@ node build.js
 ```
 
 ```txt
-  system   v1.0.1
-  size     chapbook.css 971 lines  skins 130  theme 62
+  system   v1.1.0
+  size     chapbook.css 1019 lines  skins 130  theme 62
   measure  neutral light surface #f5f5f5  tightest 5.27:1  sunk 1.07:1  AA
   measure  neutral dark  surface #161616  tightest 5.24:1  sunk 1.07:1  AA
   measure  green   light surface #fbfaf7  tightest 4.97:1  sunk 1.09:1  AA
   measure  green   dark  surface #121412  tightest 4.99:1  sunk 1.09:1  AA
   measure  clay    light surface #f5f3ee  tightest 5.06:1  sunk 1.10:1  AA
   measure  clay    dark  surface #181613  tightest 4.92:1  sunk 1.08:1  AA
-  rules    01 02 03 09 static  06 07 measured  pass  (04 05 08 are markup)
+  rules    01 02 03 09 static  06 07 measured  pass  (04 05 08 are markup — node audit.js)
+  paper    18mm margin  10.5pt on 1.4  orphans 3 widows 3  headings hold the sheet
+  card     public/og.png absent  head falls back to the summary card
 ```
 
 No dependencies. Node's standard library and nothing else.
@@ -137,6 +180,7 @@ src/
 skill/chapbook/       the same system as an agent skill
 public/                 the deployed site
   index.html            generated
+  colophon.html         generated — the faces, the sheet, every measured ratio
   system.md             the specification — hand-written
   llms.txt              the short brief for agents — hand-written
   specimen.css          the specimen's own CSS, and nothing else's
@@ -158,7 +202,8 @@ the CSP is only exercised on Pages.
 
 ## Versioning
 
-- `/v1.0.1/` — exact. Never changes. Cached for a year.
+- `/v1.1.0/` — exact. Never changes. Cached for a year, and the build now
+  **proves** it: editing a shipped file without a version bump fails the build.
 - `/v1/` — the major line. Picks up additive releases. Cached for a day.
 
 A **token rename or a removed primitive** bumps the major. Those are the only

@@ -177,6 +177,27 @@ structural blocks, and link destinations expanded after the link text. A
 printed page has no hover and no address bar, so a bare "read more" prints as
 a dead end.
 
+**The sheet is set, not surrendered.** Three decisions that a stylesheet
+otherwise hands to the browser:
+
+```css
+@page { margin: 18mm; }                        /* not the print dialogue's default */
+
+@media print {
+  p, li, dd, blockquote { orphans: 3; widows: 3; }   /* no stranded lines */
+  h1, h2, h3, h4 { break-after: avoid; }             /* no heading alone at a foot */
+}
+```
+
+`@page` sits outside `@media print` because it only ever applies to paged
+media. 18mm is a judgement and a fork may reasonably disagree; leaving it
+unset is not a judgement, it is a per-installation default, which means the
+same document printed in two offices is set two different ways.
+
+Three is the conventional floor for orphans and widows: two admits a stranded
+pair that still reads as broken, four starts pushing whole paragraphs across
+for the sake of one line.
+
 Expand `href` on content links only. Applied to every anchor it also prints the
 address of every nav item, which is noise.
 

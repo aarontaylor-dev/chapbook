@@ -11,7 +11,11 @@ export const site = {
   repo: 'https://github.com/aarontaylor-dev/chapbook',
   title: 'Chapbook',
   brand: 'chapbook',
-  version: '1.0.1',
+  version: '1.1.0',
+  /* Alt text for the social card. Networks surface this, and so do readers
+     who never see the image — so it describes the system, not the picture. */
+  cardAlt:
+    'Chapbook — a small CSS system for documents that want to read like documents.',
   description:
     'A small CSS system for documents that want to read like documents. Monospace carries structure, a second face carries language, and separation comes from rules and space rather than from cards. Nine rules, six of them enforced by the build, no build step to use it, MIT.',
 };
@@ -23,8 +27,42 @@ export const hero = {
     'A small CSS system for documents that want to read like documents. Monospace carries structure, a second face carries language, and separation comes from rules and space rather than from cards.',
   aside: {
     lead: 'This page is the specimen.',
-    rest: 'It is set in the system it documents, using the same stylesheet you are invited to take &mdash; so every component below is the real implementation rather than a picture of one. The theme toggle is real. So is the print stylesheet. Change the skin in section 02 and watch nothing structural move.',
+    rest: 'It is set in the system it documents, using the same stylesheet you are invited to take &mdash; so every component below is the real implementation rather than a picture of one. The theme toggle is real. So is the print stylesheet &mdash; <b>press print and read the result</b>, because paper is a target here rather than a courtesy. Change the skin in section 03 and watch nothing structural move.',
   },
+};
+
+/*
+ * What the system is for, and what it is not.
+ *
+ * The anti-goals are the half that was missing. "Not a framework, no
+ * JavaScript, no utility classes" describes what the file does not contain,
+ * which is a different question from who should not use it — and leaving the
+ * second question unanswered means the wrong people arrive, ask for cards and
+ * form controls, and conclude the system is unfinished rather than aimed
+ * somewhere else.
+ *
+ * The name settles it. A chapbook was a distribution technology and not a
+ * look: standard formats, shared stock, no per-title design, cheap enough to
+ * give away. Looking distinctive was never among its aims, and it is not
+ * among these.
+ */
+export const purpose = {
+  lede:
+    'A chapbook was a distribution technology rather than a look &mdash; standard formats, shared stock, no design per title, cheap enough to give away. This system inherits that, including the parts that sound like limitations.',
+  claim:
+    'Chapbook is not a way to make your documents look distinctive. It is a way to stop having the conversation, so the writing can start &mdash; and it holds up when the page leaves the screen.',
+  for: [
+    ['Documents that are read', 'Specifications, notes, changelogs, internal docs, a personal site that is mostly writing.'],
+    ['Anything that leaves the screen', 'Paper, PDF, an archive, a printer in an office. Rule 09 is load-bearing, not a courtesy.'],
+    ['A settled default', 'For a person or an agent, so that no time at all is spent deciding how it should look.'],
+    ['Being taken and edited', 'One file, no build, no configuration, MIT. Editing it <em>is</em> the configuration.'],
+  ],
+  not: [
+    ['Applications', 'No form controls, no grid utilities, no cards. A dashboard wants a different tool, not this one with additions.'],
+    ['Looking unique', 'An explicit anti-goal. Two sites built on this should look related; if that is a problem, the problem is the choice of system.'],
+    ['Teams wanting configuration', 'There are no options and there is no theme API. The file is the API.'],
+    ['Being a brand', 'It is stock, in the printer&rsquo;s sense &mdash; shared inventory rather than identity.'],
+  ],
 };
 
 /*
@@ -86,8 +124,8 @@ export const rules = [
   {
     n: 9,
     title: 'It prints',
-    body: 'Ink on white, controls gone, every panel open, <code>break-inside: avoid</code> on structural blocks, and link destinations expanded after the link text. A printed page has no hover and no address bar, so a bare &ldquo;read more&rdquo; prints as a dead end. Print is a real target here, not an afterthought &mdash; try it on this page.',
-    spec: '@media print · --grain: 0 · href expanded on content links only',
+    body: 'Ink on white, controls gone, every panel open, and link destinations expanded after the link text &mdash; a printed page has no hover and no address bar, so a bare &ldquo;read more&rdquo; prints as a dead end. The sheet is set rather than surrendered: <code>@page</code> owns the margin instead of the print dialogue, paragraphs carry orphans and widows, and a heading never ends a sheet with its section overleaf. Print is the target this system is actually for &mdash; try it on this page.',
+    spec: '@page 18mm · 10.5pt on 1.4 · orphans 3 widows 3 · --grain: 0 · href expanded',
   },
 ];
 

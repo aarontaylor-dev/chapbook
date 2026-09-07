@@ -7,11 +7,113 @@ Versions follow the system, not the site. A **token rename or a removed
 primitive** bumps the major, because those are the only two changes that can
 break a site downstream. Everything else is additive.
 
-## Unreleased — 1.1.0
+## 1.1.0 — 7 September 2026
 
-The additive release. 1.0.1 was fixes only and added no class names; this is
-where the components go, and `/v1/` picks it up without anyone changing a
-`<link>`.
+The additive release, and it turned out not to be about components at all.
+Rule 09 was half a rule, the anti-goals were missing, and the frozen version
+directories were being quietly rewritten on every build. The component queue
+moved to 1.2.0 rather than holding this up — see below.
+
+### The sheet is set
+
+**Rule 09 was half a rule.** v1.0.1 proved the print palette wins the cascade,
+which was a real bug and worth catching. It said nothing about whether the page
+was *typeset* — so a document could pass every check the build had and still
+come off the printer with a heading stranded at the foot of a sheet, a
+paragraph leaving one line behind, and a margin decided by whichever print
+dialogue the reader happened to open.
+
+Three declarations, each owning a decision the stylesheet was handing to the
+browser:
+
+- **`@page { margin: 18mm }`**, outside `@media print` because `@page` only
+  ever applies to paged media. The margin is the most consequential
+  measurement on a sheet and it was the one nobody was making. Left unset it is
+  a per-installation default, which means the same document printed in two
+  offices is set two different ways — precisely the outcome a system like this
+  exists to prevent.
+- **`orphans: 3; widows: 3`** on `p`, `li`, `dd` and `blockquote`. Three is the
+  conventional floor: two admits a stranded pair that still reads as broken,
+  four starts pushing whole paragraphs across for one line.
+- **`break-after: avoid`** on `h1`–`h4`. A heading at the foot of a sheet with
+  its section overleaf has stopped doing its job.
+
+`src/rules.js` grows `checkPaged()`, and the build now fails on a stylesheet
+that claims Rule 09 while leaving the page unset. Presence is checked rather
+than value — 18mm is a judgement a fork may reasonably disagree with; declaring
+nothing is not a judgement. The build also reports the sheet on every run, next
+to the contrast measurements, because the sheet is a measurement too.
+
+### What it is for, and what it is not
+
+The specimen gains a first section, and the anti-goals are the half that was
+missing. "Not a framework, no JavaScript, no utility classes" describes what
+the file does not contain, which is a different question from *who should not
+use this* — and leaving the second unanswered means the wrong people arrive,
+ask for cards and form controls, and conclude the system is unfinished rather
+than aimed somewhere else.
+
+Stated plainly now: not for applications, not for looking unique, not for teams
+wanting configuration, not a brand. The name settles it. A chapbook was a
+distribution technology and not a look — standard formats, shared stock, no
+design per title, cheap enough to give away. Looking distinctive was never
+among its aims and it is not among these.
+
+### A colophon
+
+`/colophon` — the note at the back saying who set the thing, in what, and on
+what. A real convention of the object this system is named after, and the
+natural home for the facts true of the whole system rather than of any one
+section: the faces, the sheet, every measured contrast floor, the licence.
+Generated, so none of its numbers can go stale.
+
+### The audit — the third part that was never written
+
+The README has said since v1.0.0 that rules 04, 05 and 08 are "the skill's
+job. Six here, three there." The third part did not exist. `audit.js` is it.
+
+It splits a built page into sections and reports two kinds of thing, and never
+mixes them. **Problems** are decidable — a section with no rail, two row
+anatomies in one list, a `<button>` carrying no bordered class, an inline
+style with a radius — and they exit non-zero. **Evidence** is not: whether a
+row's label is honest, whether a control earned its border, whether the number
+on a rail means anything. That needs a reader, and pretending otherwise would
+be the theatre the build's own comments refuse.
+
+`skill/chapbook/AUDIT.md` carries the rubric and a 0-3 scale, so two agents
+scoring the same page are held to the same standard. `npm test` now runs both.
+
+It found something immediately, on a page written the same afternoon: the new
+colophon numbered three sections that are peers. The setting, the
+measurements and the licence can be shuffled without loss, and numbering them
+dressed them as a sequence. The numbers are gone.
+
+### The social card
+
+`build.js` reads `public/og.png`, checks the PNG header for 1200×630 and emits
+the `og:image` tags. The card *type* is conditional on the file existing:
+`summary_large_image` promises an image, and a page claiming it while serving
+none renders as a broken panel on some networks and degrades silently on
+others. The claim and the asset now come from one fact and cannot drift. A
+missing card is reported and the build continues; a wrong-shaped one fails it.
+
+The asset itself is not in this release — the slot is.
+
+### The favicon has a dark palette
+
+`public/favicon.svg` declared one ground, `#fcfcfc`, so on a dark browser tab,
+in dark GitHub and in every dark-mode bookmark bar it rendered as a white
+block. It now carries both palettes behind `prefers-color-scheme`. Verified
+under the site's real Content-Security-Policy, where an SVG loaded as an image
+turns out not to be subject to the response policy — the inline `<style>`
+applies.
+
+
+## Unreleased — 1.2.0
+
+The components. Scoped for 1.1.0 and moved here unbuilt, because 1.1.0 filled
+up with the print and provenance work instead. Nothing here has changed except
+the number it is waiting on.
 
 ### Margin notes
 

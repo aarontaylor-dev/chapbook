@@ -1,6 +1,6 @@
 {
   "name": "chapbook",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "A small CSS system for documents that want to read like documents. Monospace carries structure, a second face carries language, and separation comes from rules and space rather than from cards. Nine rules, no dependencies, no build step.",
   "keywords": [
     "css",
@@ -54,6 +54,8 @@
     "chapbook-skins.css",
     "chapbook-theme.js",
     "src/measure.js",
+    "src/conformance.js",
+    "audit.js",
     "system.md",
     "llms.txt",
     "skill/",
@@ -62,7 +64,8 @@
   ],
   "scripts": {
     "build": "node build.js",
-    "test": "node build.js",
+    "audit": "node audit.js",
+    "test": "node build.js && node audit.js",
     "prepack": "node build.js && node scripts/sync-dist.js",
     "start": "node build.js && python3 -m http.server 4400 --directory public"
   },
