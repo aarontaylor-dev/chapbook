@@ -204,15 +204,53 @@ https://www.chapbook.page/system.md          301 -> https://chapbook.page/system
 https://www.chapbook.page/llms.txt?ref=test  301 -> https://chapbook.page/llms.txt?ref=test
 ```
 
-## Mail is not in scope
+## Mail: a domain that receives but never sends
 
-Adding a `CNAME` at `style` cannot affect mail on this zone. Mail records live
-at the apex and at `_dmarc` / `google._domainkey`, none of them is a wildcard,
-and a new subdomain record does not shadow any of them.
+`chapbook.page` has an `MX` pointing at Hover's forwarding, so it *receives*.
+Nothing sends as it: no mailbox was bought, and the project's contact address
+is `hi@aarontaylor.me`. Forwarding relays inbound mail onward without putting
+`chapbook.page` in the envelope sender, so a hard SPF fail does not break it.
 
-The apex deploy did need a mail baseline, because it changed a record at the
-apex. That procedure lives in the private repo for this zone, which is where
-it belongs.
+That makes this a **non-sending domain**, which has a settled configuration:
+
+```txt
+TXT  @        v=spf1 -all                      no host may send as this domain
+TXT  _dmarc   v=DMARC1; p=reject; sp=reject;   reject anything that fails
+```
+
+Without these, anyone can put `@chapbook.page` in a From header and a
+receiving server has nothing to check it against. `-all` rather than `~all`,
+and `p=reject` rather than `p=none`, because the domain genuinely sends
+nothing — there is no legitimate mail to soft-fail.
+
+`sp=reject` covers subdomains, which otherwise inherit nothing.
+
+No `rua=` reporting address. Aggregate reports for a domain that sends nothing
+are noise, and pointing `rua` at an address on another domain would need an
+authorisation record on *that* zone as well.
+
+**If a mailbox is ever added at this domain, both records must change first.**
+`-all` will hard-fail the new sender, and `p=reject` will tell receivers to
+drop it. That is the whole point of them, and it is also the trap.
+
+Verified in public DNS rather than in the dashboard:
+
+```bash
+dig +short TXT chapbook.page            # "v=spf1 -all"
+dig +short TXT _dmarc.chapbook.page     # "v=DMARC1; p=reject; sp=reject;"
+```
+
+The `MX` was left exactly as imported. Adding TXT records at the apex and at
+`_dmarc` cannot affect it, and the `aarontaylor.me` zone is a separate zone
+entirely — its six `MX` records and its DKIM fingerprint (`3a045d2a…`) were
+confirmed unchanged before and after.
+
+### Not done
+
+A `*._domainkey` record with an empty public key (`v=DKIM1; p=`) would
+explicitly revoke DKIM for a domain that has no keys. It is a reasonable third
+step for a non-sending domain and would need removing the moment real DKIM is
+set up. Left off as more trouble than it is worth here.
 
 ## Publishing to npm
 
