@@ -1,4 +1,4 @@
-# Chapbook v1.0.0
+# Chapbook v1.0.1
 
 A small CSS system for documents that want to read like documents.
 
@@ -7,9 +7,9 @@ comes from rules and space rather than from cards.**
 
 MIT. Take it, change it, no credit needed.
 
-- Stylesheet: <https://chapbook.page/v1.0.0/chapbook.css>
-- Skins: <https://chapbook.page/v1.0.0/chapbook-skins.css>
-- Theme bootstrap: <https://chapbook.page/v1.0.0/chapbook-theme.js>
+- Stylesheet: <https://chapbook.page/v1.0.1/chapbook.css>
+- Skins: <https://chapbook.page/v1.0.1/chapbook-skins.css>
+- Theme bootstrap: <https://chapbook.page/v1.0.1/chapbook-theme.js>
 - Specimen: <https://chapbook.page>
 - Source: <https://github.com/aarontaylor-dev/chapbook>
 
@@ -21,14 +21,39 @@ in this system, you need nothing else.
 ## What this is not
 
 It is not a framework, and it is not a component library. It has no build
-step, no JavaScript requirement, no utility classes, and no reset beyond
-`box-sizing`. It styles a **named set of components** and leaves the rest of
-the document alone, deliberately, so it can be dropped into an existing page
-without a fight.
+step, no JavaScript requirement and no utility classes. It styles a **named set
+of components** and leaves the rest of the document alone, deliberately, so it
+can be dropped into an existing page without a fight.
 
 It will not style your headings, paragraphs or links for you beyond the
 primitives listed here. That is on purpose. If you want a heading styled, put
 one of these classes on it.
+
+### What it does reset
+
+Small, but not nothing. Know this before dropping it into a page that already
+has styles:
+
+| Selector | What it sets |
+| --- | --- |
+| `*`, `::before`, `::after` | `box-sizing: border-box` |
+| `body` | margin, background, colour, face, size, leading |
+| `h1`–`h4`, `p` | `margin: 0` — the system spaces from the container |
+| `h1`–`h4` | `font-weight: 400`, `text-wrap: balance` |
+| `a` | `color: inherit` |
+| `html` | `scroll-behavior: smooth`, off under reduced motion |
+| `code`, `kbd`, `samp` | `var(--mono)` at `0.9em`, so Rule 01 is true by default |
+| `pre code` | `font-size: inherit`, so `<pre><code>` does not shrink twice |
+| `hr` | one 1px `--rule` hairline, so Rule 03 is true by default |
+
+The last two exist because the rules were otherwise **false by default**:
+`monospace` is a keyword rather than a face, so an unstyled `<code>` renders in
+a second mono the system never chose; and the UA draws `<hr>` as an inset
+border, which is a third rule weight arriving without anybody writing one.
+
+`p { margin: 0 }` is global, so paragraphs nested inside a blockquote, list
+item or figure are spaced by `.body` rather than by the UA. Outside `.body`
+they have no spacing at all — that is the container's job.
 
 ---
 
@@ -154,6 +179,19 @@ a dead end.
 
 Expand `href` on content links only. Applied to every anchor it also prints the
 address of every nav item, which is noise.
+
+**Every token in the print block carries `!important`, and that is
+load-bearing.** A media query does not change specificity: the print block is
+`:root` at (0,1,0) and loses to `:root[data-theme="dark"]` and to every skin
+selector at (0,2,0). Until v1.0.1 this meant the print palette applied only to
+the neutral skin, and only for a reader who had never touched the toggle —
+anyone else printed near-white text onto white paper. `!important` is the one
+mechanism specificity cannot outrank, so it is the correct tool here rather
+than a shortcut: this block has to beat every palette that will ever be written
+against the system, including palettes that do not exist yet.
+
+**A skin must therefore never mark a token `!important`.** It would win that
+fight and print itself. `build.js` checks for it.
 
 ---
 
@@ -300,7 +338,7 @@ sentence from a link that *is* a component.
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>A page</title>
-  <link rel="stylesheet" href="https://chapbook.page/v1.0.0/chapbook.css">
+  <link rel="stylesheet" href="https://chapbook.page/v1.0.1/chapbook.css">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -387,9 +425,13 @@ colour on every load for anyone who chose dark.
 7. **Measure against the worst-case grain pixel, not against `--paper`.**
 8. Lower `--grain` in dark. Light noise on a dark field is more conspicuous
    than dark noise on a light one.
+9. **Never mark a token `!important`.** The print block uses it so that ink on
+   white beats every palette on the way to paper; a skin that answers in kind
+   wins that fight and prints itself. This is Rule 09 lost, and it is checked.
 
 The reference implementation of the measuring is `src/measure.js` in the
-source repo, and `build.js` fails the build on a token below AA.
+source repo, and `build.js` fails the build on a token below AA. The static
+checks for Rules 01, 02, 03 and 09 are in `src/rules.js` beside it.
 
 ---
 
@@ -409,7 +451,8 @@ source repo, and `build.js` fails the build on a token below AA.
 
 ## Versioning
 
-- `/v1.0.0/` — exact. Never changes. Cached for a year.
+- `/v1.0.1/` — exact. Never changes. Cached for a year. Older exact paths stay
+  served forever, unchanged.
 - `/v1/` — the major line. Picks up additive releases. Cached for a day.
 - A **token rename or a removed primitive** bumps the major. Those are the
   only two changes that can break a site downstream.

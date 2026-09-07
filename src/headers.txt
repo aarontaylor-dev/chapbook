@@ -31,9 +31,7 @@
 # The major line MOVES with each additive release inside v1, so it gets a day
 # — calling a path immutable when it moves is the kind of small lie that costs
 # somebody an afternoon of cache-busting.
-/v1.0.0/*
-  Access-Control-Allow-Origin: *
-  Cache-Control: public, max-age=31536000, immutable
+{{EXACT_BLOCKS}}
 /v1/*
   Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=86400

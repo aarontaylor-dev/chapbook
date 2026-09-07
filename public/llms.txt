@@ -2,24 +2,27 @@
 
 > A small CSS system for documents that want to read like documents. Monospace
 > carries structure, a second face carries language, and separation comes from
-> rules and space rather than from cards. v1.0.0, MIT, no dependencies, no
-> build step, about 500 lines.
+> rules and space rather than from cards. v1.0.1, MIT, no dependencies, no
+> build step, about 970 lines.
 
 Load one stylesheet and use the class names. There is nothing to install and
 nothing to initialise.
 
-    <link rel="stylesheet" href="https://chapbook.page/v1.0.0/chapbook.css">
+    <link rel="stylesheet" href="https://chapbook.page/v1.0.1/chapbook.css">
 
 ## The nine rules
 
 01. Two faces, and the mono is the constant. If a piece of text tells you WHAT
     KIND OF THING you are looking at, it is mono, uppercase and tracked. If it
     SAYS SOMETHING, it is the language face. That test decides every case.
+    code/kbd/samp are reset to --mono, because `monospace` is a keyword rather
+    than a face and would otherwise be a second mono.
 02. No cards. No radius, no shadow, no container fill. Objects are separated by
     a hairline and by space. The only fill is the row hover at ~1.07:1.
 03. Two weights of rule. 1px --rule between peers; 2px --ink to open and close
     the document (under the masthead, above the first block, above the footer).
-    Never a third weight.
+    Never a third weight. <hr> is reset to one hairline, because the UA default
+    is a third weight.
 04. The numbered rail. A sticky left column with a number and a mono section
     name; content on the right. `align-self: start` is required or it will not
     stick, silently.
@@ -36,7 +39,14 @@ nothing to initialise.
     DOES something gets a border; links that only GO somewhere do not. A
     pressed state is a border in ink, never a fill.
 09. It prints. Ink on white, controls gone, structural blocks kept whole, and
-    href expanded after content links.
+    href expanded after content links. Every token in the print block carries
+    !important: a media query does not change specificity, so :root at (0,1,0)
+    would otherwise lose to every theme and skin selector at (0,2,0). A skin
+    must never mark a token !important.
+
+Six of the nine are enforced by the build rather than described: 01, 02, 03
+and 09 statically, 06 and 07 by measurement. 04, 05 and 08 are markup rules and
+are the skill's job.
 
 ## Tokens — the names are the contract
 
@@ -54,14 +64,18 @@ Type:   .eyebrow .name .intro .aside .lede .label .small .footnote .code
 Row:    .index .row .row-label .row-title .row-mark .row-desc .row-meta
 Other:  .theme .tsvg .theming .vh .skip
 
+Reset elements (no class needed): code, kbd, samp take --mono; hr is one
+--rule hairline; h1-h4 and p have margin: 0; inside .body the UA's block
+margins are zeroed and one 1.35rem rhythm rule spaces the column.
+
 Unclassed links inside .body, .lede and .intro get the accent treatment.
 
 ## Files
 
-- [The stylesheet](https://chapbook.page/v1.0.0/chapbook.css): the system. Required. Everything else is optional.
+- [The stylesheet](https://chapbook.page/v1.0.1/chapbook.css): the system. Required. Everything else is optional.
 - [The full spec](https://chapbook.page/system.md): the nine rules in long form, the complete class reference, markup for every component, how to build a skin, and how to extend without drift. Read this if you are generating a page.
-- [Skins](https://chapbook.page/v1.0.0/chapbook-skins.css): two worked palettes, from sites actually running the system. Set data-skin on the root.
-- [Theme bootstrap](https://chapbook.page/v1.0.0/chapbook-theme.js): 24 lines. Inline it in the head or a stored dark preference flashes white.
+- [Skins](https://chapbook.page/v1.0.1/chapbook-skins.css): two worked palettes, from sites actually running the system. Set data-skin on the root.
+- [Theme bootstrap](https://chapbook.page/v1.0.1/chapbook-theme.js): 24 lines. Inline it in the head or a stored dark preference flashes white.
 - [Specimen](https://chapbook.page): the system documenting itself. Every component on it is live.
 - [Source](https://github.com/aarontaylor-dev/chapbook): including the build that measures contrast and refuses to publish a failing token.
 

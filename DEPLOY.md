@@ -133,7 +133,8 @@ the apex. It went **Active** in under two minutes.
 ```bash
 curl -sS -o /dev/null -w "site    %{http_code}\n" https://chapbook.page/
 curl -sS -o /dev/null -w "css     %{http_code}\n" https://chapbook.page/chapbook.css
-curl -sS -o /dev/null -w "frozen  %{http_code}\n" https://chapbook.page/v1.0.0/chapbook.css
+curl -sS -o /dev/null -w "frozen  %{http_code}\n" https://chapbook.page/v1.0.1/chapbook.css
+curl -sS -o /dev/null -w "v1.0.0  %{http_code}\n" https://chapbook.page/v1.0.0/chapbook.css
 curl -sS -o /dev/null -w "spec    %{http_code}\n" https://chapbook.page/system.md
 curl -sS -o /dev/null -w "llms    %{http_code}\n" https://chapbook.page/llms.txt
 curl -sS -o /dev/null -w "404     %{http_code}\n" https://chapbook.page/nope
@@ -403,8 +404,17 @@ request. It is the same build, and it enforces three things:
   deploy works whether or not the build has run — an invariant that only holds
   if what is committed matches what the build produces. A dirty tree after
   `node build.js` means someone edited a source file and did not rebuild.
-- **The frozen version directories match their source.** `/v1.0.0/` is served
-  `immutable` and cached for a year; it had better be what it claims to be.
+- **The current frozen directory matches its source.** `/v1.0.1/` is written
+  by the build from the working copy and is served `immutable` for a year; it
+  had better be what it claims to be.
+- **Every older frozen directory is byte-for-byte unchanged.** `/v1.0.0/` is a
+  promise, not a copy: it is cached for a year and must keep serving the bytes
+  it served on the day it shipped. The build never writes to it, so
+  `git diff public/v1.0.0/` returning nothing is the check.
+- **`_headers` names every frozen directory.** The build discovers them on disk
+  rather than reading a list, so a new version cannot ship without the
+  immutable block that caches it — but the generated file is worth a glance on
+  a release that adds one.
 
 ## Rollback
 

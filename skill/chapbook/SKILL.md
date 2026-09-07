@@ -3,7 +3,7 @@ name: chapbook
 description: Build or review a web page in the Chapbook — monospace carries structure, a second face carries language, and separation comes from rules and space rather than from cards.
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   source: https://chapbook.page
 ---
 
@@ -11,7 +11,7 @@ metadata:
 
 **Does this page follow the system, or does it just resemble it?**
 
-The Chapbook is nine rules and about 500 lines of CSS. The rules are
+The Chapbook is nine rules and about 970 lines of CSS. The rules are
 the system; the CSS is only their implementation. A page can link the
 stylesheet and still be off-system — cards creep in, a third rule weight
 appears, a sans-serif starts doing the monospace's job — and none of that
@@ -79,7 +79,7 @@ pressed state is a border in ink, never a fill.
 ## How to build a page
 
 1. **Link the stylesheet and nothing else.**
-   `https://chapbook.page/v1.0.0/chapbook.css`, or vendor the file.
+   `https://chapbook.page/v1.0.1/chapbook.css`, or vendor the file.
 2. **Use only the documented classes.** They are listed in `system.md` and the
    list is exhaustive. An invented class name is the first sign of a fork.
 3. **Structure before colour.** Masthead, hero, numbered blocks, index rows,
@@ -111,6 +111,16 @@ the order they actually turn up:
   or not measured at all. **Rule 07.**
 - A filled pressed state, or a toggle offered without JavaScript. **Rule 08.**
 - No print stylesheet. **Rule 09.**
+- A print stylesheet that redefines tokens on a **lower-specificity selector**
+  than the page's theme or skin, so it never applies. **Rule 09**, and the one
+  that hides best — it looks right in the file and fails only on paper, only
+  for readers who chose a theme. Check the specificity, not the presence.
+
+Six of the nine are enforced by `build.js` in the source repository (01, 02,
+03, 06, 07, 09). If you are reviewing a page that vendors the stylesheet
+unchanged, those six are already true and your attention belongs on **04, 05
+and 08** — the markup rules, which no build can see and which are the reason
+this skill exists.
 
 ## Reporting
 

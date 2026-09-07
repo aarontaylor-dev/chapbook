@@ -11,9 +11,9 @@ export const site = {
   repo: 'https://github.com/aarontaylor-dev/chapbook',
   title: 'Chapbook',
   brand: 'chapbook',
-  version: '1.0.0',
+  version: '1.0.1',
   description:
-    'A small CSS system for documents that want to read like documents. Monospace carries structure, a second face carries language, and separation comes from rules and space rather than from cards. Nine rules, about 500 lines, no build step, MIT.',
+    'A small CSS system for documents that want to read like documents. Monospace carries structure, a second face carries language, and separation comes from rules and space rather than from cards. Nine rules, six of them enforced by the build, no build step to use it, MIT.',
 };
 
 export const hero = {

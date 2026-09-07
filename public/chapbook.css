@@ -1,14 +1,29 @@
 /*
- * Chapbook — v1.0.0
+ * Chapbook — v1.0.1
  * https://chapbook.page
  *
  * A small CSS system for documents that want to read like documents. Monospace
  * carries structure, a second face carries language, and separation comes from
  * rules and space rather than from cards.
  *
- * It is not a framework. There is no build step, no reset beyond box-sizing,
- * no utility classes and no JavaScript requirement. It is about 500 lines and
- * you are expected to read all of them before you use it.
+ * It is not a framework. There is no build step, no utility classes and no
+ * JavaScript requirement. It is about 970 lines and you are expected to read
+ * all of them before you use it.
+ *
+ * WHAT IT RESETS
+ *   Small, but not nothing, and worth knowing before you drop it into a page
+ *   that already has styles:
+ *
+ *     box-sizing        border-box on everything
+ *     body              margin, background, colour, face, size, leading
+ *     h1-h4, p          margin: 0 — the system spaces from the container
+ *     h1-h4             font-weight: 400, text-wrap: balance
+ *     a                 color: inherit
+ *     html              scroll-behavior: smooth (off under reduced motion)
+ *     code, kbd, samp   the mono face, so Rule 01 is true by default
+ *     hr                one 1px --rule hairline, so Rule 03 is true by default
+ *
+ *   Everything else in the document is left alone.
  *
  * WHAT YOU HAVE TO SUPPLY
  *   Nothing. The defaults below use system font stacks and a neutral palette,
@@ -193,7 +208,6 @@ body {
   font-family: var(--language);
   font-size: 1.0625rem;
   line-height: 1.6;
-  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -203,6 +217,36 @@ body {
 h1, h2, h3, h4 { margin: 0; font-weight: 400; text-wrap: balance; }
 p { margin: 0; }
 a { color: inherit; }
+
+/* Rule 01 is FALSE BY DEFAULT without this. `monospace` is a keyword, not a
+   face: left alone, an inline <code> renders in whatever the browser nominates
+   and at whatever size it nominates it — a second monospace, on a page whose
+   first rule is that the mono is the constant. Three declarations, and the
+   rule becomes true instead of aspirational.
+
+   0.9em rather than a rem: code sits inside running text and should track the
+   size of the sentence it interrupts, not the root. */
+code, kbd, samp {
+  font-family: var(--mono);
+  font-size: 0.9em;
+}
+
+/* The 0.9em step is for code inside a SENTENCE, where mono runs large beside
+   the language face. <pre><code> is the ordinary markup for a code field, and
+   there the step would apply a second time and set the block at 0.73rem. */
+pre code { font-size: inherit; }
+
+/* Rule 03 is FALSE BY DEFAULT without this. The UA draws <hr> as an inset
+   border — two tones of a grey the palette never chose, at a width nobody
+   wrote. That is a third rule weight arriving in a system whose whole claim is
+   that it has two. One hairline, in the token, no margin: spacing belongs to
+   the container, as it does for every other block here. */
+hr {
+  height: 0;
+  margin: 0;
+  border: 0;
+  border-top: 1px solid var(--rule);
+}
 
 /*
  * Grain. A tiled 200px SVG feTurbulence, desaturated in the filter because
@@ -564,7 +608,35 @@ footer { position: relative; z-index: 1; }
    column instead of blowing the grid out sideways. */
 .body { min-width: 0; }
 
+/*
+ * The rhythm rule sets the TOP margin only, so anything the UA also gives a
+ * bottom margin to used to close at 1em + 1.35rem and open at 1.35rem — a list
+ * sat 38.6px below its neighbour and 21.6px above it, and blockquote and
+ * figure carried a 40px indent nobody wrote, in px, in a system whose token
+ * table says rem everywhere. Zero the UA's contribution first and let the one
+ * rule below be the only thing that spaces this column.
+ *
+ * :where() IS LOAD-BEARING. `:is()` carries the specificity of its most
+ * specific argument, so `.body > :is(p, ul, ...)` scores (0,1,1) and beats
+ * `.body > * + *` at (0,1,0) — the reset wins and every gap in the column
+ * collapses to zero. `:where()` contributes nothing, so this stays at (0,1,0),
+ * ties with the rhythm rule below it, and loses on source order, which is
+ * exactly what a reset should do.
+ */
+.body > :where(p, ul, ol, dl, blockquote, figure, pre, hr, table) { margin: 0; }
+
+/* The UA indents a list by 40px — a px value in a system whose token table
+   says rem everywhere, and one that does not move with the reader's font
+   size. Same specificity trick, same reason. */
+.body > :where(ul, ol) { padding-left: 1.4rem; }
+
 .body > * + * { margin-top: 1.35rem; }
+
+/* `p { margin: 0 }` is global but the rhythm rule only reaches direct
+   children, so two paragraphs inside a quote or a list item ran together at a
+   measured 0px gap. Smaller than the column rhythm, because these are
+   paragraphs inside one object rather than objects in a column. */
+.body :is(blockquote, li, figure) > p + p { margin-top: 0.9rem; }
 
 .body .lede { max-width: var(--measure); }
 
@@ -787,16 +859,39 @@ footer {
    ------------------------------------------------------------------------ */
 
 @media print {
+  /*
+   * EVERY DECLARATION HERE IS !important, AND THAT IS LOAD-BEARING.
+   *
+   * A media query does not change specificity. This block is `:root`, which
+   * scores (0,1,0), and it loses to `:root[data-theme="dark"]` and to every
+   * skin selector at (0,2,0) — so until v1.0.1 the print palette applied only
+   * to the neutral skin, and only for a reader who had never touched the
+   * toggle. Anyone who chose dark and pressed print got #ededed body text on
+   * white paper, at about 1.1:1. An effectively blank page. The specimen was
+   * affected too: its skin picker sets data-skin on the root.
+   *
+   * Raising the selector to (0,3,0) would work today and break again the first
+   * time a skin adds a third attribute. `!important` is the one mechanism
+   * specificity cannot outrank, which makes it the correct tool rather than a
+   * shortcut — this block has to beat every palette that will ever be written
+   * against this system, including palettes that do not exist yet.
+   *
+   * build.js asserts it. See Rule 09 in src/rules.js.
+   */
   :root {
-    --paper: #fff;
-    --ink: #000;          /* ink on paper is not backlit; it does not glare */
-    --muted: #2e2e2e;
-    --faint: #545454;
-    --accent: #000;
-    --accent-deep: #000;
-    --rule: #c9c9c9;
-    --sunk: #fff;
-    --grain: 0;
+    --paper: #fff !important;
+    --ink: #000 !important;   /* ink on paper is not backlit; it does not glare */
+    --muted: #2e2e2e !important;
+    --faint: #545454 !important;
+    --accent: #000 !important;
+    --accent-deep: #000 !important;
+    --rule: #c9c9c9 !important;
+    --sunk: #fff !important;
+    --grain: 0 !important;
+
+    /* The dark blocks set this, and a dark color-scheme surviving into print
+       lets the browser paint its own dark canvas under an ink-on-white page. */
+    color-scheme: light !important;
   }
 
   /* Tighter than a document meant to be read at length, because an index
@@ -872,4 +967,10 @@ footer {
    chapbook-skins.css has two worked examples, and system.md has the
    measuring procedure — every text token must clear 4.5:1 against the
    worst-case grain pixel, not against --paper.
+
+   NEVER MARK A TOKEN !important IN A SKIN. The print block is the one place
+   in this file that uses it, and it uses it so that ink-on-white beats every
+   palette on the way to paper. A skin that answers with !important of its own
+   wins that fight and prints itself, which is Rule 09 lost. build.js checks
+   this and fails the build.
    ======================================================================== */

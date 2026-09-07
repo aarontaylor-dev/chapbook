@@ -14,7 +14,7 @@ MIT. Take it, change it, no credit needed.
 ## Use it
 
 ```html
-<link rel="stylesheet" href="https://chapbook.page/v1.0.0/chapbook.css">
+<link rel="stylesheet" href="https://chapbook.page/v1.0.1/chapbook.css">
 ```
 
 Or vendor it, which is better — one request less, it survives this domain
@@ -38,10 +38,17 @@ file and use the class names. The complete list is in
 
 ## What it is not
 
-Not a framework and not a component library. No JavaScript requirement, no
-utility classes, no reset beyond `box-sizing`. It styles a named set of
-components and leaves the rest of the document alone, deliberately, so it can
-be dropped into an existing page without a fight.
+Not a framework and not a component library. No JavaScript requirement and no
+utility classes. It styles a named set of components and leaves the rest of the
+document alone, deliberately, so it can be dropped into an existing page
+without a fight.
+
+The reset is small but it is not nothing, and it is worth knowing before you
+drop the file into a page that already has styles: `box-sizing` on everything,
+six declarations on `body`, `margin: 0` on `h1`–`h4` and `p`, `font-weight: 400`
+and `text-wrap: balance` on `h1`–`h4`, `color: inherit` on `a`, smooth scrolling
+on `html`, the mono face on `code`/`kbd`/`samp`, and one hairline on `hr`. The
+full list is at the top of the stylesheet. Everything else is left alone.
 
 It has no cards, no form controls and no grid utilities. If you want those,
 this is the wrong system rather than one that needs configuring.
@@ -68,32 +75,46 @@ The rules are the system; the CSS is only their implementation.
 
 Long form: [system.md](public/system.md).
 
-## The build measures the system
+## The build enforces six of the nine rules
 
-`build.js` does three things, in order of how much they matter:
+A rule you can execute is worth more than a rule you can read. `build.js` runs
+six of the nine and **exits non-zero** on any of them:
 
-1. **Measures.** Every colour token in every skin, against the worst-case grain
-   pixel. A text token below WCAG AA **exits non-zero**. Rule 07 is a test
-   rather than a comment, so a failing token cannot reach the site and the
-   published table cannot drift from the CSS it describes.
-2. **Checks Rule 06.** The dark palette is declared twice and nothing in CSS
-   makes the two agree. A value edited in one and not the other is close to
-   undebuggable by eye, so it is a build error.
-3. **Renders** the specimen, the 404, the frozen version directories, and
-   `_headers` with the inline script hashes.
+| Rule | Enforced how |
+| --- | --- |
+| 01 | Every `font-family` in the shipped CSS is one of the three face tokens |
+| 02 | No `border-radius` and no `box-shadow` anywhere |
+| 03 | Border widths are 1px or 2px, and 2px only ever with `var(--ink)` |
+| 06 | The two dark declarations of the palette are diffed against each other |
+| 07 | Every text token is measured against the worst-case grain pixel, AA floor |
+| 09 | The print palette is proved to beat every other palette, by specificity or by `!important` |
+
+Rules **04, 05 and 08** are about markup and meaning — whether a rail sticks,
+whether every list shares one row anatomy, whether a control that *does*
+something is bordered. None of that is visible in a stylesheet, and a check
+that pretended otherwise would be theatre. They are [the skill's](skill/chapbook)
+job. Six here, three there.
+
+06 and 07 shipped in v1.0.0. The other four arrived in v1.0.1, after Rule 09
+turned out to have been false since the beginning — see the changelog.
+
+The build also **renders** the specimen, the 404, the frozen version
+directories and `_headers` with the inline script hashes.
 
 ```bash
 node build.js
 ```
 
 ```txt
-  system   v1.0.0
+  system   v1.0.1
+  size     chapbook.css 971 lines  skins 130  theme 62
   measure  neutral light surface #f5f5f5  tightest 5.27:1  sunk 1.07:1  AA
   measure  neutral dark  surface #161616  tightest 5.24:1  sunk 1.07:1  AA
   measure  green   light surface #fbfaf7  tightest 4.97:1  sunk 1.09:1  AA
   measure  green   dark  surface #121412  tightest 4.99:1  sunk 1.09:1  AA
   measure  clay    light surface #f5f3ee  tightest 5.06:1  sunk 1.10:1  AA
   measure  clay    dark  surface #181613  tightest 4.92:1  sunk 1.08:1  AA
+  rules    01 02 03 09 static  06 07 measured  pass  (04 05 08 are markup)
 ```
 
 No dependencies. Node's standard library and nothing else.
@@ -107,7 +128,8 @@ chapbook-theme.js     the theme bootstrap, 24 lines
 
 build.js                measures, checks, renders
 src/
-  measure.js            the contrast maths and the CSS token reader
+  measure.js            the contrast maths and the CSS token reader — 06, 07
+  rules.js              the static checks and a specificity model — 01, 02, 03, 09
   content.js            the nine rules and the specimen's copy
   page.js               the specimen template
   demo.js               the skin picker — specimen only
@@ -118,7 +140,7 @@ public/                 the deployed site
   system.md             the specification — hand-written
   llms.txt              the short brief for agents — hand-written
   specimen.css          the specimen's own CSS, and nothing else's
-  v1/  v1.0.0/          frozen copies, written by the build
+  v1/  v1.0.0/  v1.0.1/ frozen copies, written by the build
 ```
 
 Generated files are committed, so a deploy or a local static server works
@@ -136,7 +158,7 @@ the CSP is only exercised on Pages.
 
 ## Versioning
 
-- `/v1.0.0/` — exact. Never changes. Cached for a year.
+- `/v1.0.1/` — exact. Never changes. Cached for a year.
 - `/v1/` — the major line. Picks up additive releases. Cached for a day.
 
 A **token rename or a removed primitive** bumps the major. Those are the only

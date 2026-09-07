@@ -10,10 +10,23 @@
  *      comment into a test — a failing token cannot reach the site, and the
  *      table on the page cannot drift from the CSS it describes.
  *
- *   2. CHECK. Rule 06 declares the dark palette twice, once in a media query
- *      and once on an attribute, and nothing in CSS makes the two agree. A
- *      value edited in one and not the other gives you a site whose toggle
- *      disagrees with the same site's system preference. So it is checked.
+ *   2. CHECK. Six of the nine rules are enforced here rather than described:
+ *
+ *        01  every font-family is one of the three face tokens
+ *        02  no border-radius and no box-shadow anywhere
+ *        03  border widths are 1px or 2px, and 2px only ever with --ink
+ *        06  the two dark declarations of the palette agree
+ *        07  every text token clears AA against the grain surface
+ *        09  the print palette beats every other palette on the way to paper
+ *
+ *      06 and 07 shipped in v1.0.0. The other four arrived in v1.0.1, after
+ *      Rule 09 turned out to have been false for the whole life of v1.0.0 on
+ *      the system's own website — the print block is `:root` at (0,1,0) and
+ *      lost to every skin at (0,2,0), so anyone who picked a skin printed in
+ *      screen colours. Nothing caught it because nothing was looking.
+ *
+ *      Rules 04, 05 and 08 are about markup and meaning and are not visible in
+ *      a stylesheet. They are the skill's job. Six here, three there.
  *
  *   3. RENDER. The specimen page, the 404, the frozen version directories,
  *      and _headers with the two inline script hashes.
@@ -28,13 +41,14 @@
  */
 
 import { createHash } from 'node:crypto';
-import { copyFile, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { copyFile, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 import { site, skins } from './src/content.js';
 import { indexPage, notFoundPage } from './src/page.js';
 import { audit, block, darkBlocksAgree, COLOUR_TOKENS, AA } from './src/measure.js';
+import { checkRules } from './src/rules.js';
 
 const root = dirname(fileURLToPath(import.meta.url));
 const p = (...parts) => join(root, ...parts);
@@ -153,7 +167,25 @@ async function main() {
 
   const { palettes, problems } = readPalettes(baseCss, skinCss);
 
+  /* Job 2, the static half. Rules 01, 02, 03 and 09 read the shipped CSS the
+     same way the audit reads the palette, and fail the build the same way. */
+  const ruleProblems = checkRules(
+    [
+      { name: 'chapbook.css', css: baseCss },
+      { name: 'chapbook-skins.css', css: skinCss },
+    ],
+    COLOUR_TOKENS.concat('grain')
+  );
+  problems.push(...ruleProblems);
+
   console.log(`  system   v${site.version}`);
+  /* Printed rather than asserted. The header tells a reader the file is about
+     900 lines and asks them to read all of them, so the number is a promise
+     and it should be visible on every build rather than checked once. */
+  console.log(
+    `  size     chapbook.css ${baseCss.split('\n').length} lines  ` +
+      `skins ${skinCss.split('\n').length}  theme ${themeScript.split('\n').length}`
+  );
   for (const pal of palettes) {
     for (const a of [pal.light, pal.dark]) {
       const worst = Math.min(...a.rows.map((r) => r.grain));
@@ -164,6 +196,12 @@ async function main() {
       );
     }
   }
+
+  console.log(
+    `  rules    01 02 03 09 static  06 07 measured  ` +
+      `${ruleProblems.length ? `${ruleProblems.length} FAIL` : 'pass'}  ` +
+      `(04 05 08 are markup — see skill/chapbook)`
+  );
 
   if (problems.length) {
     console.error('\n  The build refuses to publish this:\n');
@@ -176,14 +214,15 @@ async function main() {
      between the script tags — so an edit to either script must reach _headers
      too, which is why _headers is generated rather than hand-maintained. */
   const sha = (s) => `sha256-${createHash('sha256').update(s, 'utf8').digest('base64')}`;
-  const headers = headerTpl
-    .replace('{{THEME_HASH}}', sha(themeInline))
-    .replace('{{DEMO_HASH}}', sha(demoScript));
 
   /* Two version paths, and they are not the same promise. The exact one never
      changes and is cached forever; the major one moves with each additive
      release inside v1 and is cached for a day. Saying "immutable" about a
-     path that moves is the sort of small lie that costs somebody an afternoon. */
+     path that moves is the sort of small lie that costs somebody an afternoon.
+
+     This runs BEFORE _headers is rendered, because the header template asks
+     the filesystem which frozen directories exist and the newest one has to be
+     on disk by the time it looks. */
   const major = `v${site.version.split('.')[0]}`;
   const exact = `v${site.version}`;
   for (const dir of [major, exact]) {
@@ -192,6 +231,31 @@ async function main() {
   }
   for (const file of SHIPPED) await copyFile(p(file), p('public', file));
   console.log(`  freeze   public/${major}/ and public/${exact}/  ${SHIPPED.length} files each`);
+
+  /*
+   * One immutable block per frozen directory, discovered rather than listed.
+   * Every exact version ever published stays on the site forever and stays
+   * cached for a year, so the template cannot name only the current one — and
+   * a hand-maintained list is a line somebody forgets on the release where it
+   * matters. The directories on disk are the source of truth.
+   */
+  const frozen = (await readdir(p('public'), { withFileTypes: true }))
+    .filter((e) => e.isDirectory() && /^v\d+\.\d+\.\d+$/.test(e.name))
+    .map((e) => e.name)
+    .sort();
+  const exactBlocks = frozen
+    .map(
+      (dir) =>
+        `/${dir}/*\n  Access-Control-Allow-Origin: *\n` +
+        `  Cache-Control: public, max-age=31536000, immutable`
+    )
+    .join('\n');
+  console.log(`  frozen   ${frozen.join('  ')}  immutable for a year`);
+
+  const headers = headerTpl
+    .replace('{{THEME_HASH}}', sha(themeInline))
+    .replace('{{DEMO_HASH}}', sha(demoScript))
+    .replace('{{EXACT_BLOCKS}}', exactBlocks);
 
   const written = [
     ['public/index.html', indexPage({ palettes, themeScript: themeInline, demoScript })],
