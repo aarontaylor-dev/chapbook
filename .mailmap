@@ -1,0 +1,16 @@
+# Canonical identity for this repository.
+#
+# Five commits between "Make Rule 09 true" and "Scope 1.1.0" were authored with
+# git's fallback identity — a name and email derived from the username and
+# hostname of the machine, because neither had been configured. They are the
+# same person as every other commit here.
+#
+# Mapped rather than rewritten, deliberately. All five are published on
+# origin/main, and v1.0.1 points at one of them — the commit that published the
+# package to npm with provenance. That attestation is immutable and names the
+# commit SHA, so rewriting it would leave the published provenance for
+# chapbook@1.0.1 pointing at a commit that no longer exists. A cosmetic fix is
+# not worth breaking a supply-chain claim the README makes in writing.
+#
+# git log --use-mailmap, git shortlog and git blame apply this automatically.
+Aaron Taylor <hi@aarontaylor.me> Personal <personal@Aarons-MacBook-Pro.local>
