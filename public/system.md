@@ -55,6 +55,15 @@ border, which is a third rule weight arriving without anybody writing one.
 item or figure are spaced by `.body` rather than by the UA. Outside `.body`
 they have no spacing at all — that is the container's job.
 
+The column rhythm itself is `.body > * + *` at 1.35rem, and the reset that
+clears the UA's own margins ahead of it is written with `:where()`. **That is
+load-bearing.** `:is()` takes the specificity of its most specific argument, so
+`.body > :is(p, ul, ol, …)` scores (0,1,1) and outranks the rhythm rule at
+(0,1,0) — the reset wins, and every gap in the column collapses to zero.
+`:where()` contributes no specificity, ties at (0,1,0), and loses on source
+order, which is what a reset should do. Swap the one for the other and the
+column closes up, with no error anywhere.
+
 ---
 
 ## The nine rules
@@ -287,6 +296,13 @@ pixel — `#f5f5f5` in light, `#161616` in dark.
 | `--accent-deep` | `#111` | 17.32 | `#ededed` | 15.46 |
 | `--grain` | `0.028` | | `0.02` | |
 
+Those ratios are measurements rather than constants, taken on 14 August 2026
+against the worst-case pixel for this `--paper` and no other. `--ink` is 18.41:1
+against the flat background and 17.32:1 against the worst case; `#000` on `#fff`
+was tried and rejected, because at 21:1 it glares on long text. A text token
+that changes is re-measured against the worst-case pixel for its own `--paper`.
+It is never carried over.
+
 The neutral skin collapses the accent onto the ink deliberately: a monochrome
 page has no hue to spend, so a link announces itself by decoration and hover
 changes the underline rather than the colour.
@@ -475,7 +491,9 @@ colour on every load for anyone who chose dark.
    light and closer to it in dark.
 7. **Measure against the worst-case grain pixel, not against `--paper`.**
 8. Lower `--grain` in dark. Light noise on a dark field is more conspicuous
-   than dark noise on a light one.
+   than dark noise on a light one. This is a judgement and not a
+   measurement — nothing fails if the two are equal, and the pair has
+   never been tested.
 9. **Never mark a token `!important`.** The print block uses it so that ink on
    white beats every palette on the way to paper; a skin that answers in kind
    wins that fight and prints itself. This is Rule 09 lost, and it is checked.
