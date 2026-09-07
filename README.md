@@ -24,7 +24,9 @@ disappearing, and you can edit it, which you are meant to do:
 curl -O https://style.aarontaylor.me/plain-text.css
 ```
 
-Or from npm:
+Or from npm — published from CI with
+[provenance](https://docs.npmjs.com/generating-provenance-statements), so the
+tarball is cryptographically tied to the commit that built it:
 
 ```bash
 npm i plain-text-system

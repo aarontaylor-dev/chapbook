@@ -160,21 +160,86 @@ it belongs.
 
 ## Publishing to npm
 
+Releases go out from GitHub Actions, not from a laptop, so that npm can attest
+**provenance** — a signed, verifiable link between the published tarball and
+the exact commit and workflow that built it. The package page then shows a
+Provenance panel pointing at this repository. That attestation can only be
+produced by a trusted CI system with an OIDC identity, which is why
+`.github/workflows/release.yml` requests `id-token: write`.
+
+### One-time setup
+
+1. **Create an npm Automation token.** npmjs.com → Access Tokens → Generate →
+   **Automation**.
+
+   It must be Automation rather than Publish. A Publish token still prompts for
+   a one-time code when the account has 2FA on publishes, and there is nobody
+   in CI to type one.
+
+2. **Add it as a repository secret** named `NPM_TOKEN`, at Settings → Secrets
+   and variables → Actions → New repository secret.
+
+That is the whole setup. Nothing else needs configuring, and the token is the
+only secret this repository has.
+
+### Releasing
+
 ```bash
-npm publish --access public
+# 1. bump the version and record the release
+#    - package.json  "version"
+#    - CHANGELOG.md  a new section saying why, not only what
+node build.js          # refreshes public/ and the frozen version directories
+
+git add -A && git commit -m "Release v1.0.1"
+git push
+
+# 2. the tag is what publishes
+git tag v1.0.1
+git push --tags
 ```
 
-`prepack` runs the build and copies `system.md` and `llms.txt` to the root, so
-the tarball cannot go out with a stale spec or a token below AA.
+Pushing to `main` never publishes. Only a `v*` tag does.
 
-Check what would ship first:
+### What the release workflow refuses to do
+
+- **Publish when the tag disagrees with `package.json`.** That would ship the
+  wrong version under the right name, and npm versions cannot be reused.
+- **Publish a version that already exists** on the registry.
+- **Publish a token below WCAG AA**, or a Rule 06 disagreement — it runs the
+  same `node build.js` gate as CI before it publishes.
+
+### Checking what would ship
 
 ```bash
 npm pack --dry-run
 ```
 
-Ten files, about 23 kB. If it is much larger, something has been added to
-`files` that should not be there.
+Twelve files, about 24 kB — README, changelog, licence, the three
+distributables, `system.md`, `llms.txt`, the skill, and `measure.js`. If it is
+much larger, something has been added to `files` that should not be there.
+
+### Verifying provenance after a release
+
+```bash
+npm view plain-text-system dist.attestations
+```
+
+The package page at <https://www.npmjs.com/package/plain-text-system> should
+show a **Provenance** panel naming this repository and the building commit.
+
+## Continuous integration
+
+`.github/workflows/build.yml` runs on every push to `main` and every pull
+request. It is the same build, and it enforces three things:
+
+- No text token below **4.5:1** against the worst-case grain pixel, and no
+  Rule 06 disagreement between the two dark blocks.
+- **`public/` is not stale.** This repository commits its generated files so a
+  deploy works whether or not the build has run — an invariant that only holds
+  if what is committed matches what the build produces. A dirty tree after
+  `node build.js` means someone edited a source file and did not rebuild.
+- **The frozen version directories match their source.** `/v1.0.0/` is served
+  `immutable` and cached for a year; it had better be what it claims to be.
 
 ## Rollback
 

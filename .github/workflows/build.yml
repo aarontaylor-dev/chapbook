@@ -1,0 +1,63 @@
+# The build is the test.
+#
+# build.js measures every colour token against the worst-case grain pixel and
+# exits non-zero below WCAG AA, and it checks that Rule 06's two dark blocks
+# agree. Running it here means a contrast regression cannot reach main, and
+# cannot reach npm — release.yml runs the same build before it publishes.
+#
+# There are no dependencies, so there is nothing to install and no lockfile to
+# restore. Node's standard library and nothing else.
+
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Fails on any text token below 4.5:1, and on a Rule 06 disagreement.
+      - name: Measure, check and render
+        run: node build.js
+
+      # The repo's standing invariant is that generated files are committed, so
+      # a deploy works whether or not the build has been run. That only holds if
+      # what is committed matches what the build produces — otherwise the site
+      # silently serves a stale stylesheet. A dirty tree here means someone
+      # edited a source file and did not rebuild.
+      - name: Committed output must match the build
+        run: |
+          if ! git diff --exit-code --stat; then
+            echo "::error::public/ is stale — run 'node build.js' and commit the result"
+            exit 1
+          fi
+
+      # The frozen version directories are the promise that /v1.0.0/ never
+      # changes. Cheap to verify, and expensive to get wrong.
+      - name: Frozen copies must match their source
+        run: |
+          # Not named "status": that is read-only in zsh, and this snippet is
+          # worth being able to paste into a local shell.
+          failed=0
+          for f in plain-text.css plain-text-skins.css plain-text-theme.js; do
+            for dir in public "public/v1" "public/v$(node -p "require('./package.json').version")"; do
+              if ! cmp -s "$f" "$dir/$f"; then
+                echo "::error::$dir/$f differs from $f"
+                failed=1
+              fi
+            done
+          done
+          exit $failed
