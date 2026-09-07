@@ -165,6 +165,45 @@ for s in re.findall(r'<script>(.*?)</script>', sys.stdin.read(), re.S):
 If they differ, the deployed HTML and the deployed headers came from different
 builds. Rebuild and redeploy; do not hand-edit `_headers` to match.
 
+## www
+
+Hover's import left `www A 216.40.34.41`, pointing at the same dead parking IP
+as the wildcard. Proxied, that serves a Cloudflare **522** to anyone who types
+it.
+
+Deleting it would have been the wrong fix, for the reason recorded on the
+`aarontaylor.me` zone: **a Redirect Rule only fires if DNS resolves the
+hostname to Cloudflare's edge.** Deleting the record does not tidy `www` — it
+breaks it, because the rule never runs.
+
+So `www` is a proxied `CNAME` to the apex, and a redirect rule sends it there:
+
+```txt
+DNS     www   CNAME   chapbook.page          Proxied
+Rule    www to apex
+        match    URI Full wildcard  "https://www.*"
+        action   301 -> https://${1}
+        preserve query string
+```
+
+301 rather than 302: this canonicalisation is genuinely permanent, which is
+the distinction the apex notes draw. Reserve 302 for a redirect you expect to
+remove.
+
+**Change the record before deploying the rule, not after.** Cloudflare checks
+whether `www` is proxied at deploy time and warns that the rule may not apply.
+If the record is already a proxied CNAME the warning is stale and *Ignore and
+deploy rule anyway* is correct — taking the offered *Create a new proxied DNS
+record* instead would add a duplicate.
+
+Verified:
+
+```txt
+https://www.chapbook.page/                   301 -> https://chapbook.page/
+https://www.chapbook.page/system.md          301 -> https://chapbook.page/system.md
+https://www.chapbook.page/llms.txt?ref=test  301 -> https://chapbook.page/llms.txt?ref=test
+```
+
 ## Mail is not in scope
 
 Adding a `CNAME` at `style` cannot affect mail on this zone. Mail records live
@@ -310,10 +349,6 @@ back — publish a patch instead.
   Whether the personal-site route becomes a redirect here, or a page of its
   own, is undecided. It is a `CNAME` plus a redirect rule on the
   `aarontaylor.me` zone whenever it is wanted.
-- **`www.chapbook.page` points at Hover's dead parking IP.** Left from the
-  import. It will serve a 522 for anyone who types it. Either delete the
-  record, or make it a proxied `CNAME` to the apex with a redirect rule, which
-  is what `aarontaylor.me` does.
 - **The `MX` record still points at Hover's mail forwarding.** Untouched on
   purpose: nothing here needs mail, and mail config is not this project's to
   guess at.
