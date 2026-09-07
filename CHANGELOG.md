@@ -7,12 +7,18 @@ Versions follow the system, not the site. A **token rename or a removed
 primitive** bumps the major, because those are the only two changes that can
 break a site downstream. Everything else is additive.
 
+Every section here is a released version. Plans for the next one are kept out
+deliberately: this file ships inside the npm tarball, so an "Unreleased"
+section is published *as part of* the release above it, where it reads as a
+promise the tarball does not keep. Work that is queued rather than shipped
+belongs in an issue.
+
 ## 1.1.0 — 7 September 2026
 
 The additive release, and it turned out not to be about components at all.
 Rule 09 was half a rule, the anti-goals were missing, and the frozen version
 directories were being quietly rewritten on every build. The component queue
-moved to 1.2.0 rather than holding this up — see below.
+was held rather than allowed to delay any of that.
 
 ### The sheet is set
 
@@ -107,91 +113,6 @@ block. It now carries both palettes behind `prefers-color-scheme`. Verified
 under the site's real Content-Security-Policy, where an SVG loaded as an image
 turns out not to be subject to the response policy — the inline `<style>`
 applies.
-
-
-## Unreleased — 1.2.0
-
-The components. Scoped for 1.1.0 and moved here unbuilt, because 1.1.0 filled
-up with the print and provenance work instead. Nothing here has changed except
-the number it is waiting on.
-
-### The release-drift guard
-
-1.1.0 was bumped, changelogged, merged and deployed — and never tagged.
-`release.yml` triggers on `push: tags`, so it was never invoked. Nothing
-failed, because nothing ran, and for a while `main` and chapbook.page
-advertised 1.1.0 while `npm i chapbook` still gave you 1.0.1. The only thing
-between that and it staying true indefinitely was somebody remembering.
-
-`release-drift.yml` runs daily and fails when `main` names a version that has
-no matching tag, or that is not on the registry. Both are checked, because a
-tag does not prove a publish: the workflow can fail after the tag is pushed,
-and then the tag exists and the package does not.
-
-It is a schedule rather than a push trigger, and that is the whole design.
-Immediately after a version-bump merge, "main names a version with no tag" is
-the correct state — the tag cannot exist until the merge commit does, and a
-rebase merge does not settle the hash until afterwards. A push-triggered check
-would go red at exactly the moment a release was going right, which is how a
-red build stops meaning anything. The fault worth catching is drift that
-persists, and a day is soon enough to catch it.
-
-### Margin notes
-
-**Admitted ahead of the two-build rule, deliberately.** They exist on Working
-Notes and nowhere else, so by the rule that kept v1 small they should still be
-waiting. Recording the exception rather than quietly making it:
-
-The rail is already half of this component. Rule 04 is a sticky column beside
-the content carrying mono metadata; a margin note is the same column carrying
-prose. The structural work — the grid, the stickiness, the `align-self: start`
-that makes it work at all, the collapse to a line above the content below 52rem
-— is built, shipped and documented. What is missing is a second thing to put in
-a column that already exists.
-
-That is the difference between this and the other held-back components. Tables
-and form controls would each be new machinery. This is a second tenant for
-machinery the system already carries, which is a much weaker claim on the
-system's size, and the two-build rule exists to police size.
-
-The rule still stands for everything else. An exception that is written down,
-with its reasoning, is a different object from a rule that quietly stopped
-being followed.
-
-### The rest
-
-Each of these reached two builds honestly, most of them across `specimen.css`
-and the v1.0.1 review page.
-
-- **A sub-heading inside `.body`.** An `<h3>` currently measures 19.89px at
-  weight 400 against 17px body text, which is a difference no reader sees. One
-  class, not a scale — a scale is the beginning of a framework.
-- **Tables.** Held at one build in v1.0.0 with the note that the specimen
-  styled them in its own stylesheet. That was right then. Hairlines only, a 2px
-  ink head rule, and no zebra fill, because the system has one fill and it is
-  the row hover.
-- **A bordered text control.** Rule 08 describes the pattern and ships half of
-  it: `.theme` is the icon form and lives in the system, `.skinbtn` is the text
-  form and lives in `specimen.css`. Pressed state is a border in ink.
-- **Lists and blockquotes as styled components.** v1.0.1 fixed their spacing
-  inside `.body` but gave them no treatment of their own.
-- **A container query for the rail.** The 52rem collapse is measured against
-  the viewport, so the rail stays a 10rem column inside a 24rem sidebar. Add
-  `@container` alongside the media query rather than replacing it.
-- **`forced-colors` and `prefers-contrast`.** The gap that sits least
-  comfortably beside Rule 07. A system that fails its own build over 4.5:1 has
-  nothing to say about Windows High Contrast, where the grain overlay, the
-  hairline redraw on `.row::after` and the 1px borders are exactly what forced
-  colours disturb.
-- **`::selection`.** Two declarations from existing tokens. Currently the
-  browser default blue is the one colour on the page the palette did not
-  choose.
-
-### Still held
-
-- **Form controls.** No site in the family has a form, and a control set is
-  where this stops being a document system.
-- **Grid utilities.** The system has one layout. A second is a framework.
 
 ## 1.0.1 — 7 September 2026
 
