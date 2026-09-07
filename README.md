@@ -5,23 +5,23 @@ A small CSS system for documents that want to read like documents.
 **Monospace carries structure, a second face carries language, and separation
 comes from rules and space rather than from cards.**
 
-- **Specimen:** <https://style.aarontaylor.me>
-- **Spec:** <https://style.aarontaylor.me/system.md>
-- **For agents:** <https://style.aarontaylor.me/llms.txt>
+- **Specimen:** <https://chapbook.page>
+- **Spec:** <https://chapbook.page/system.md>
+- **For agents:** <https://chapbook.page/llms.txt>
 
 MIT. Take it, change it, no credit needed.
 
 ## Use it
 
 ```html
-<link rel="stylesheet" href="https://style.aarontaylor.me/v1.0.0/chapbook.css">
+<link rel="stylesheet" href="https://chapbook.page/v1.0.0/chapbook.css">
 ```
 
 Or vendor it, which is better — one request less, it survives this domain
 disappearing, and you can edit it, which you are meant to do:
 
 ```bash
-curl -O https://style.aarontaylor.me/chapbook.css
+curl -O https://chapbook.page/chapbook.css
 ```
 
 Or from npm — published from CI with

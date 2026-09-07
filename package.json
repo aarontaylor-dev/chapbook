@@ -14,7 +14,7 @@
     "print-stylesheet",
     "no-dependencies"
   ],
-  "homepage": "https://style.aarontaylor.me",
+  "homepage": "https://chapbook.page",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aarontaylor-dev/chapbook.git"

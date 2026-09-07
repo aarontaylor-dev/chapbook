@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://style.aarontaylor.me/sitemap.xml
+Sitemap: https://chapbook.page/sitemap.xml

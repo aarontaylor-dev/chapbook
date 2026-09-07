@@ -236,11 +236,11 @@ const takeBlock = () =>
     heading: 'Take it',
     body: `          <p class="lede">There is no install step, no package to configure and nothing to initialise. Link one file and use the class names.</p>
 
-          ${code(`<link rel="stylesheet" href="https://style.aarontaylor.me/v${site.version}/chapbook.css">`)}
+          ${code(`<link rel="stylesheet" href="https://chapbook.page/v${site.version}/chapbook.css">`)}
           <p class="small">Two version paths, and they are not the same promise. <code>/v${site.version}/</code> is exact: it never changes, and it is cached for a year. <code>/v${site.version.split('.')[0]}/</code> follows the major line and picks up additive releases, cached for a day. Link the exact one unless you specifically want the updates.</p>
 
           <p class="label footnote">Or vendor it, which is better</p>
-          ${code(`curl -O https://style.aarontaylor.me/chapbook.css`)}
+          ${code(`curl -O https://chapbook.page/chapbook.css`)}
           <p class="small">Copying the file into your own repo costs one request less, survives this domain disappearing, and lets you edit it &mdash; which you are meant to do. A system you cannot change is a dependency.</p>
 
           <p class="label footnote">Or from npm</p>
@@ -416,7 +416,7 @@ ${block({
   id: 'try',
   heading: 'Try',
   body: `          <nav class="index" aria-label="Try">
-${row({ status: 'Back', title: 'The system', href: '/', meta: 'style.aarontaylor.me' })}
+${row({ status: 'Back', title: 'The system', href: '/', meta: 'chapbook.page' })}
 ${row({ status: 'Required', title: 'chapbook.css', href: '/chapbook.css', meta: 'the whole thing' })}
 ${row({ status: 'For agents', title: 'system.md', href: '/system.md', meta: 'the chapbook spec' })}
           </nav>`,

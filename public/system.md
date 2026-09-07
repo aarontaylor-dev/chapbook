@@ -7,10 +7,10 @@ comes from rules and space rather than from cards.**
 
 MIT. Take it, change it, no credit needed.
 
-- Stylesheet: <https://style.aarontaylor.me/v1.0.0/chapbook.css>
-- Skins: <https://style.aarontaylor.me/v1.0.0/chapbook-skins.css>
-- Theme bootstrap: <https://style.aarontaylor.me/v1.0.0/chapbook-theme.js>
-- Specimen: <https://style.aarontaylor.me>
+- Stylesheet: <https://chapbook.page/v1.0.0/chapbook.css>
+- Skins: <https://chapbook.page/v1.0.0/chapbook-skins.css>
+- Theme bootstrap: <https://chapbook.page/v1.0.0/chapbook-theme.js>
+- Specimen: <https://chapbook.page>
 - Source: <https://github.com/aarontaylor-dev/chapbook>
 
 This file is the complete specification. If you are an agent building a page
@@ -300,7 +300,7 @@ sentence from a link that *is* a component.
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>A page</title>
-  <link rel="stylesheet" href="https://style.aarontaylor.me/v1.0.0/chapbook.css">
+  <link rel="stylesheet" href="https://chapbook.page/v1.0.0/chapbook.css">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>

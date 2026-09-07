@@ -7,7 +7,7 @@
  */
 
 export const site = {
-  url: 'https://style.aarontaylor.me/',
+  url: 'https://chapbook.page/',
   repo: 'https://github.com/aarontaylor-dev/chapbook',
   title: 'Chapbook',
   brand: 'chapbook',
@@ -135,35 +135,35 @@ export const files = [
     title: 'chapbook.css',
     href: '/chapbook.css',
     desc: 'The system. Tokens, primitives, components, print. Around 500 lines, and you are expected to read them.',
-    meta: 'style.aarontaylor.me/chapbook.css',
+    meta: 'chapbook.page/chapbook.css',
   },
   {
     status: 'Optional',
     title: 'chapbook-skins.css',
     href: '/chapbook-skins.css',
     desc: 'Two worked palettes, taken from sites actually running this system. Load after the base file and set data-skin.',
-    meta: 'style.aarontaylor.me/chapbook-skins.css',
+    meta: 'chapbook.page/chapbook-skins.css',
   },
   {
     status: 'Optional',
     title: 'chapbook-theme.js',
     href: '/chapbook-theme.js',
     desc: 'The theme bootstrap in 24 lines. Inline it in the head, or the stored preference flashes the wrong colour on every load.',
-    meta: 'style.aarontaylor.me/chapbook-theme.js',
+    meta: 'chapbook.page/chapbook-theme.js',
   },
   {
     status: 'For agents',
     title: 'system.md',
     href: '/system.md',
     desc: 'The whole system as plain text: the nine rules, the token contract, the markup for every component, and the rules for extending it without drift.',
-    meta: 'style.aarontaylor.me/system.md',
+    meta: 'chapbook.page/system.md',
   },
   {
     status: 'For agents',
     title: 'llms.txt',
     href: '/llms.txt',
     desc: 'The short brief. What this is, the nine rules in one line each, and where the files are. Start here if you have a small context window.',
-    meta: 'style.aarontaylor.me/llms.txt',
+    meta: 'chapbook.page/llms.txt',
   },
   {
     status: 'Source',

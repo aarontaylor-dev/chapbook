@@ -1,34 +1,33 @@
 # Deployment
 
 Static files in `public/`, served by Cloudflare Pages on
-`style.aarontaylor.me`. `node build.js` renders them; there are no
+`chapbook.page`. `node build.js` renders them; there are no
 dependencies to install.
 
 This is the third Pages project on the `aarontaylor.me` zone, after the apex
 and the notes site. The procedure below is the apex's, minus the one trap that
 does not apply here — and it is worth knowing *why* it does not apply.
 
-## The redirect-rule trap does not apply here
+## chapbook.page is its own zone
 
-Deploying the apex hit a failure that looks like a Cloudflare bug: **a Redirect
-Rule covering a hostname prevents Pages from verifying a custom domain on that
-hostname.** The rule runs at the edge, ahead of Pages, so the verification
-probe gets a 301 and never sees the project, and the domain sits on
-**Verifying** indefinitely.
+The first plan was a subdomain of `aarontaylor.me`. It ended up a domain of
+its own, registered at Hover on 7 September 2026 and moved onto Cloudflare
+DNS the same day. That changes the procedure in one important way, and
+removes a trap.
 
-The only redirect rule on this zone is `www to apex`, filtered to
-`http.host eq "www.aarontaylor.me"`. It does not touch `style`, so this deploy
-can be done in the obvious order.
+**The trap that no longer applies.** Deploying the apex of `aarontaylor.me`
+hit a failure that looks like a Cloudflare bug: a Redirect Rule covering a
+hostname prevents Pages from verifying a custom domain on it, because the rule
+runs at the edge ahead of Pages and the verification probe never reaches the
+project. The domain then sits on **Verifying** indefinitely.
 
-Confirm before starting, rather than trusting this paragraph:
+`chapbook.page` is a fresh zone with no rules on it at all, so the custom
+domain activated in under two minutes. Nothing here needs doing in a special
+order.
 
-```bash
-dig +short style.aarontaylor.me
-```
-
-`NXDOMAIN` or empty is the expected answer — the wildcard `A` record was
-deleted during the apex deploy precisely so that unknown subdomains fail
-cleanly instead of serving a 522. A new subdomain must be added explicitly.
+**Registration stays at Hover.** Only DNS moved. A registrar transfer would
+have been the wrong tool and would have been refused anyway — ICANN blocks
+transfers within 60 days of registration.
 
 ## Order of operations
 
@@ -40,20 +39,55 @@ gh repo create aarontaylor-dev/chapbook --public \
   --description "A small CSS system for documents that want to read like documents."
 ```
 
-**Public matters.** The whole point of this repo is that people take the files.
-The apex repo is private, which is why the system could not live inside it.
+**Public matters.** The whole point of this repo is that people take the
+files. The `aarontaylor.me` repo is private, which is why the system could not
+live inside it.
 
-### 2. Grant the Cloudflare Pages GitHub app access
+### 2. Move the domain onto Cloudflare DNS
 
-Cloudflare's GitHub app is scoped to **selected repositories**, so a new repo
-is invisible to the create-project flow until it is added at
-[github.com/settings/installations](https://github.com/settings/installations)
-→ Cloudflare Workers and Pages → Configure → Select repositories → **Save**.
+Cloudflare → Add a site → **Connect a domain**. Not *Transfer a domain*: that
+moves the registration and costs money.
 
-The Save button is easy to miss. The repo appears in the list as soon as it is
-ticked, which looks finished, but nothing persists until Save.
+Free plan. Then Cloudflare assigns two nameservers, and they replace Hover's
+at Hover → the domain → Nameservers → Edit:
 
-### 3. Create the Pages project
+```txt
+ns1.hover.com          ->   etienne.ns.cloudflare.com
+ns2.hover.com          ->   gene.ns.cloudflare.com
+```
+
+The TLD delegation updated within about two minutes. Watch it directly at the
+registry rather than through a caching resolver, which will hold the old
+answer:
+
+```bash
+dig NS chapbook.page @$(dig +short NS page. | head -1) +noall +authority
+```
+
+**Delete the wildcard Cloudflare imports.** Hover's defaults include
+`* A 216.40.34.41`, its parking IP. Exactly the same record turned up in the
+`aarontaylor.me` migration, and it is worth removing for the same reason: it
+makes *every* possible subdomain resolve and serve a Cloudflare **522**,
+proxying to a parking IP that no longer answers. Deleting it means unknown
+subdomains return `NXDOMAIN`, which is what they should do.
+
+If a subdomain is ever needed, add it explicitly. Do not restore the wildcard.
+
+The apex `A` record is left alone at this stage — Pages replaces it in step 5.
+
+### 3. AI policy is set at zone creation
+
+Cloudflare's onboarding sets **Block training in robots.txt** on by default.
+It is deliberately **off** here, matching the decision recorded for
+`aarontaylor.me`.
+
+This site exists to be read by agents: `llms.txt` and `system.md` are half its
+reason for existing, and the licence is MIT with no attribution required.
+Blocking training on it would contradict both.
+
+Search and Agent policies are left at **Allow**.
+
+### 4. Create the Pages project
 
 Workers & Pages → Create → Pages → Connect to Git.
 
@@ -67,59 +101,42 @@ Build output directory:  public
 Root directory:          (leave empty)
 ```
 
-Set the build command **at creation**. The apex was created without one and
-then needed it later, and a forgotten build command fails silently — the
+Set the build command **at creation**. The apex project was created without
+one and needed it later, and a forgotten build command fails *silently* — the
 committed generated files deploy fine, just stale.
 
 Here the failure mode is worse than stale: the build is what enforces WCAG AA
-on the tokens. Without it, a contrast regression deploys without complaint.
+on the tokens and checks Rule 06. Without it a contrast regression deploys
+without complaint.
 
-### 4. Prove the deployment on its own URL
+The Pages GitHub app is scoped to selected repositories. If the repo does not
+appear, add it at
+[github.com/settings/installations](https://github.com/settings/installations)
+→ Cloudflare Workers and Pages → Configure → Save. The Save button is easy to
+miss.
 
-```bash
-curl -sS -o /dev/null -w "root   %{http_code}\n" https://chapbook.pages.dev/
-curl -sS -o /dev/null -w "css    %{http_code}\n" https://chapbook.pages.dev/chapbook.css
-curl -sS -o /dev/null -w "frozen %{http_code}\n" https://chapbook.pages.dev/v1.0.0/chapbook.css
-curl -sSI https://chapbook.pages.dev/chapbook.css | grep -i 'access-control\|cache-control'
-curl -sS -o /dev/null -w "404    %{http_code}\n" https://chapbook.pages.dev/nope
-```
+### 5. Attach the custom domain
 
-Expect `200` throughout, `404` last, and the CSS carrying
-`Access-Control-Allow-Origin: *` — which proves `_headers` was picked up from
-the output directory.
+Pages project → Custom domains → Set up a custom domain → `chapbook.page`.
 
-The CORS header is not decoration. A `<link rel="stylesheet">` does not need
-it, but an agent reading the system with `fetch()` does, and that is half the
-audience.
-
-### 5. Add the DNS record
-
-DNS → Records → Add record.
+Cloudflare shows exactly what it will change, and it is one record:
 
 ```txt
-Type:    CNAME
-Name:    style
-Target:  chapbook.pages.dev
-Proxy:   Proxied
-TTL:     Auto
+A      @   216.40.34.41        ->   CNAME  @   chapbook.pages.dev
 ```
 
-### 6. Attach the custom domain
-
-Pages project → Custom domains → Set up a domain → `style.aarontaylor.me`.
-
-It should go **Active / SSL enabled** within a minute or two, because nothing
-at the edge is answering for that hostname first.
+Root CNAME flattening is what lets a root record coexist with other records at
+the apex. It went **Active** in under two minutes.
 
 ## Verify
 
 ```bash
-curl -sS -o /dev/null -w "site    %{http_code}\n" https://style.aarontaylor.me/
-curl -sS -o /dev/null -w "css     %{http_code}\n" https://style.aarontaylor.me/chapbook.css
-curl -sS -o /dev/null -w "frozen  %{http_code}\n" https://style.aarontaylor.me/v1.0.0/chapbook.css
-curl -sS -o /dev/null -w "spec    %{http_code}\n" https://style.aarontaylor.me/system.md
-curl -sS -o /dev/null -w "llms    %{http_code}\n" https://style.aarontaylor.me/llms.txt
-curl -sS -o /dev/null -w "404     %{http_code}\n" https://style.aarontaylor.me/nope
+curl -sS -o /dev/null -w "site    %{http_code}\n" https://chapbook.page/
+curl -sS -o /dev/null -w "css     %{http_code}\n" https://chapbook.page/chapbook.css
+curl -sS -o /dev/null -w "frozen  %{http_code}\n" https://chapbook.page/v1.0.0/chapbook.css
+curl -sS -o /dev/null -w "spec    %{http_code}\n" https://chapbook.page/system.md
+curl -sS -o /dev/null -w "llms    %{http_code}\n" https://chapbook.page/llms.txt
+curl -sS -o /dev/null -w "404     %{http_code}\n" https://chapbook.page/nope
 curl -sS -o /dev/null -w "apex    %{http_code}\n" https://aarontaylor.me/
 curl -sS -o /dev/null -w "notes   %{http_code}\n" https://notes.aarontaylor.me/
 ```
@@ -133,13 +150,13 @@ The specimen inlines two scripts — the theme bootstrap and the skin picker —
 and both are admitted by hash rather than by `'unsafe-inline'`:
 
 ```bash
-curl -sSI https://style.aarontaylor.me/ | grep -i content-security-policy
+curl -sSI https://chapbook.page/ | grep -i content-security-policy
 ```
 
 Both hashes in the header must match the scripts in the page:
 
 ```bash
-curl -sS https://style.aarontaylor.me/ | python3 -c "
+curl -sS https://chapbook.page/ | python3 -c "
 import sys, re, hashlib, base64
 for s in re.findall(r'<script>(.*?)</script>', sys.stdin.read(), re.S):
     print('sha256-' + base64.b64encode(hashlib.sha256(s.encode()).digest()).decode())"
@@ -252,6 +269,24 @@ back — publish a patch instead.
 
 ## Known loose ends
 
+- **The dashboard shows "This project is disconnected from your Git account".**
+  It appeared immediately after the project was created and may be spurious:
+  the repository is attached, the settings page shows
+  `aarontaylor-dev/chapbook`, automatic deployments are enabled, and the first
+  build ran from the repo without trouble. The honest test is whether a push
+  to `main` triggers a deployment on its own. If it does not, reconnect at
+  Settings → Build → Git repository.
+- **`style.aarontaylor.me` is not set up.** Canonical is `chapbook.page`.
+  Whether the personal-site route becomes a redirect here, or a page of its
+  own, is undecided. It is a `CNAME` plus a redirect rule on the
+  `aarontaylor.me` zone whenever it is wanted.
+- **`www.chapbook.page` points at Hover's dead parking IP.** Left from the
+  import. It will serve a 522 for anyone who types it. Either delete the
+  record, or make it a proxied `CNAME` to the apex with a redirect rule, which
+  is what `aarontaylor.me` does.
+- **The `MX` record still points at Hover's mail forwarding.** Untouched on
+  purpose: nothing here needs mail, and mail config is not this project's to
+  guess at.
 - No sitemap yet. `robots.txt` references one. Either add it or drop the line.
 - The specimen self-hosts no fonts, by design: the system defaults to system
   stacks, and the specimen demonstrates the default rather than an upgrade.

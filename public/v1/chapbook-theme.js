@@ -1,6 +1,6 @@
 /*
  * Chapbook — theme bootstrap (optional)
- * https://style.aarontaylor.me
+ * https://chapbook.page
  *
  * Rule 08: the toggle ships hidden and script reveals it, so a visitor
  * without JavaScript is never offered a button that cannot work.

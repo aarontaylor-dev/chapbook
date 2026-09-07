@@ -8,7 +8,7 @@
 Load one stylesheet and use the class names. There is nothing to install and
 nothing to initialise.
 
-    <link rel="stylesheet" href="https://style.aarontaylor.me/v1.0.0/chapbook.css">
+    <link rel="stylesheet" href="https://chapbook.page/v1.0.0/chapbook.css">
 
 ## The nine rules
 
@@ -58,11 +58,11 @@ Unclassed links inside .body, .lede and .intro get the accent treatment.
 
 ## Files
 
-- [The stylesheet](https://style.aarontaylor.me/v1.0.0/chapbook.css): the system. Required. Everything else is optional.
-- [The full spec](https://style.aarontaylor.me/system.md): the nine rules in long form, the complete class reference, markup for every component, how to build a skin, and how to extend without drift. Read this if you are generating a page.
-- [Skins](https://style.aarontaylor.me/v1.0.0/chapbook-skins.css): two worked palettes, from sites actually running the system. Set data-skin on the root.
-- [Theme bootstrap](https://style.aarontaylor.me/v1.0.0/chapbook-theme.js): 24 lines. Inline it in the head or a stored dark preference flashes white.
-- [Specimen](https://style.aarontaylor.me): the system documenting itself. Every component on it is live.
+- [The stylesheet](https://chapbook.page/v1.0.0/chapbook.css): the system. Required. Everything else is optional.
+- [The full spec](https://chapbook.page/system.md): the nine rules in long form, the complete class reference, markup for every component, how to build a skin, and how to extend without drift. Read this if you are generating a page.
+- [Skins](https://chapbook.page/v1.0.0/chapbook-skins.css): two worked palettes, from sites actually running the system. Set data-skin on the root.
+- [Theme bootstrap](https://chapbook.page/v1.0.0/chapbook-theme.js): 24 lines. Inline it in the head or a stored dark preference flashes white.
+- [Specimen](https://chapbook.page): the system documenting itself. Every component on it is live.
 - [Source](https://github.com/aarontaylor-dev/chapbook): including the build that measures contrast and refuses to publish a failing token.
 
 ## If you are generating a page

@@ -4,7 +4,7 @@ description: Build or review a web page in the Chapbook — monospace carries st
 license: MIT
 metadata:
   version: "1.0.0"
-  source: https://style.aarontaylor.me
+  source: https://chapbook.page
 ---
 
 # /chapbook
@@ -79,7 +79,7 @@ pressed state is a border in ink, never a fill.
 ## How to build a page
 
 1. **Link the stylesheet and nothing else.**
-   `https://style.aarontaylor.me/v1.0.0/chapbook.css`, or vendor the file.
+   `https://chapbook.page/v1.0.0/chapbook.css`, or vendor the file.
 2. **Use only the documented classes.** They are listed in `system.md` and the
    list is exhaustive. An invented class name is the first sign of a fork.
 3. **Structure before colour.** Masthead, hero, numbered blocks, index rows,
