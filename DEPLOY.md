@@ -358,6 +358,40 @@ appear in the Pages create flow whether or not the app has been granted it**,
 and the first build will succeed either way. Do not treat a successful first
 deployment as proof that the integration is wired up. Push something and watch.
 
+## style.aarontaylor.me
+
+`style.aarontaylor.me` is the discoverable route — what somebody guesses when
+looking for this person's design system — and it 302s here. Canonical stays
+`chapbook.page`; the subdomain is a signpost, not a second home.
+
+It lives on the **`aarontaylor.me` zone**, not this one:
+
+```txt
+DNS     style   CNAME   aarontaylor.me         Proxied
+Rule    style to chapbook.page
+        match    URI Full wildcard  "https://style.aarontaylor.me/*"
+        action   302 -> https://chapbook.page/${1}
+        preserve query string
+```
+
+The record has to exist and be **proxied**, for the same reason `www` does
+here: a Redirect Rule only fires if DNS resolves the hostname to Cloudflare's
+edge. The wildcard on that zone was deleted during the apex migration, so a
+new subdomain must be added explicitly.
+
+**302, not 301.** The `aarontaylor.me` deploy notes record why: an earlier
+apex redirect was a 301, browsers cached it indefinitely, and visitors kept
+being sent to the old destination after the apex started serving a page — "no
+server-side change can override it". This redirect might not be permanent:
+`style.aarontaylor.me` could become a page in its own right. It has never been
+published, so there is no link equity a 301 would preserve, which removes the
+only argument for one. Switching to 301 later is a one-field edit; un-caching a
+301 is not possible.
+
+Do not use Cloudflare's *Redirect to a different domain* template for this. It
+matches **all** incoming requests on the zone, which would hijack the apex and
+the notes site. Scope it to the hostname.
+
 ## Continuous integration
 
 `.github/workflows/build.yml` runs on every push to `main` and every pull
@@ -383,10 +417,6 @@ back — publish a patch instead.
 
 ## Known loose ends
 
-- **`style.aarontaylor.me` is not set up.** Canonical is `chapbook.page`.
-  Whether the personal-site route becomes a redirect here, or a page of its
-  own, is undecided. It is a `CNAME` plus a redirect rule on the
-  `aarontaylor.me` zone whenever it is wanted.
 - **The `MX` record still points at Hover's mail forwarding.** Untouched on
   purpose: nothing here needs mail, and mail config is not this project's to
   guess at.
