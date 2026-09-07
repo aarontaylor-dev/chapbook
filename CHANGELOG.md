@@ -35,6 +35,31 @@ The workflow's `contents` permission goes from `read` to `write`, which buys
 exactly one thing: the Release object. The tag already exists by the time it
 runs, and nothing in it pushes code.
 
+### The notes were wrapped for the wrong reader
+
+The first version of this used `gh release create --notes-from-tag`, which
+passes the tag message through unchanged, and the two formats disagree about
+newlines.
+
+A git tag message is hard-wrapped near 76 columns because it is read in a
+terminal by `git show`, which does not reflow. GitHub renders a release body
+as Markdown with hard line breaks **preserved** — a single newline becomes a
+`<br>`. So a message wrapped for the terminal arrived on the releases page as
+ragged forced breaks at a width the reader never chose, and every release read
+as though it had been typed into a narrow box. The tag also opened by naming
+itself, directly under a title that already did.
+
+Neither format is wrong; they are for different readers.
+`scripts/release-notes.js` translates between them — dropping the redundant
+title line, joining wrapped prose so the browser can wrap it instead, and
+leaving lists, quotes, tables and fenced code alone, because their line breaks
+mean something. The four existing releases were reflowed through it.
+
+The workflow now fails outright on a lightweight tag rather than opening an
+empty Release, since the notes have nowhere else to come from.
+
+### The drift guard checks for a Release too
+
 `release-drift.yml` gains the same check. It verified the tag and the registry
 and would have gone on passing forever with an empty Releases page, so it now
 fails on a missing Release too, and its failure summary prints the one-line
