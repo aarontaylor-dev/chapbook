@@ -1,0 +1,708 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plain Text System — a small CSS system</title>
+<meta name="description" content="A small CSS system for documents that want to read like documents. Monospace carries structure, a second face carries language, and separation comes from rules and space rather than from cards. Nine rules, about 500 lines, no build step, MIT.">
+<link rel="canonical" href="https://style.aarontaylor.me/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Plain Text System">
+<meta property="og:title" content="Plain Text System — a small CSS system">
+<meta property="og:description" content="A small CSS system for documents that want to read like documents. Monospace carries structure, a second face carries language, and separation comes from rules and space rather than from cards. Nine rules, about 500 lines, no build step, MIT.">
+<meta property="og:url" content="https://style.aarontaylor.me/">
+<meta name="twitter:card" content="summary">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
+<!-- Applies a stored theme before first paint. Inlined rather than fetched
+     because a round trip here is a flash of the wrong colour; the CSP carries
+     its hash, so this costs no 'unsafe-inline'. -->
+<script>(function () {
+  var d = document.documentElement;
+  var K = 'theme';
+
+  /* Runs before first paint. Everything below it can wait for the DOM. */
+  try {
+    var saved = localStorage.getItem(K);
+    if (saved === 'light' || saved === 'dark') d.setAttribute('data-theme', saved);
+  } catch (e) {}
+
+  function current() {
+    return d.getAttribute('data-theme') ||
+      (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var btn = document.getElementById('theme');
+    if (!btn) return;
+    btn.hidden = false;
+    btn.setAttribute('aria-pressed', current() === 'dark' ? 'true' : 'false');
+    btn.addEventListener('click', function () {
+      var next = current() === 'dark' ? 'light' : 'dark';
+      /* Colours cross-fade only while the theme is actually changing. */
+      d.classList.add('theming');
+      d.setAttribute('data-theme', next);
+      btn.setAttribute('aria-pressed', next === 'dark' ? 'true' : 'false');
+      try { localStorage.setItem(K, next); } catch (e) {}
+      setTimeout(function () { d.classList.remove('theming'); }, 320);
+    });
+  });
+})();
+</script>
+
+<link rel="stylesheet" href="/plain-text.css">
+<link rel="stylesheet" href="/plain-text-skins.css">
+<link rel="stylesheet" href="/specimen.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+    <header class="wrap bar">
+      <a class="brand" href="/">plain text system</a>
+      <div class="bar-end">
+        <nav class="barlinks" aria-label="Sections">
+          <a href="#rules">Rules</a>
+          <a href="#tokens">Tokens</a>
+          <a href="#components">Components</a>
+          <a href="#take">Take it</a>
+        </nav>
+
+      <button class="theme" id="theme" type="button" hidden>
+        <svg class="tsvg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle class="ring" cx="12" cy="12" r="8.4" fill="none"/>
+          <path class="half" d="M12 3.6 A8.4 8.4 0 0 1 12 20.4 Z"/>
+        </svg>
+        <span class="vh">Switch theme</span>
+      </button>
+      </div>
+    </header>
+
+    <main class="wrap" id="main">
+
+      <div class="hero">
+        <p class="eyebrow">v1.0.0 · MIT · no dependencies</p>
+        <h1 class="name">Plain&nbsp;Text System</h1>
+        <p class="intro">A small CSS system for documents that want to read like documents. Monospace carries structure, a second face carries language, and separation comes from rules and space rather than from cards.</p>
+        <p class="aside"><b>This page is the specimen.</b> It is set in the system it documents, using the same stylesheet you are invited to take &mdash; so every component below is the real implementation rather than a picture of one. The theme toggle is real. So is the print stylesheet. Change the skin in section 02 and watch nothing structural move.</p>
+      </div>
+
+      <section class="blk" id="rules">
+        <div class="rail">
+          <p class="n">01</p>
+          <h2>The rules</h2>
+        </div>
+        <div class="body">
+          <p class="lede">Nine rules, each already followed by two independently built sites before it was written down here. A rule that has survived one build is a preference; these survived two, with different palettes and different faces.</p>
+          <div class="rules">
+            <article class="rule">
+              <p class="rule-n">Rule 01</p>
+              <h3 class="rule-title">Two faces, and the mono is the constant</h3>
+              <p class="rule-body">One monospace sets every label, number, address, breadcrumb, button and footer line &mdash; anything that tells you <em>what kind of thing</em> you are looking at rather than <em>saying something</em>. A second face carries the language, and it is the site&rsquo;s own. If a piece of text tells you what kind of thing you are looking at, it is mono, uppercase and tracked. That single test decides every case.</p>
+              <p class="rule-spec">--mono is shared across sites · --language is not · 0.68&ndash;0.75rem · 0.08&ndash;0.16em tracking</p>
+            </article>
+            <article class="rule">
+              <p class="rule-n">Rule 02</p>
+              <h3 class="rule-title">No cards</h3>
+              <p class="rule-body">No radius, no fill, no shadow to say &ldquo;separate object&rdquo;. Objects are separated by a hairline and by space. The only fill in the system is the row hover at about 1.07:1 &mdash; felt rather than seen. If you can identify its colour, it is too strong. The single exception is a code field, which earns its border by genuinely being a different surface.</p>
+              <p class="rule-spec">border-radius: 0 everywhere · one fill, --sunk · zero box-shadow</p>
+            </article>
+            <article class="rule">
+              <p class="rule-n">Rule 03</p>
+              <h3 class="rule-title">Two weights of rule, and they mean different things</h3>
+              <p class="rule-body">A 1px hairline separates peers. A 2px ink rule opens and closes the document: under the masthead, above the first block, above the footer. Those three lines are what hold a page together at a glance. Do not add a third weight &mdash; the moment there are three, none of them mean anything.</p>
+              <p class="rule-spec">1px var(--rule) between peers · 2px var(--ink) at the document edges</p>
+            </article>
+            <article class="rule">
+              <p class="rule-n">Rule 04</p>
+              <h3 class="rule-title">The numbered rail</h3>
+              <p class="rule-body">A sticky left column carrying a number and a mono section name, content on the right. It stays beside its content for as long as that content is on screen, and collapses to a line above the content on narrow viewports. <code>align-self: start</code> is required, or there is nothing to stick within &mdash; a grid item stretches to the row height by default, and a stretched item cannot be sticky. Remove that one line and the rail silently stops moving, with no error anywhere.</p>
+              <p class="rule-spec">grid: var(--rail) minmax(0, 1fr) · position: sticky · align-self: start</p>
+            </article>
+            <article class="rule">
+              <p class="rule-n">Rule 05</p>
+              <h3 class="rule-title">One row anatomy, everywhere</h3>
+              <p class="rule-body">Mono label left, title in the display face, mark right, then an optional description and a mono line carrying the destination. The whole row is the link and the mark is decorative. On hover the hairline redraws in ink from the left and the mark nudges up and right. Use <b>&#8599;</b> for a destination that leaves the site and <b>&#8594;</b> for one that does not, so the mark keeps meaning something.</p>
+              <p class="rule-spec">rules bleed 0.75rem past the text so the hover fill has somewhere to sit</p>
+            </article>
+            <article class="rule">
+              <p class="rule-n">Rule 06</p>
+              <h3 class="rule-title">Tokens declared three times</h3>
+              <p class="rule-body">Bare <code>:root</code> is the light palette and the fallback. The media query is guarded with <code>:not([data-theme="light"])</code> so an explicit choice beats the system preference. <code>[data-theme="dark"]</code> restates it so the toggle wins in both directions. Never style a component from inside one of those blocks &mdash; a rule written there exists in one theme and not the other, and you will not notice for weeks.</p>
+              <p class="rule-spec">:root · @media (prefers-color-scheme: dark) · :root[data-theme="dark"]</p>
+            </article>
+            <article class="rule">
+              <p class="rule-n">Rule 07</p>
+              <h3 class="rule-title">Contrast is measured, and the measurement is written down</h3>
+              <p class="rule-body">Every text token carries its ratio, measured against the <em>worst-case surface</em> rather than the flat background &mdash; the grain overlay sits between the text and the page and moves the surface toward the text in both themes. Ink is never pure black on pure white; at 21:1 that pairing glares on long text. In this repo the measuring is done by the build, and a token below AA fails it.</p>
+              <p class="rule-spec">WCAG AA 4.5:1 for text · hairlines and fills exempt · measured, not estimated</p>
+            </article>
+            <article class="rule">
+              <p class="rule-n">Rule 08</p>
+              <h3 class="rule-title">A bordered control, not another word in a row of words</h3>
+              <p class="rule-body">The theme toggle is a 2rem square with a hairline border, because it <em>does</em> something where the links beside it only <em>go</em> somewhere. It ships with the <code>hidden</code> attribute set and is revealed by script, so a visitor without JavaScript is never offered a button that cannot work.</p>
+              <p class="rule-spec">2rem square · 1px border · hidden until bootstrapped</p>
+            </article>
+            <article class="rule">
+              <p class="rule-n">Rule 09</p>
+              <h3 class="rule-title">It prints</h3>
+              <p class="rule-body">Ink on white, controls gone, every panel open, <code>break-inside: avoid</code> on structural blocks, and link destinations expanded after the link text. A printed page has no hover and no address bar, so a bare &ldquo;read more&rdquo; prints as a dead end. Print is a real target here, not an afterthought &mdash; try it on this page.</p>
+              <p class="rule-spec">@media print · --grain: 0 · href expanded on content links only</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="blk" id="tokens">
+        <div class="rail">
+          <p class="n">02</p>
+          <h2>Tokens</h2>
+        </div>
+        <div class="body">
+          <p class="lede">Eight colour tokens, and the names are the contract. Change every value you like; keep the names, so a diff between two sites built on this system shows only the differences that were intended.</p>
+
+          <div class="skinpick">
+            <p class="label" id="skinlabel">Skin</p>
+            <div class="skinbtns" role="group" aria-labelledby="skinlabel">
+              <button class="skinbtn" type="button" data-skin-set="neutral" aria-pressed="true">Neutral</button>
+              <button class="skinbtn" type="button" data-skin-set="green" aria-pressed="false">Green</button>
+              <button class="skinbtn" type="button" data-skin-set="clay" aria-pressed="false">Clay</button>
+            </div>
+          </div>
+          <div class="skinpanel" data-skin-panel="neutral">
+            <p class="small skinnote"><b>aarontaylor.me</b> &mdash; Monochrome, no accent. The hub is an index of other work, so it stays neutral and lets each project keep its own colour.</p>
+
+            <div class="tablewrap">
+              <table class="tbl">
+                <caption class="vh">Colour tokens for the Neutral skin, light and dark, with contrast measured against the worst-case grain pixel</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Token</th>
+                    <th scope="col">Light</th>
+                    <th scope="col">On surface</th>
+                    <th scope="col">Dark</th>
+                    <th scope="col">On surface</th>
+                    <th scope="col">Role</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row"><code>--paper</code></th>
+                    <td><span class="chip" style="--c:#fcfcfc"></span>#fcfcfc</td>
+                    <td class="num">—</td>
+                    <td><span class="chip" style="--c:#111"></span>#111</td>
+                    <td class="num">—</td>
+                    <td class="role">Page ground</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>--sunk</code></th>
+                    <td><span class="chip" style="--c:#f4f4f4"></span>#f4f4f4</td>
+                    <td class="num">—</td>
+                    <td><span class="chip" style="--c:#191919"></span>#191919</td>
+                    <td class="num">—</td>
+                    <td class="role">Row hover, code field</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>--rule</code></th>
+                    <td><span class="chip" style="--c:#e5e5e5"></span>#e5e5e5</td>
+                    <td class="num">—</td>
+                    <td><span class="chip" style="--c:#2a2a2a"></span>#2a2a2a</td>
+                    <td class="num">—</td>
+                    <td class="role">Hairlines</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>--ink</code></th>
+                    <td><span class="chip" style="--c:#111"></span>#111</td>
+                    <td class="num">17.32</td>
+                    <td><span class="chip" style="--c:#ededed"></span>#ededed</td>
+                    <td class="num">15.46</td>
+                    <td class="role">Body, titles, 2px rules</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>--muted</code></th>
+                    <td><span class="chip" style="--c:#444"></span>#444</td>
+                    <td class="num">8.93</td>
+                    <td><span class="chip" style="--c:#b4b4b4"></span>#b4b4b4</td>
+                    <td class="num">8.73</td>
+                    <td class="role">Ledes, descriptions</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>--faint</code></th>
+                    <td><span class="chip" style="--c:#666"></span>#666</td>
+                    <td class="num">5.27</td>
+                    <td><span class="chip" style="--c:#8a8a8a"></span>#8a8a8a</td>
+                    <td class="num">5.24</td>
+                    <td class="role">Mono labels, meta</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>--accent</code></th>
+                    <td><span class="chip" style="--c:#111"></span>#111</td>
+                    <td class="num">17.32</td>
+                    <td><span class="chip" style="--c:#ededed"></span>#ededed</td>
+                    <td class="num">15.46</td>
+                    <td class="role">Links, rail numbers</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>--accent-deep</code></th>
+                    <td><span class="chip" style="--c:#111"></span>#111</td>
+                    <td class="num">17.32</td>
+                    <td><span class="chip" style="--c:#ededed"></span>#ededed</td>
+                    <td class="num">15.46</td>
+                    <td class="role">Link hover</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="skinpanel" data-skin-panel="green" hidden>
+            <p class="small skinnote"><b>weindie.com</b> &mdash; Warm paper, deep green, Newsreader. Shipped &mdash; these are the values running on the site today.</p>
+
+            <div class="tablewrap">
+              <table class="tbl">
+                <caption class="vh">Colour tokens for the Green skin, light and dark, with contrast measured against the worst-case grain pixel</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Token</th>
+                    <th scope="col">Light</th>
+                    <th scope="col">On surface</th>
+                    <th scope="col">Dark</th>
+                    <th scope="col">On surface</th>
+                    <th scope="col">Role</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row"><code>--paper</code></th>
+                    <td><span class="chip" style="--c:#fbfaf7"></span>#fbfaf7</td>
+                    <td class="num">—</td>
+                    <td><span class="chip" style="--c:#121412"></span>#121412</td>
+                    <td class="num">—</td>
+                    <td class="role">Page ground</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>--sunk</code></th>
+                    <td><span class="chip" style="--c:#f2f0ea"></span>#f2f0ea</td>
+                    <td class="num">—</td>
+                    <td><span class="chip" style="--c:#1a1d1a"></span>#1a1d1a</td>
+                    <td class="num">—</td>
+                    <td class="role">Row hover, code field</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>--rule</code></th>
+                    <td><span class="chip" style="--c:#d9d7ce"></span>#d9d7ce</td>
+                    <td class="num">—</td>
+                    <td><span class="chip" style="--c:#2d312c"></span>#2d312c</td>
+                    <td class="num">—</td>
+                    <td class="role">Hairlines</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>--ink</code></th>
+                    <td><span class="chip" style="--c:#16181a"></span>#16181a</td>
+                    <td class="num">17.05</td>
+                    <td><span class="chip" style="--c:#ece9e1"></span>#ece9e1</td>
+                    <td class="num">15.26</td>
+                    <td class="role">Body, titles, 2px rules</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>--muted</code></th>
+                    <td><span class="chip" style="--c:#54574f"></span>#54574f</td>
+                    <td class="num">7.05</td>
+                    <td><span class="chip" style="--c:#a9a89d"></span>#a9a89d</td>
+                    <td class="num">7.73</td>
+                    <td class="role">Ledes, descriptions</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>--faint</code></th>
+                    <td><span class="chip" style="--c:#6b6e66"></span>#6b6e66</td>
+                    <td class="num">4.97</td>
+                    <td><span class="chip" style="--c:#83867c"></span>#83867c</td>
+                    <td class="num">4.99</td>
+                    <td class="role">Mono labels, meta</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>--accent</code></th>
+                    <td><span class="chip" style="--c:#27705a"></span>#27705a</td>
+                    <td class="num">5.66</td>
+                    <td><span class="chip" style="--c:#5cb894"></span>#5cb894</td>
+                    <td class="num">7.70</td>
+                    <td class="role">Links, rail numbers</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>--accent-deep</code></th>
+                    <td><span class="chip" style="--c:#1a5342"></span>#1a5342</td>
+                    <td class="num">8.53</td>
+                    <td><span class="chip" style="--c:#7fd0af"></span>#7fd0af</td>
+                    <td class="num">10.18</td>
+                    <td class="role">Link hover</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="skinpanel" data-skin-panel="clay" hidden>
+            <p class="small skinnote"><b>notes.aarontaylor.me</b> &mdash; Warmer paper, clay accent, Source Serif&nbsp;4. Clay is the colour of a correction, and the site is a notebook of them.</p>
+
+            <div class="tablewrap">
+              <table class="tbl">
+                <caption class="vh">Colour tokens for the Clay skin, light and dark, with contrast measured against the worst-case grain pixel</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Token</th>
+                    <th scope="col">Light</th>
+                    <th scope="col">On surface</th>
+                    <th scope="col">Dark</th>
+                    <th scope="col">On surface</th>
+                    <th scope="col">Role</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row"><code>--paper</code></th>
+                    <td><span class="chip" style="--c:#faf8f3"></span>#faf8f3</td>
+                    <td class="num">—</td>
+                    <td><span class="chip" style="--c:#14120f"></span>#14120f</td>
+                    <td class="num">—</td>
+                    <td class="role">Page ground</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>--sunk</code></th>
+                    <td><span class="chip" style="--c:#f1ede3"></span>#f1ede3</td>
+                    <td class="num">—</td>
+                    <td><span class="chip" style="--c:#1c1a16"></span>#1c1a16</td>
+                    <td class="num">—</td>
+                    <td class="role">Row hover, code field</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>--rule</code></th>
+                    <td><span class="chip" style="--c:#ddd7c9"></span>#ddd7c9</td>
+                    <td class="num">—</td>
+                    <td><span class="chip" style="--c:#302c25"></span>#302c25</td>
+                    <td class="num">—</td>
+                    <td class="role">Hairlines</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>--ink</code></th>
+                    <td><span class="chip" style="--c:#191714"></span>#191714</td>
+                    <td class="num">16.13</td>
+                    <td><span class="chip" style="--c:#ece7dc"></span>#ece7dc</td>
+                    <td class="num">14.64</td>
+                    <td class="role">Body, titles, 2px rules</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>--muted</code></th>
+                    <td><span class="chip" style="--c:#55514a"></span>#55514a</td>
+                    <td class="num">7.11</td>
+                    <td><span class="chip" style="--c:#a8a296"></span>#a8a296</td>
+                    <td class="num">7.11</td>
+                    <td class="role">Ledes, descriptions</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>--faint</code></th>
+                    <td><span class="chip" style="--c:#6c675e"></span>#6c675e</td>
+                    <td class="num">5.06</td>
+                    <td><span class="chip" style="--c:#8b8578"></span>#8b8578</td>
+                    <td class="num">4.92</td>
+                    <td class="role">Mono labels, meta</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>--accent</code></th>
+                    <td><span class="chip" style="--c:#9a4f2b"></span>#9a4f2b</td>
+                    <td class="num">5.37</td>
+                    <td><span class="chip" style="--c:#d98b62"></span>#d98b62</td>
+                    <td class="num">6.72</td>
+                    <td class="role">Links, rail numbers</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>--accent-deep</code></th>
+                    <td><span class="chip" style="--c:#7d3e20"></span>#7d3e20</td>
+                    <td class="num">7.33</td>
+                    <td><span class="chip" style="--c:#eba57e"></span>#eba57e</td>
+                    <td class="num">8.78</td>
+                    <td class="role">Link hover</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <p class="small footnote">Ratios are measured against the <b>worst-case grain pixel</b>, not against <code>--paper</code>. The overlay sits between the text and the page and moves the surface toward the text in both themes, so a ratio taken against the flat ground flatters itself. <code>--rule</code> and <code>--sunk</code> are exempt: they are edges and fills, and WCAG does not ask a hairline to be legible.</p>
+
+          <p class="small footnote">The build recomputes every number on this page from the stylesheet it ships, and <b>exits non-zero if any text token drops below 4.5:1</b>. A failing token cannot reach the site, and this table cannot go stale.</p>
+
+          <p class="small footnote">Layout tokens, reconciled across the three sites &mdash; they had drifted, and these are the settled values:<br>
+            <code>--gut</code> clamp(1.25rem, 5vw, 2.75rem) &middot;
+            <code>--wrap</code> 62rem &middot;
+            <code>--rail</code> 10rem &middot;
+            <code>--measure</code> 34em &middot;
+            <code>--ease</code> cubic-bezier(0.22, 0.61, 0.36, 1). Rem everywhere.</p>
+        </div>
+      </section>
+
+      <section class="blk" id="type">
+        <div class="rail">
+          <p class="n">03</p>
+          <h2>Type</h2>
+        </div>
+        <div class="body">
+          <p class="lede">Two faces do all the work. If a piece of text tells you <em>what kind of thing</em> you are looking at, it is mono, uppercase and tracked. If it <em>says something</em>, it is the language face. That test decides every case, which is why the system needs no third face.</p>
+
+          <div class="tablewrap">
+            <table class="tbl">
+              <caption class="vh">The type scale</caption>
+              <thead>
+                <tr><th scope="col">Role</th><th scope="col">Face</th><th scope="col">Size</th><th scope="col">Detail</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Page title</th><td>Display</td><td class="num">clamp(2.5rem, 8vw, 4rem)</td><td class="role">lh 1.02 · ls &minus;0.032em</td></tr>
+                <tr><th scope="row">Row title</th><td>Display</td><td class="num">clamp(1.15rem, 3vw, 1.45rem)</td><td class="role">lh 1.2 · ls &minus;0.02em</td></tr>
+                <tr><th scope="row">Intro</th><td>Language</td><td class="num">1.125rem</td><td class="role">--muted · max 32em</td></tr>
+                <tr><th scope="row">Lede</th><td>Language</td><td class="num">1.1rem</td><td class="role">--muted · max --measure</td></tr>
+                <tr><th scope="row">Body</th><td>Language</td><td class="num">1.0625rem</td><td class="role">lh 1.6</td></tr>
+                <tr><th scope="row">Row description</th><td>Language</td><td class="num">0.97rem</td><td class="role">--muted · lh 1.5</td></tr>
+                <tr><th scope="row">Section head</th><td>Mono 500</td><td class="num">0.7rem</td><td class="role">ls 0.13em · uppercase</td></tr>
+                <tr><th scope="row">Label / meta</th><td>Mono 400</td><td class="num">0.7rem</td><td class="role">ls 0.11em · uppercase · --faint</td></tr>
+                <tr><th scope="row">Rail number</th><td>Mono 400</td><td class="num">0.7rem</td><td class="role">tabular-nums · --accent</td></tr>
+                <tr><th scope="row">Code</th><td>Mono 400</td><td class="num">0.8125rem</td><td class="role">lh 1.65 · --sunk field</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="small footnote">Sizes live on classes, never on elements. A base <code>h1</code> rule gets overridden on every page that uses it, and at that point it is not a base rule &mdash; it is a default nobody wants, written once and fought four times.</p>
+
+          <p class="small footnote">Three faces are declared: <code>--mono</code>, <code>--language</code>, and <code>--display</code>, which defaults to <code>--language</code> so most sites never think about it. Set it separately only when titles genuinely want a different face &mdash; the hub does, because Archivo Black sets its titles and Roboto sets its prose.</p>
+        </div>
+      </section>
+
+      <section class="blk" id="components">
+        <div class="rail">
+          <p class="n">04</p>
+          <h2>Components</h2>
+        </div>
+        <div class="body">
+          <p class="lede">Every component below is live. Hover a row to see Rule 05, press the toggle in the masthead to see Rule 06, and print the page to see Rule 09.</p>
+
+          <p class="label">The index row</p>
+          <nav class="index" aria-label="Example rows">
+
+            <a class="row" href="#components">
+              <span class="row-label">Internal</span>
+              <span class="row-title">A row that stays on the site</span>
+              <span class="row-mark" aria-hidden="true">&#8594;</span>
+              <span class="row-desc">Mono label left, title in the display face, mark right, then this description and a mono line carrying the destination. The whole row is the link.</span>
+              <span class="row-meta">the mark is &#8594; because this one does not leave</span>
+            </a>
+
+            <a class="row" href="https://github.com/aarontaylor-dev/plain-text-system" rel="noopener">
+              <span class="row-label">External</span>
+              <span class="row-title">A row that leaves</span>
+              <span class="row-mark" aria-hidden="true">&#8599;</span>
+              <span class="row-desc">Same anatomy. Only the mark changes, so the mark keeps meaning something rather than being decoration that happens to point.</span>
+              <span class="row-meta">github.com/aarontaylor-dev/plain-text-system</span>
+            </a>
+          </nav>
+
+          <p class="label footnote">The code field</p>
+          <pre class="code">.row:hover::after { transform: scaleX(1); }</pre>
+          <p class="small">The one bordered, filled object in the system. It earns the exception in Rule 02 by genuinely being a different surface, rather than being a card drawn around ordinary content.</p>
+
+          <p class="label footnote">The rail</p>
+          <p class="small">You are looking at it. The number and the section name to the left of this text are sticky, and stay beside their content for as long as that content is on screen. On a narrow viewport they collapse into a single line above the content &mdash; resize the window and watch the grid change rather than the type shrink.</p>
+
+          <p class="label footnote">Not in v1</p>
+          <p class="small">Margin notes are the obvious next component &mdash; they exist on Working Notes and are worth keeping &mdash; but they have shipped on one build rather than two, so they are a candidate for v1.1 rather than part of v1. The rule that keeps this system honest is the same one that keeps it small: two independent builds, or it is a preference rather than a rule.</p>
+        </div>
+      </section>
+
+      <section class="blk" id="take">
+        <div class="rail">
+          <p class="n">05</p>
+          <h2>Take it</h2>
+        </div>
+        <div class="body">
+          <p class="lede">There is no install step, no package to configure and nothing to initialise. Link one file and use the class names.</p>
+
+          <pre class="code">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://style.aarontaylor.me/v1.0.0/plain-text.css&quot;&gt;</pre>
+          <p class="small">Two version paths, and they are not the same promise. <code>/v1.0.0/</code> is exact: it never changes, and it is cached for a year. <code>/v1/</code> follows the major line and picks up additive releases, cached for a day. Link the exact one unless you specifically want the updates.</p>
+
+          <p class="label footnote">Or vendor it, which is better</p>
+          <pre class="code">curl -O https://style.aarontaylor.me/plain-text.css</pre>
+          <p class="small">Copying the file into your own repo costs one request less, survives this domain disappearing, and lets you edit it &mdash; which you are meant to do. A system you cannot change is a dependency.</p>
+
+          <p class="label footnote">Or from npm</p>
+          <pre class="code">npm i plain-text-system</pre>
+
+          <p class="label footnote">The minimum page</p>
+          <pre class="code">&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;title&gt;A page&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;/plain-text.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;header class=&quot;wrap bar&quot;&gt;
+    &lt;a class=&quot;brand&quot; href=&quot;/&quot;&gt;site name&lt;/a&gt;
+  &lt;/header&gt;
+
+  &lt;main class=&quot;wrap&quot;&gt;
+    &lt;div class=&quot;hero&quot;&gt;
+      &lt;p class=&quot;eyebrow&quot;&gt;Label&lt;/p&gt;
+      &lt;h1 class=&quot;name&quot;&gt;The title&lt;/h1&gt;
+      &lt;p class=&quot;intro&quot;&gt;One sentence saying what this is.&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;section class=&quot;blk&quot;&gt;
+      &lt;div class=&quot;rail&quot;&gt;
+        &lt;p class=&quot;n&quot;&gt;01&lt;/p&gt;
+        &lt;h2&gt;Section&lt;/h2&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;body&quot;&gt;
+        &lt;nav class=&quot;index&quot;&gt;
+          &lt;a class=&quot;row&quot; href=&quot;/somewhere&quot;&gt;
+            &lt;span class=&quot;row-label&quot;&gt;Status&lt;/span&gt;
+            &lt;span class=&quot;row-title&quot;&gt;The thing&lt;/span&gt;
+            &lt;span class=&quot;row-mark&quot; aria-hidden=&quot;true&quot;&gt;&rarr;&lt;/span&gt;
+            &lt;span class=&quot;row-desc&quot;&gt;What it is.&lt;/span&gt;
+            &lt;span class=&quot;row-meta&quot;&gt;where it goes&lt;/span&gt;
+          &lt;/a&gt;
+        &lt;/nav&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+  &lt;/main&gt;
+
+  &lt;footer class=&quot;wrap&quot;&gt;
+    &lt;div class=&quot;foot&quot;&gt;&lt;b&gt;site name&lt;/b&gt;&lt;span&gt;A line.&lt;/span&gt;&lt;/div&gt;
+  &lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+
+          <p class="label footnote">Working with an agent</p>
+          <p class="small">Point it at <a href="/system.md">system.md</a>, which is the whole system as plain text &mdash; the nine rules, the token contract, the markup for every component, and the rules for extending it without drift. <a href="/llms.txt">llms.txt</a> is the short version for a small context window. There is also a skill, in the format <a href="https://weindie.com" rel="noopener">weindie.com</a> uses, in <code>skill/</code> in the repository.</p>
+
+          <nav class="index" aria-label="Files">
+
+            <a class="row" href="/plain-text.css">
+              <span class="row-label">Required</span>
+              <span class="row-title">plain-text.css</span>
+              <span class="row-mark" aria-hidden="true">&#8594;</span>
+              <span class="row-desc">The system. Tokens, primitives, components, print. Around 500 lines, and you are expected to read them.</span>
+              <span class="row-meta">style.aarontaylor.me/plain-text.css</span>
+            </a>
+
+            <a class="row" href="/plain-text-skins.css">
+              <span class="row-label">Optional</span>
+              <span class="row-title">plain-text-skins.css</span>
+              <span class="row-mark" aria-hidden="true">&#8594;</span>
+              <span class="row-desc">Two worked palettes, taken from sites actually running this system. Load after the base file and set data-skin.</span>
+              <span class="row-meta">style.aarontaylor.me/plain-text-skins.css</span>
+            </a>
+
+            <a class="row" href="/plain-text-theme.js">
+              <span class="row-label">Optional</span>
+              <span class="row-title">plain-text-theme.js</span>
+              <span class="row-mark" aria-hidden="true">&#8594;</span>
+              <span class="row-desc">The theme bootstrap in 24 lines. Inline it in the head, or the stored preference flashes the wrong colour on every load.</span>
+              <span class="row-meta">style.aarontaylor.me/plain-text-theme.js</span>
+            </a>
+
+            <a class="row" href="/system.md">
+              <span class="row-label">For agents</span>
+              <span class="row-title">system.md</span>
+              <span class="row-mark" aria-hidden="true">&#8594;</span>
+              <span class="row-desc">The whole system as plain text: the nine rules, the token contract, the markup for every component, and the rules for extending it without drift.</span>
+              <span class="row-meta">style.aarontaylor.me/system.md</span>
+            </a>
+
+            <a class="row" href="/llms.txt">
+              <span class="row-label">For agents</span>
+              <span class="row-title">llms.txt</span>
+              <span class="row-mark" aria-hidden="true">&#8594;</span>
+              <span class="row-desc">The short brief. What this is, the nine rules in one line each, and where the files are. Start here if you have a small context window.</span>
+              <span class="row-meta">style.aarontaylor.me/llms.txt</span>
+            </a>
+
+            <a class="row" href="https://github.com/aarontaylor-dev/plain-text-system" rel="noopener">
+              <span class="row-label">Source</span>
+              <span class="row-title">GitHub</span>
+              <span class="row-mark" aria-hidden="true">&#8599;</span>
+              <span class="row-desc">The repository. Everything on this page is in it, including the build that measures the contrast and refuses to publish a failing token.</span>
+              <span class="row-meta">github.com/aarontaylor-dev/plain-text-system</span>
+            </a>
+          </nav>
+        </div>
+      </section>
+
+      <section class="blk" id="version">
+        <div class="rail">
+          <p class="n">06</p>
+          <h2>Version</h2>
+        </div>
+        <div class="body">
+          <p class="lede">The <em>system</em> carries the version, not the site. <code>/v1.0.0/</code> never changes, so a page that links it never breaks.</p>
+
+          <p class="small">One rule decides a major bump: <b>a token rename or a removed primitive</b>. Those are the only two changes that can break a site downstream &mdash; everything else is additive, and additions ship as a minor version at the same URL.</p>
+
+          <p class="small footnote">What is deliberately not here: margin notes, tables as a styled component, form controls, and any kind of grid utility. Each is a real gap. None of them has been built twice yet, and the system stays small by refusing to describe anything it has not had to do.</p>
+
+          <p class="small footnote">The changelog is in the repository, and it records why a thing changed rather than only that it did.</p>
+
+          <nav class="index" aria-label="Version">
+
+            <a class="row" href="https://github.com/aarontaylor-dev/plain-text-system/blob/main/CHANGELOG.md" rel="noopener">
+              <span class="row-label">v1.0.0</span>
+              <span class="row-title">Changelog</span>
+              <span class="row-mark" aria-hidden="true">&#8599;</span>
+              <span class="row-desc">What changed, when, and the reasoning that produced it.</span>
+              <span class="row-meta">CHANGELOG.md</span>
+            </a>
+          </nav>
+        </div>
+      </section>
+    </main>
+
+    <footer class="wrap">
+      <div class="foot">
+        <b>plain text system v1.0.0</b>
+        <span>MIT. Take it, change it, do not credit me.</span>
+      </div>
+    </footer>
+
+<script>/* The skin picker. Specimen-only — it is not part of the system, and it is
+   not in plain-text.css. It swaps one attribute on the root element and shows
+   the matching panel; every visible change after that is the stylesheet's. */
+(function () {
+  var d = document.documentElement;
+  var btns = [].slice.call(document.querySelectorAll('[data-skin-set]'));
+  var panels = [].slice.call(document.querySelectorAll('[data-skin-panel]'));
+  if (!btns.length) return;
+
+  function show(id) {
+    /* "neutral" is the default palette in plain-text.css itself, so it is the
+       absence of a skin rather than a skin. */
+    if (id === 'neutral') d.removeAttribute('data-skin');
+    else d.setAttribute('data-skin', id);
+
+    btns.forEach(function (b) {
+      b.setAttribute('aria-pressed', b.dataset.skinSet === id ? 'true' : 'false');
+    });
+    panels.forEach(function (p) {
+      p.hidden = p.dataset.skinPanel !== id;
+    });
+  }
+
+  btns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      /* Cross-fade the colours, for the same reason and the same duration as
+         the theme toggle. */
+      d.classList.add('theming');
+      show(b.dataset.skinSet);
+      setTimeout(function () { d.classList.remove('theming'); }, 320);
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

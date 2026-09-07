@@ -1,0 +1,22 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Editors and local tooling
+.vscode/
+.idea/
+.claude/
+*.swp
+*~
+
+# Logs / local scratch
+*.log
+.wrangler/
+node_modules/
+*.tgz
+
+# Copied from public/ at pack time by scripts/sync-dist.js
+/system.md
+/llms.txt

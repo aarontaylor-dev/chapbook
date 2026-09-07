@@ -1,0 +1,415 @@
+# Plain Text System v1.0.0
+
+A small CSS system for documents that want to read like documents.
+
+**Monospace carries structure, a second face carries language, and separation
+comes from rules and space rather than from cards.**
+
+MIT. Take it, change it, no credit needed.
+
+- Stylesheet: <https://style.aarontaylor.me/v1.0.0/plain-text.css>
+- Skins: <https://style.aarontaylor.me/v1.0.0/plain-text-skins.css>
+- Theme bootstrap: <https://style.aarontaylor.me/v1.0.0/plain-text-theme.js>
+- Specimen: <https://style.aarontaylor.me>
+- Source: <https://github.com/aarontaylor-dev/plain-text-system>
+
+This file is the complete specification. If you are an agent building a page
+in this system, you need nothing else.
+
+---
+
+## What this is not
+
+It is not a framework, and it is not a component library. It has no build
+step, no JavaScript requirement, no utility classes, and no reset beyond
+`box-sizing`. It styles a **named set of components** and leaves the rest of
+the document alone, deliberately, so it can be dropped into an existing page
+without a fight.
+
+It will not style your headings, paragraphs or links for you beyond the
+primitives listed here. That is on purpose. If you want a heading styled, put
+one of these classes on it.
+
+---
+
+## The nine rules
+
+These are the system. The CSS is only their implementation. Each was already
+being followed by two independently built sites before it was written down —
+a rule that has survived one build is a preference.
+
+### Rule 01 — Two faces, and the mono is the constant
+
+One monospace sets every label, number, address, breadcrumb, button and footer
+line — anything that tells you *what kind of thing* you are looking at rather
+than *saying something*. A second face carries the language, and it is the
+site's own.
+
+**The test that decides every case:** if a piece of text tells you what kind of
+thing you are looking at, it is mono, uppercase and tracked. If it says
+something, it is the language face.
+
+`--mono` is shared across sites built on this system. `--language` is not.
+
+### Rule 02 — No cards
+
+No radius, no fill, no shadow to say "separate object". Objects are separated
+by a hairline and by space.
+
+The only fill in the system is the row hover at about 1.07:1 — felt rather
+than seen. If you can identify its colour, it is too strong.
+
+The single exception is `.code`, which earns its border by genuinely being a
+different surface rather than a card drawn around ordinary content.
+
+**Never write:** `border-radius`, `box-shadow`, or a background fill on a
+container.
+
+### Rule 03 — Two weights of rule, and they mean different things
+
+- **1px `var(--rule)`** separates peers.
+- **2px `var(--ink)`** opens and closes the document: under the masthead,
+  above the first block, above the footer.
+
+Those three ink lines are what hold a page together at a glance. Do not add a
+third weight — the moment there are three, none of them mean anything.
+
+### Rule 04 — The numbered rail
+
+A sticky left column carrying a number and a mono section name, content on the
+right. It stays beside its content for as long as that content is on screen,
+and collapses to a line above the content below 52rem.
+
+`align-self: start` is **required**. A grid item stretches to the row height by
+default, and a stretched item has nothing to stick within. Remove that one
+line and the rail silently stops moving, with no error anywhere.
+
+Omit the number on a single-section page. A section number is a promise that
+another one follows.
+
+### Rule 05 — One row anatomy, everywhere
+
+Mono label left, title in the display face, mark right, then an optional
+description and a mono line carrying the destination. The whole row is the
+link; the mark is decorative and must carry `aria-hidden="true"`.
+
+On hover the hairline redraws in ink from the left and the mark nudges up and
+right.
+
+Use `↗` for a destination that leaves the site and `→` for one that does not,
+so the mark keeps meaning something.
+
+### Rule 06 — Tokens declared three times
+
+```css
+:root { /* light palette, and the fallback */ }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { /* guarded, so an explicit choice wins */ }
+}
+
+:root[data-theme="dark"] { /* the toggle, so it wins in both directions */ }
+```
+
+**Never style a component from inside one of those blocks.** Redefine tokens
+only. A component rule written there exists in one theme and not the other,
+and you will not notice for weeks.
+
+The two dark blocks must declare identical values. Nothing in CSS enforces
+that; `build.js` in the source repo checks it.
+
+### Rule 07 — Contrast is measured, and the measurement is written down
+
+Every text token carries its ratio, measured against the **worst-case surface**
+rather than the flat background. The grain overlay sits between the text and
+the page and moves the surface toward the text in *both* themes, so a ratio
+taken against `--paper` flatters itself.
+
+- Light: the worst pixel is `--paper` composited with black at `--grain`.
+- Dark: the worst pixel is `--paper` composited with white at `--grain`.
+
+Text tokens must clear **4.5:1**. `--rule` and `--sunk` are exempt — they are
+edges and fills, and WCAG does not ask a hairline to be legible.
+
+Ink is never pure black on pure white; at 21:1 that pairing glares on long
+text.
+
+### Rule 08 — A bordered control, not another word in a row of words
+
+A control that *does* something gets a hairline border. Links that only *go*
+somewhere do not. The theme toggle is a 2rem square for exactly this reason.
+
+Ship it with the `hidden` attribute set and let script reveal it, so a visitor
+without JavaScript is never offered a button that cannot work.
+
+A pressed state is a **border in ink, not a fill** — a filled button would be
+the first card on the page.
+
+### Rule 09 — It prints
+
+Ink on white, controls gone, every panel open, `break-inside: avoid` on
+structural blocks, and link destinations expanded after the link text. A
+printed page has no hover and no address bar, so a bare "read more" prints as
+a dead end.
+
+Expand `href` on content links only. Applied to every anchor it also prints the
+address of every nav item, which is noise.
+
+---
+
+## Token contract
+
+The eight colour token **names** are the contract. Change every value you
+like; keep the names, so a diff between two sites built on this system shows
+only the differences that were intended.
+
+| Token | Role |
+| --- | --- |
+| `--paper` | Page ground |
+| `--sunk` | Row hover, code field. Felt rather than seen. |
+| `--rule` | Hairlines. Decorative; no contrast requirement. |
+| `--ink` | Body, titles, and the 2px rules |
+| `--muted` | Ledes, summaries, descriptions |
+| `--faint` | Mono labels, meta, addresses |
+| `--accent` | Links, rail numbers, status |
+| `--accent-deep` | Link hover |
+
+Plus `--grain` (0 to disable the surface noise).
+
+### Faces
+
+| Token | Role |
+| --- | --- |
+| `--mono` | The structural face. Shared across sites. |
+| `--language` | The reading face. The site's own. |
+| `--display` | Titles. Defaults to `var(--language)`. |
+
+Set `--display` separately only when titles genuinely want a different face.
+
+### Layout
+
+Reconciled across the three sites already running this system — they had
+drifted, and these are the settled values. **Rem everywhere; do not
+reintroduce px.**
+
+| Token | Value |
+| --- | --- |
+| `--gut` | `clamp(1.25rem, 5vw, 2.75rem)` |
+| `--wrap` | `62rem` |
+| `--rail` | `10rem` |
+| `--measure` | `34em` |
+| `--ease` | `cubic-bezier(0.22, 0.61, 0.36, 1)` |
+
+---
+
+## The default palette
+
+Neutral: monochrome, no accent. Ratios measured against the worst-case grain
+pixel — `#f5f5f5` in light, `#161616` in dark.
+
+| Token | Light | Ratio | Dark | Ratio |
+| --- | --- | --- | --- | --- |
+| `--paper` | `#fcfcfc` | — | `#111` | — |
+| `--sunk` | `#f4f4f4` | 1.07 | `#191919` | 1.07 |
+| `--rule` | `#e5e5e5` | — | `#2a2a2a` | — |
+| `--ink` | `#111` | 17.32 | `#ededed` | 15.46 |
+| `--muted` | `#444` | 8.93 | `#b4b4b4` | 8.73 |
+| `--faint` | `#666` | 5.27 | `#8a8a8a` | 5.24 |
+| `--accent` | `#111` | 17.32 | `#ededed` | 15.46 |
+| `--accent-deep` | `#111` | 17.32 | `#ededed` | 15.46 |
+| `--grain` | `0.028` | | `0.02` | |
+
+The neutral skin collapses the accent onto the ink deliberately: a monochrome
+page has no hue to spend, so a link announces itself by decoration and hover
+changes the underline rather than the colour.
+
+---
+
+## Class reference
+
+Everything the system styles. There is nothing else.
+
+### Layout
+
+| Class | On | What it does |
+| --- | --- | --- |
+| `.wrap` | any | Centres content at `--wrap`, with `--gut` either side |
+| `.bar` | `<header>` | Masthead row. Adds the 2px ink rule beneath. |
+| `.brand` | `<a>` | Site name in the masthead |
+| `.bar-end` | `<div>` | Right-hand group: nav plus the toggle |
+| `.barlinks` | `<nav>` | Section links. Hidden below 36rem. |
+| `.blk` | `<section>` | Rail + body grid. First one gets the 2px ink rule. |
+| `.rail` | `<div>` | The sticky left column |
+| `.rail .n` | `<p>` | The section number. Tabular, `--accent`. |
+| `.body` | `<div>` | The content column |
+| `.foot` | `<div>` | Footer row, inside `<footer>` |
+
+### Type
+
+| Class | What it is |
+| --- | --- |
+| `.eyebrow` | Mono label above a page title |
+| `.name` | The page title, in `--display` |
+| `.intro` | The opening sentence, `--muted` |
+| `.aside` | Mono aside — the page talking about itself |
+| `.lede` | Section opener, `--muted` |
+| `.label` | The mono label. The most reused object in the system. |
+| `.small` | Mono running text, for footnotes and asides |
+| `.footnote` | Adds top margin. Combine: `class="small footnote"`. |
+| `.code` | `<pre>` code field. The one bordered, filled object. |
+
+### The index row
+
+| Class | On | What it is |
+| --- | --- | --- |
+| `.index` | `<nav>` | The container. Drops its top border if first in `.body`. |
+| `.row` | `<a>` | The whole row is the link |
+| `.row-label` | `<span>` | Mono status, left column |
+| `.row-title` | `<span>` | Title in `--display` |
+| `.row-mark` | `<span>` | `↗` or `→`. Must be `aria-hidden="true"`. |
+| `.row-desc` | `<span>` | Optional description |
+| `.row-meta` | `<span>` | Optional mono destination line |
+| `.row-meta.breakable` | | Allows long addresses to break |
+
+### Control and utility
+
+| Class | What it is |
+| --- | --- |
+| `.theme` | The 2rem bordered toggle |
+| `.tsvg` | Its SVG, with `.ring` and `.half` inside |
+| `.theming` | Added by script during a theme change only |
+| `.vh` | Visually hidden, still read aloud |
+| `.skip` | Skip-to-content link |
+
+### Prose links
+
+Unclassed `<a>` inside `.body`, `.lede` or `.intro` gets the accent treatment.
+Every component carries a class, so `:not([class])` separates a link in a
+sentence from a link that *is* a component.
+
+---
+
+## Markup
+
+### A complete page
+
+```html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A page</title>
+  <link rel="stylesheet" href="https://style.aarontaylor.me/v1.0.0/plain-text.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="wrap bar">
+    <a class="brand" href="/">site name</a>
+    <div class="bar-end">
+      <nav class="barlinks" aria-label="Sections">
+        <a href="#one">Section</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="main">
+    <div class="hero">
+      <p class="eyebrow">Label</p>
+      <h1 class="name">The title</h1>
+      <p class="intro">One sentence saying what this is.</p>
+      <p class="aside"><b>A lead-in.</b> The page explaining how to read itself.</p>
+    </div>
+
+    <section class="blk" id="one">
+      <div class="rail">
+        <p class="n">01</p>
+        <h2>Section</h2>
+      </div>
+      <div class="body">
+        <p class="lede">What this section is for.</p>
+        <nav class="index" aria-label="Things">
+          <a class="row" href="/somewhere">
+            <span class="row-label">Status</span>
+            <span class="row-title">The thing</span>
+            <span class="row-mark" aria-hidden="true">&rarr;</span>
+            <span class="row-desc">What it is.</span>
+            <span class="row-meta">where it goes</span>
+          </a>
+        </nav>
+        <p class="small footnote">A closing note.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <div class="foot">
+      <b>site name</b>
+      <span>A line.</span>
+    </div>
+  </footer>
+</body>
+</html>
+```
+
+### The theme toggle
+
+Goes inside `.bar-end`. Ships `hidden`; script reveals it.
+
+```html
+<button class="theme" id="theme" type="button" hidden>
+  <svg class="tsvg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <circle class="ring" cx="12" cy="12" r="8.4" fill="none"/>
+    <path class="half" d="M12 3.6 A8.4 8.4 0 0 1 12 20.4 Z"/>
+  </svg>
+  <span class="vh">Switch theme</span>
+</button>
+```
+
+Inline `plain-text-theme.js` in `<head>`, before the stylesheet. Fetching it
+as a file costs a round trip, and a round trip here is a flash of the wrong
+colour on every load for anyone who chose dark.
+
+---
+
+## Building a new skin
+
+1. Copy the three token blocks. Keep all eight names.
+2. Pick `--paper` and `--ink` first. Never pure black on pure white.
+3. Derive `--muted` and `--faint` by stepping toward the ground. Aim for
+   roughly 8:1 and 5:1.
+4. `--sunk` sits about 1.07–1.10:1 from `--paper`. Above ~1.15:1 it starts
+   reading as a card, which is Rule 02 lost by accident.
+5. `--rule` sits about 1.2–1.4:1 from `--paper`.
+6. `--accent` must clear 4.5:1. `--accent-deep` is further from the ground in
+   light and closer to it in dark.
+7. **Measure against the worst-case grain pixel, not against `--paper`.**
+8. Lower `--grain` in dark. Light noise on a dark field is more conspicuous
+   than dark noise on a light one.
+
+The reference implementation of the measuring is `src/measure.js` in the
+source repo, and `build.js` fails the build on a token below AA.
+
+---
+
+## Extending without drift
+
+- **Put additions in a separate stylesheet** loaded after `plain-text.css`.
+  Keep the two apart so you can always see what you added. The specimen site
+  does exactly this in `specimen.css`.
+- **Reuse the tokens.** A new component that hard-codes a colour is a
+  component that breaks in dark mode.
+- **Obey Rule 02.** If your addition needs a border-radius or a shadow, it is
+  probably a card, and the system does not have cards.
+- **Do not add a third rule weight** (Rule 03) or a third face (Rule 01).
+- **A component earns its place after two builds**, not one. That is why
+  margin notes, form controls, styled tables and grid utilities are not in
+  v1 — each is a real gap, and none has been built twice.
+
+## Versioning
+
+- `/v1.0.0/` — exact. Never changes. Cached for a year.
+- `/v1/` — the major line. Picks up additive releases. Cached for a day.
+- A **token rename or a removed primitive** bumps the major. Those are the
+  only two changes that can break a site downstream.
