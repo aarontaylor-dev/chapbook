@@ -51,7 +51,9 @@ jobs:
         with:
           node-version: 22
 
-      - name: main's version must be tagged and published
+      - name: main's version must be tagged, published and released
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           name="$(node -p "require('./package.json').name")"
           version="$(node -p "require('./package.json').version")"
@@ -79,6 +81,18 @@ jobs:
             failed=1
           fi
 
+          # 3. The GitHub Release. A tag is a ref and nothing else, so for three
+          #    versions this repository had tags, published packages and an
+          #    empty Releases page — which is the page a human looks at to find
+          #    out what changed. Checked third because it is the one that fails
+          #    silently: nothing breaks, there is simply nothing there.
+          if gh release view "v$version" >/dev/null 2>&1; then
+            echo "release v$version exists"
+          else
+            echo "::error::there is no GitHub Release for v$version"
+            failed=1
+          fi
+
           # The site deploys from main, so a gap here is not merely internal
           # bookkeeping: chapbook.page/v$version/ is already live and serving a
           # stylesheet that `npm i chapbook` cannot get you.
@@ -94,6 +108,13 @@ jobs:
               echo
               echo '```bash'
               echo "git tag -a v$version -m \"Chapbook v$version\" && git push origin v$version"
+              echo '```'
+              echo
+              echo "If the tag and the package are both already there, only the Release is"
+              echo "missing, and the tag's own message is the notes:"
+              echo
+              echo '```bash'
+              echo "gh release create v$version --verify-tag --notes-from-tag --latest"
               echo '```'
               echo
               echo "Or, if the bump was premature, revert the version in \`package.json\`."
