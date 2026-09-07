@@ -13,6 +13,34 @@ section is published *as part of* the release above it, where it reads as a
 promise the tarball does not keep. Work that is queued rather than shipped
 belongs in an issue.
 
+## Unreleased
+
+### A tag is not a release
+
+`git push --tags` creates a ref and nothing else. For three versions this
+repository had tags, published packages and a deployed site, and a Releases
+page holding one entry made by hand for v1.0.1 — which still described itself
+as the latest, eight months of work later. Nothing was broken. There was
+simply nothing there, which is why nothing caught it.
+
+`release.yml` now opens the Release itself, after the publish rather than
+before: a Release announcing a version that failed to reach the registry is
+worse than no Release, because it is a link people follow to something that is
+not there. Notes come from `--notes-from-tag`, so the annotated tag's message
+is the release notes verbatim and the two cannot drift. That makes the tag
+having a message a requirement rather than a courtesy, and the workflow header
+and README both say so now.
+
+The workflow's `contents` permission goes from `read` to `write`, which buys
+exactly one thing: the Release object. The tag already exists by the time it
+runs, and nothing in it pushes code.
+
+`release-drift.yml` gains the same check. It verified the tag and the registry
+and would have gone on passing forever with an empty Releases page, so it now
+fails on a missing Release too, and its failure summary prints the one-line
+`gh release create` when the tag and the package are the halves that already
+exist.
+
 ## 1.2.0 — 7 September 2026
 
 The components release, finally. Every name below is new; nothing was renamed

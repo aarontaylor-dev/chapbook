@@ -10,9 +10,14 @@
 #
 #   1. bump "version" in package.json, and add the release to CHANGELOG.md
 #   2. commit and push to main
-#   3. git tag v1.0.1 && git push --tags
+#   3. git tag -a v1.0.1 -m "..." && git push origin v1.0.1
 #
 # The tag is what triggers this. Pushing to main never publishes.
+#
+# ANNOTATED, not lightweight. The tag's message becomes the GitHub Release
+# notes verbatim, so the reasoning is written once and cannot drift between
+# the two. A lightweight tag would publish the package and then open a Release
+# with nothing in it.
 #
 # NO SECRET REQUIRED. This publishes by OpenID Connect — npm trusts this
 # repository and this workflow filename directly, and mints a short-lived
@@ -46,7 +51,10 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  # Write, and only for the release step below. The tag already exists by the
+  # time this runs — nothing here pushes code — so the elevation buys exactly
+  # one thing: the GitHub Release object that `git push --tags` does not make.
+  contents: write
   # Not an optional extra any more. Under trusted publishing this IS the
   # credential: without it there is nothing to authenticate with and the
   # publish fails outright, rather than merely publishing unsigned.
@@ -110,6 +118,28 @@ jobs:
       - name: Publish with provenance
         run: npm publish --access public
 
+      # A tag is not a release. `git push --tags` creates a ref and nothing else,
+      # so for three versions this repository had tags, published packages, a
+      # deployed site — and an empty Releases page, because the only Release
+      # that existed had been made by hand and still claimed to be the latest.
+      #
+      # AFTER the publish, deliberately. A Release announcing a version that
+      # failed to reach the registry is worse than no Release: it is a link
+      # people follow to something that is not there.
+      #
+      # --notes-from-tag uses the annotated tag's own message, so the release
+      # notes and the tag cannot drift. Write the reasoning once, in the tag.
+      - name: Create the GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          gh release create "$GITHUB_REF_NAME" \
+            --verify-tag \
+            --notes-from-tag \
+            --title "$GITHUB_REF_NAME" \
+            --latest
+
       - name: Summary
         run: |
           name="$(node -p "require('./package.json').name")"
@@ -119,4 +149,5 @@ jobs:
             echo
             echo "- https://www.npmjs.com/package/$name/v/$version"
             echo "- Provenance is attested to commit \`$GITHUB_SHA\`."
+            echo "- Release: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/tag/$GITHUB_REF_NAME"
           } >> "$GITHUB_STEP_SUMMARY"

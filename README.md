@@ -218,10 +218,13 @@ A release is three steps, and the third is the one that publishes:
 
 1. Bump `version` in `package.json`, and write the release into the changelog.
 2. Commit and push to `main`. **This never publishes.**
-3. `git tag -a v1.1.0 -m "Chapbook v1.1.0" && git push origin v1.1.0`
+3. `git tag -a v1.2.0 -m "..." && git push origin v1.2.0`
 
 `release.yml` triggers on the tag and refuses to publish if the tag disagrees
-with `package.json`, or if that version already exists on npm.
+with `package.json`, or if that version already exists on npm. After it
+publishes it opens the GitHub Release, using the annotated tag's own message
+as the notes — so the tag must be annotated, and the reasoning is written once
+rather than twice.
 
 `release-drift.yml` guards the other direction, which is the one that actually
 bit: it runs daily and fails if `main` names a version that has no tag or is
