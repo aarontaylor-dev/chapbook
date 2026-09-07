@@ -14,7 +14,7 @@ MIT. Take it, change it, no credit needed.
 ## Use it
 
 ```html
-<link rel="stylesheet" href="https://chapbook.page/v1.1.0/chapbook.css">
+<link rel="stylesheet" href="https://chapbook.page/v1.2.0/chapbook.css">
 ```
 
 Or vendor it, which is better — one request less, it survives this domain
@@ -72,6 +72,10 @@ full list is at the top of the stylesheet. Everything else is left alone.
 
 It has no cards, no form controls and no grid utilities. If you want those,
 this is the wrong system rather than one that needs configuring.
+
+It does have, as of 1.2.0: margin notes, tables, a bordered text control, a
+sub-heading, styled lists and quotations, `::selection` from the palette, and
+support for `forced-colors` and `prefers-contrast`.
 
 ## The nine rules
 
@@ -148,8 +152,8 @@ node build.js
 ```
 
 ```txt
-  system   v1.1.0
-  size     chapbook.css 1019 lines  skins 130  theme 62
+  system   v1.2.0
+  size     chapbook.css 1314 lines  skins 130  theme 62
   measure  neutral light surface #f5f5f5  tightest 5.27:1  sunk 1.07:1  AA
   measure  neutral dark  surface #161616  tightest 5.24:1  sunk 1.07:1  AA
   measure  green   light surface #fbfaf7  tightest 4.97:1  sunk 1.09:1  AA

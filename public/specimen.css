@@ -85,85 +85,10 @@
   border-bottom: 1px solid var(--rule);
 }
 
-.skinbtns { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-
-.skinbtn {
-  padding: 0.42rem 0.85rem;
-  border: 1px solid var(--rule);
-  background: transparent;
-  color: var(--faint);
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: color 200ms var(--ease), border-color 200ms var(--ease);
-}
-
-.skinbtn:hover { color: var(--ink); border-color: var(--ink); }
-
-/* The pressed state is a border in ink, not a fill — a filled button here
-   would be the first card on the page. */
-.skinbtn[aria-pressed="true"] {
-  color: var(--ink);
-  border-color: var(--ink);
-}
-
+/* The skin picker's own label spacing. The buttons themselves are .btn and
+   live in the system now; only this page's arrangement of them is here. */
 .skinnote { margin-top: 1.1rem; }
 .skinnote b { color: var(--ink); font-weight: 500; }
-
-/* Tables ------------------------------------------------------------------ */
-/* Hairlines only. A zebra fill would be a second fill in a system that has
-   one, and the one it has is the row hover. */
-
-.tablewrap {
-  margin-top: 1.1rem;
-  overflow-x: auto;   /* wide content scrolls inside its column, never the page */
-}
-
-.tbl {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  line-height: 1.6;
-  white-space: nowrap;
-}
-
-.tbl th,
-.tbl td {
-  padding: 0.55rem 1rem 0.55rem 0;
-  text-align: left;
-  vertical-align: baseline;
-  border-bottom: 1px solid var(--rule);
-}
-
-.tbl thead th {
-  border-bottom: 2px solid var(--ink);
-  color: var(--ink);
-  font-weight: 500;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-}
-
-.tbl tbody th {
-  color: var(--ink);
-  font-weight: 400;
-}
-
-.tbl td { color: var(--faint); }
-
-.tbl .num { font-variant-numeric: tabular-nums; }
-
-/* The role column is the only prose in the table, so it is the only cell that
-   is allowed to wrap. */
-.tbl .role {
-  white-space: normal;
-  min-width: 12rem;
-  color: var(--muted);
-}
-
-.tbl code { font-family: inherit; color: var(--ink); }
 
 /* A swatch, sized to the mono cap height so it sits on the baseline of the
    hex value beside it rather than floating above it. */
@@ -232,7 +157,6 @@
   .skinpanel { display: block !important; }
   .skinpanel[hidden] { display: block !important; }
   .rule,
-  .tbl tr,
   .forrow,
   .claim { break-inside: avoid; }
 
@@ -242,6 +166,5 @@
      the order they are argued in anyway. */
   .forpair { display: block; }
   .forcol + .forcol { margin-top: 1.25rem; }
-  .tablewrap { overflow-x: visible; }
-  .tbl { white-space: normal; font-size: 8pt; }
+
 }

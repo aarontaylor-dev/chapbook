@@ -133,7 +133,10 @@ the apex. It went **Active** in under two minutes.
 ```bash
 curl -sS -o /dev/null -w "site    %{http_code}\n" https://chapbook.page/
 curl -sS -o /dev/null -w "css     %{http_code}\n" https://chapbook.page/chapbook.css
-curl -sS -o /dev/null -w "frozen  %{http_code}\n" https://chapbook.page/v1.0.1/chapbook.css
+curl -sS -o /dev/null -w "current %{http_code}\n" https://chapbook.page/v1.2.0/chapbook.css
+curl -sS -o /dev/null -w "v1.1.1  %{http_code}\n" https://chapbook.page/v1.1.1/chapbook.css
+curl -sS -o /dev/null -w "v1.1.0  %{http_code}\n" https://chapbook.page/v1.1.0/chapbook.css
+curl -sS -o /dev/null -w "v1.0.1  %{http_code}\n" https://chapbook.page/v1.0.1/chapbook.css
 curl -sS -o /dev/null -w "v1.0.0  %{http_code}\n" https://chapbook.page/v1.0.0/chapbook.css
 curl -sS -o /dev/null -w "spec    %{http_code}\n" https://chapbook.page/system.md
 curl -sS -o /dev/null -w "llms    %{http_code}\n" https://chapbook.page/llms.txt

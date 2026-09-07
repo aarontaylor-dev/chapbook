@@ -13,6 +13,110 @@ section is published *as part of* the release above it, where it reads as a
 promise the tarball does not keep. Work that is queued rather than shipped
 belongs in an issue.
 
+## 1.2.0 — 7 September 2026
+
+The components release, finally. Every name below is new; nothing was renamed
+and nothing was removed, which is what makes this a minor rather than a major.
+
+### Margin notes
+
+**Admitted ahead of the two-build rule, and the exception is recorded rather
+than quietly made.** They exist on Working Notes and nowhere else, so by the
+rule that kept v1 small they should still be waiting.
+
+The argument for going early is that almost none of it is new. Rule 04 is
+already a sticky column beside the content carrying mono metadata; a margin
+note is the same column carrying prose. The grid, the stickiness, the
+`align-self: start` that makes it work at all and the collapse below 52rem are
+built, shipped and documented. What was missing was a second tenant for
+machinery the system already carries — a much weaker claim on the system's
+size than tables or form controls, each of which would be new machinery.
+
+The rule still stands for everything else.
+
+### Tables, and the text control
+
+Both existed in `specimen.css` and were therefore not part of anything anyone
+could take. Promoted into the system, which is the whole difference between a
+component and a thing one site happens to do.
+
+`.tbl` is hairlines and one 2px ink head rule, with no zebra fill — the system
+has one fill and it is the row hover, so a striped table would be the second,
+and a second fill is how a system starts drawing cards without noticing.
+
+`.btn` is the text form of Rule 08, which had shipped half-built since v1.0.0:
+`.theme` was the icon form and lived in the system, while the text form lived
+in the specimen as `.skinbtn`. A border, never a fill, and `aria-pressed`
+deepens it to ink rather than filling the box.
+
+### A sub-heading, lists and quotations
+
+An `<h3>` arrived at 19.89px against 17px body text at the same weight, which
+is a difference no reader sees — a heading in the markup and not on the page.
+Mono and tracked instead, matching the rail's own heading, because a
+sub-heading names the part of the document you are in rather than saying
+something. One treatment, not a scale; a scale is the beginning of a framework.
+
+Lists get `--faint` markers, because a bullet is punctuation rather than
+content. A blockquote gets the document weight on its left and nothing else —
+no fill, no italic.
+
+### The rail collapses on its own width
+
+`.wrap` is now a container, so `.blk` responds to the width of the column it
+is in rather than the window's. The media query measured the viewport, so a
+`.wrap` dropped into a 24rem sidebar on a wide screen kept a 10rem rail beside
+14rem of content and the text stopped being readable.
+
+Both are kept, deliberately. The media query is the floor for browsers without
+container queries, and the two agree at the same 52rem, so no browser gets a
+different layout — only a less precise reason for it.
+
+### forced-colors and prefers-contrast
+
+The gap that sat least comfortably beside Rule 07. A system that fails its own
+build over 4.5:1 had nothing at all to say about Windows High Contrast, where
+the user has replaced the palette outright and every token in the table stops
+applying.
+
+Three things this system does are exactly what forced colours disturb, and
+each is addressed rather than left to luck: the grain is a background image
+over content in a mode that exists to remove decoration, so it goes off; the
+row's hover hairline is a background on a pseudo-element rather than a border,
+so forced colours leaves it whatever it was and it is repainted in
+`CanvasText`; and the controls take `ButtonBorder`, `ButtonText` and
+`Highlight` so a forced palette can paint them rather than guess.
+
+`prefers-contrast: more` drops the grain and moves the tuned-for-calm tokens
+to the ends of their range.
+
+### ::selection
+
+Two declarations from existing tokens. The browser's default blue was the one
+colour on the page the palette had not chosen.
+
+### The freeze guard was firing on work in progress
+
+Found by using it. 1.1.0's guard compared the working files against
+`public/vX.Y.Z/` and refused if they differed — but the first build of an
+*unreleased* version writes that directory, so every build after the first one
+during development failed. That is not drift, it is work, and a guard that
+goes red while a release is going right is the fastest way to teach someone to
+stop reading it.
+
+Only a released version is immutable, and the tag is what releases: the tag is
+what `release.yml` triggers on. The guard now checks for `v<version>` before
+comparing, and skips silently when git cannot be reached rather than failing a
+build over a missing tool.
+
+### Print treatment for what was promoted
+
+`.tbl` and `.btn` were moved into the system, and their print rules were left
+behind in `specimen.css` — so anyone linking `chapbook.css` alone got a table
+that clipped at the page edge and a button that printed as an empty box.
+Both now print from the system: controls are hidden alongside `.theme`, tables
+wrap instead of scrolling, and rows and margin notes are kept whole.
+
 ## 1.1.1 — 7 September 2026
 
 Documentation only. No CSS changed, no class name added or removed, and the

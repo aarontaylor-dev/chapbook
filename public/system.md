@@ -7,7 +7,7 @@ comes from rules and space rather than from cards.**
 
 MIT. Take it, change it, no credit needed.
 
-- Stylesheet: <https://chapbook.page/v1.0.1/chapbook.css>
+- Stylesheet: <https://chapbook.page/v1.2.0/chapbook.css>
 - Skins: <https://chapbook.page/v1.0.1/chapbook-skins.css>
 - Theme bootstrap: <https://chapbook.page/v1.0.1/chapbook-theme.js>
 - Specimen: <https://chapbook.page>
@@ -309,6 +309,7 @@ Everything the system styles. There is nothing else.
 | `.blk` | `<section>` | Rail + body grid. First one gets the 2px ink rule. |
 | `.rail` | `<div>` | The sticky left column |
 | `.rail .n` | `<p>` | The section number. Tabular, `--accent`. |
+| `.rail .note` | `<p>` | A margin note. Mono, `--faint`. `<b>` inside is its lead-in. |
 | `.body` | `<div>` | The content column |
 | `.foot` | `<div>` | Footer row, inside `<footer>` |
 
@@ -325,6 +326,15 @@ Everything the system styles. There is nothing else.
 | `.small` | Mono running text, for footnotes and asides |
 | `.footnote` | Adds top margin. Combine: `class="small footnote"`. |
 | `.code` | `<pre>` code field. The one bordered, filled object. |
+
+Unclassed inside `.body`, and styled because a document has them:
+
+| Element | What it gets |
+| --- | --- |
+| `h3` | Mono, tracked, uppercase. One treatment, not a scale. |
+| `ul` / `ol` | `--faint` markers, tighter gap between items than between blocks |
+| `blockquote` | 2px ink rule on the left, no fill and no italic |
+| `blockquote cite` | Mono, uppercase, `--faint` |
 
 ### The index row
 
@@ -343,11 +353,22 @@ Everything the system styles. There is nothing else.
 
 | Class | What it is |
 | --- | --- |
-| `.theme` | The 2rem bordered toggle |
+| `.theme` | The 2rem bordered toggle — the icon form of Rule 08 |
 | `.tsvg` | Its SVG, with `.ring` and `.half` inside |
+| `.btn` | The text form of Rule 08. Border never fill; `aria-pressed` deepens it to ink. |
+| `.btns` | Flex group for a row of `.btn` |
 | `.theming` | Added by script during a theme change only |
 | `.vh` | Visually hidden, still read aloud |
 | `.skip` | Skip-to-content link |
+
+### Tables
+
+| Class | On | What it is |
+| --- | --- | --- |
+| `.tablewrap` | `<div>` | Scrolls a wide table inside its column, never the page |
+| `.tbl` | `<table>` | Mono, hairlines, 2px ink head rule, no zebra fill |
+| `.tbl .num` | `<td>` | Tabular numerals |
+| `.tbl .prose` | `<td>` | The one cell allowed to wrap |
 
 ### Prose links
 
@@ -368,7 +389,7 @@ sentence from a link that *is* a component.
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>A page</title>
-  <link rel="stylesheet" href="https://chapbook.page/v1.0.1/chapbook.css">
+  <link rel="stylesheet" href="https://chapbook.page/v1.2.0/chapbook.css">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
