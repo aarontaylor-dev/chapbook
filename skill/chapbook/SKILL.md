@@ -81,7 +81,7 @@ headings. If you write a print block without those three, the build fails.
 ## How to build a page
 
 1. **Link the stylesheet and nothing else.**
-   `https://chapbook.page/v1.0.1/chapbook.css`, or vendor the file.
+   `https://chapbook.page/v1.2.0/chapbook.css`, or vendor the file.
 2. **Use only the documented classes.** They are listed in `system.md` and the
    list is exhaustive. An invented class name is the first sign of a fork.
 3. **Structure before colour.** Masthead, hero, numbered blocks, index rows,
@@ -93,6 +93,23 @@ headings. If you write a print block without those three, the build fails.
    Never edit the base file to add a component.
 6. **Check it in dark, at 375px, and on paper** before calling it done. All
    three are real targets, and the print one is the one everybody skips.
+
+## What 1.2.0 added
+
+- `.rail .note` — a margin note. The rail carrying prose instead of metadata.
+  `<b>` inside it is the lead-in.
+- `.tbl` in `.tablewrap` — hairlines, a 2px ink head rule, no zebra fill.
+  `.num` for tabular figures, `.prose` for the one cell allowed to wrap.
+- `.btn` and `.btns` — the text form of Rule 08. Border never fill, and
+  `aria-pressed="true"` deepens the border to ink.
+- Inside `.body` and needing no class: `h3` (mono, tracked, uppercase — one
+  treatment, not a scale), `ul`/`ol` markers, and `blockquote` with a 2px ink
+  rule and no fill.
+- `.wrap` is a container, so the rail collapses on its own column's width
+  rather than the window's.
+- `forced-colors` and `prefers-contrast` are handled: the grain comes off, the
+  row hairline repaints in `CanvasText`, and controls take system colours.
+- `::selection` uses the palette instead of the browser's blue.
 
 ## How to review a page
 

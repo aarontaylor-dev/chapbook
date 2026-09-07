@@ -46,10 +46,10 @@ ${themeButton()}
       </div>
     </header>`;
 
-const block = ({ n, id, heading, body }) => `
+const block = ({ n, id, heading, note, body }) => `
       <section class="blk" id="${id}">
         <div class="rail">${n ? `\n          <p class="n">${n2(n)}</p>` : ''}
-          <h2>${heading}</h2>
+          <h2>${heading}</h2>${note ? `\n          <p class="note"><b>${note.lead}</b>${note.rest}</p>` : ''}
         </div>
         <div class="body">
 ${body}
@@ -174,7 +174,7 @@ ${p.tokens
                     <td class="num">${t.lightRatio}</td>
                     <td><span class="chip" style="--c:${t.dark}"></span>${t.dark}</td>
                     <td class="num">${t.darkRatio}</td>
-                    <td class="role">${t.role}</td>
+                    <td class="prose">${t.role}</td>
                   </tr>`
   )
   .join('\n')}
@@ -191,10 +191,10 @@ const tokensBlock = (palettes) =>
 
           <div class="skinpick">
             <p class="label" id="skinlabel">Skin</p>
-            <div class="skinbtns" role="group" aria-labelledby="skinlabel">
+            <div class="btns" role="group" aria-labelledby="skinlabel">
 ${skins
   .map(
-    (s, i) => `              <button class="skinbtn" type="button" data-skin-set="${s.id}"${i === 0 ? ' aria-pressed="true"' : ' aria-pressed="false"'}>${s.label}</button>`
+    (s, i) => `              <button class="btn" type="button" data-skin-set="${s.id}"${i === 0 ? ' aria-pressed="true"' : ' aria-pressed="false"'}>${s.label}</button>`
   )
   .join('\n')}
             </div>
@@ -237,7 +237,7 @@ const typeBlock = () =>
 ${typeScale
   .map(
     ([role, face, size, detail]) =>
-      `                <tr><th scope="row">${role}</th><td>${face}</td><td class="num">${size}</td><td class="role">${detail}</td></tr>`
+      `                <tr><th scope="row">${role}</th><td>${face}</td><td class="num">${size}</td><td class="prose">${detail}</td></tr>`
   )
   .join('\n')}
               </tbody>
@@ -254,6 +254,10 @@ const componentsBlock = () =>
     n: 5,
     id: 'components',
     heading: 'Components',
+    note: {
+      lead: 'This is a margin note.',
+      rest: 'Mono, faint, and in the rail beside the thing it glosses \u2014 the same column the section number lives in.',
+    },
     body: `          <p class="lede">Every component below is live. Hover a row to see Rule 05, press the toggle in the masthead to see Rule 06, and print the page to see Rule 09.</p>
 
           <p class="label">The index row</p>
@@ -266,11 +270,24 @@ ${row({ status: 'External', title: 'A row that leaves', href: site.repo, desc: '
           ${code(`.row:hover::after { transform: scaleX(1); }`)}
           <p class="small">The one bordered, filled object in the system. It earns the exception in Rule 02 by genuinely being a different surface, rather than being a card drawn around ordinary content.</p>
 
-          <p class="label footnote">The rail</p>
-          <p class="small">You are looking at it. The number and the section name to the left of this text are sticky, and stay beside their content for as long as that content is on screen. On a narrow viewport they collapse into a single line above the content &mdash; resize the window and watch the grid change rather than the type shrink.</p>
+          <p class="label footnote">The rail, and the margin note</p>
+          <p class="small">You are looking at both. The number and the section name are sticky and stay beside their content for as long as that content is on screen; the mono paragraph under them is a margin note, which is the same column carrying prose instead of metadata. Narrow the window &mdash; or the <em>container</em>, which is what the system actually measures now &mdash; and the whole rail collapses to a line above the content.</p>
 
-          <p class="label footnote">Not in v1</p>
-          <p class="small">Margin notes are the obvious next component &mdash; they exist on Working Notes and are worth keeping &mdash; but they have shipped on one build rather than two, so they are a candidate for v1.1 rather than part of v1. The rule that keeps this system honest is the same one that keeps it small: two independent builds, or it is a preference rather than a rule.</p>`,
+          <h3>The sub-heading</h3>
+          <p class="small">That is one, and it is the only one. An <code>h3</code> used to arrive at 19.89px against 17px body text at the same weight, which is a difference no reader sees. It is mono and tracked instead, matching the rail&rsquo;s own heading, because a sub-heading names the part of the document you are in rather than saying something &mdash; which is Rule 01&rsquo;s test. One treatment, not a scale.</p>
+
+          <h3>Lists and quotations</h3>
+          <ul>
+            <li>A list item, with the marker in <code>--faint</code> because a bullet is punctuation rather than content.</li>
+            <li>The gap between items is smaller than the gap between blocks, so a list reads as one object.</li>
+          </ul>
+          <blockquote>
+            <p>A quotation is opened by the document weight &mdash; the same 2px in ink that opens the page under the masthead. No fill and no italic: the rule and the indent are the whole treatment.</p>
+            <cite>The system, about itself</cite>
+          </blockquote>
+
+          <h3>The table and the text control</h3>
+          <p class="small">Both are above, in section 03. The table is hairlines and one 2px head rule, with no zebra fill &mdash; the system has one fill and it is the row hover, so a striped table would be the second. The skin buttons are the text form of Rule 08: a border, never a fill, and the pressed state deepens the border to ink rather than filling the box.</p>`,
   });
 
 const takeBlock = () =>

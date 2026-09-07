@@ -83,7 +83,7 @@
     <main class="wrap" id="main">
 
       <div class="hero">
-        <p class="eyebrow">v1.1.1 · MIT · no dependencies</p>
+        <p class="eyebrow">v1.2.0 · MIT · no dependencies</p>
         <h1 class="name">Chapbook</h1>
         <p class="intro">A small CSS system for documents that want to read like documents. Monospace carries structure, a second face carries language, and separation comes from rules and space rather than from cards.</p>
         <p class="aside"><b>This page is the specimen.</b> It is set in the system it documents, using the same stylesheet you are invited to take &mdash; so every component below is the real implementation rather than a picture of one. The theme toggle is real. So is the print stylesheet &mdash; <b>press print and read the result</b>, because paper is a target here rather than a courtesy. Change the skin in section 03 and watch nothing structural move.</p>
@@ -218,10 +218,10 @@
 
           <div class="skinpick">
             <p class="label" id="skinlabel">Skin</p>
-            <div class="skinbtns" role="group" aria-labelledby="skinlabel">
-              <button class="skinbtn" type="button" data-skin-set="neutral" aria-pressed="true">Neutral</button>
-              <button class="skinbtn" type="button" data-skin-set="green" aria-pressed="false">Green</button>
-              <button class="skinbtn" type="button" data-skin-set="clay" aria-pressed="false">Clay</button>
+            <div class="btns" role="group" aria-labelledby="skinlabel">
+              <button class="btn" type="button" data-skin-set="neutral" aria-pressed="true">Neutral</button>
+              <button class="btn" type="button" data-skin-set="green" aria-pressed="false">Green</button>
+              <button class="btn" type="button" data-skin-set="clay" aria-pressed="false">Clay</button>
             </div>
           </div>
           <div class="skinpanel" data-skin-panel="neutral">
@@ -247,7 +247,7 @@
                     <td class="num">—</td>
                     <td><span class="chip" style="--c:#111"></span>#111</td>
                     <td class="num">—</td>
-                    <td class="role">Page ground</td>
+                    <td class="prose">Page ground</td>
                   </tr>
                   <tr>
                     <th scope="row"><code>--sunk</code></th>
@@ -255,7 +255,7 @@
                     <td class="num">—</td>
                     <td><span class="chip" style="--c:#191919"></span>#191919</td>
                     <td class="num">—</td>
-                    <td class="role">Row hover, code field</td>
+                    <td class="prose">Row hover, code field</td>
                   </tr>
                   <tr>
                     <th scope="row"><code>--rule</code></th>
@@ -263,7 +263,7 @@
                     <td class="num">—</td>
                     <td><span class="chip" style="--c:#2a2a2a"></span>#2a2a2a</td>
                     <td class="num">—</td>
-                    <td class="role">Hairlines</td>
+                    <td class="prose">Hairlines</td>
                   </tr>
                   <tr>
                     <th scope="row"><code>--ink</code></th>
@@ -271,7 +271,7 @@
                     <td class="num">17.32</td>
                     <td><span class="chip" style="--c:#ededed"></span>#ededed</td>
                     <td class="num">15.46</td>
-                    <td class="role">Body, titles, 2px rules</td>
+                    <td class="prose">Body, titles, 2px rules</td>
                   </tr>
                   <tr>
                     <th scope="row"><code>--muted</code></th>
@@ -279,7 +279,7 @@
                     <td class="num">8.93</td>
                     <td><span class="chip" style="--c:#b4b4b4"></span>#b4b4b4</td>
                     <td class="num">8.73</td>
-                    <td class="role">Ledes, descriptions</td>
+                    <td class="prose">Ledes, descriptions</td>
                   </tr>
                   <tr>
                     <th scope="row"><code>--faint</code></th>
@@ -287,7 +287,7 @@
                     <td class="num">5.27</td>
                     <td><span class="chip" style="--c:#8a8a8a"></span>#8a8a8a</td>
                     <td class="num">5.24</td>
-                    <td class="role">Mono labels, meta</td>
+                    <td class="prose">Mono labels, meta</td>
                   </tr>
                   <tr>
                     <th scope="row"><code>--accent</code></th>
@@ -295,7 +295,7 @@
                     <td class="num">17.32</td>
                     <td><span class="chip" style="--c:#ededed"></span>#ededed</td>
                     <td class="num">15.46</td>
-                    <td class="role">Links, rail numbers</td>
+                    <td class="prose">Links, rail numbers</td>
                   </tr>
                   <tr>
                     <th scope="row"><code>--accent-deep</code></th>
@@ -303,7 +303,7 @@
                     <td class="num">17.32</td>
                     <td><span class="chip" style="--c:#ededed"></span>#ededed</td>
                     <td class="num">15.46</td>
-                    <td class="role">Link hover</td>
+                    <td class="prose">Link hover</td>
                   </tr>
                 </tbody>
               </table>
@@ -332,7 +332,7 @@
                     <td class="num">—</td>
                     <td><span class="chip" style="--c:#121412"></span>#121412</td>
                     <td class="num">—</td>
-                    <td class="role">Page ground</td>
+                    <td class="prose">Page ground</td>
                   </tr>
                   <tr>
                     <th scope="row"><code>--sunk</code></th>
@@ -340,7 +340,7 @@
                     <td class="num">—</td>
                     <td><span class="chip" style="--c:#1a1d1a"></span>#1a1d1a</td>
                     <td class="num">—</td>
-                    <td class="role">Row hover, code field</td>
+                    <td class="prose">Row hover, code field</td>
                   </tr>
                   <tr>
                     <th scope="row"><code>--rule</code></th>
@@ -348,7 +348,7 @@
                     <td class="num">—</td>
                     <td><span class="chip" style="--c:#2d312c"></span>#2d312c</td>
                     <td class="num">—</td>
-                    <td class="role">Hairlines</td>
+                    <td class="prose">Hairlines</td>
                   </tr>
                   <tr>
                     <th scope="row"><code>--ink</code></th>
@@ -356,7 +356,7 @@
                     <td class="num">17.05</td>
                     <td><span class="chip" style="--c:#ece9e1"></span>#ece9e1</td>
                     <td class="num">15.26</td>
-                    <td class="role">Body, titles, 2px rules</td>
+                    <td class="prose">Body, titles, 2px rules</td>
                   </tr>
                   <tr>
                     <th scope="row"><code>--muted</code></th>
@@ -364,7 +364,7 @@
                     <td class="num">7.05</td>
                     <td><span class="chip" style="--c:#a9a89d"></span>#a9a89d</td>
                     <td class="num">7.73</td>
-                    <td class="role">Ledes, descriptions</td>
+                    <td class="prose">Ledes, descriptions</td>
                   </tr>
                   <tr>
                     <th scope="row"><code>--faint</code></th>
@@ -372,7 +372,7 @@
                     <td class="num">4.97</td>
                     <td><span class="chip" style="--c:#83867c"></span>#83867c</td>
                     <td class="num">4.99</td>
-                    <td class="role">Mono labels, meta</td>
+                    <td class="prose">Mono labels, meta</td>
                   </tr>
                   <tr>
                     <th scope="row"><code>--accent</code></th>
@@ -380,7 +380,7 @@
                     <td class="num">5.66</td>
                     <td><span class="chip" style="--c:#5cb894"></span>#5cb894</td>
                     <td class="num">7.70</td>
-                    <td class="role">Links, rail numbers</td>
+                    <td class="prose">Links, rail numbers</td>
                   </tr>
                   <tr>
                     <th scope="row"><code>--accent-deep</code></th>
@@ -388,7 +388,7 @@
                     <td class="num">8.53</td>
                     <td><span class="chip" style="--c:#7fd0af"></span>#7fd0af</td>
                     <td class="num">10.18</td>
-                    <td class="role">Link hover</td>
+                    <td class="prose">Link hover</td>
                   </tr>
                 </tbody>
               </table>
@@ -417,7 +417,7 @@
                     <td class="num">—</td>
                     <td><span class="chip" style="--c:#14120f"></span>#14120f</td>
                     <td class="num">—</td>
-                    <td class="role">Page ground</td>
+                    <td class="prose">Page ground</td>
                   </tr>
                   <tr>
                     <th scope="row"><code>--sunk</code></th>
@@ -425,7 +425,7 @@
                     <td class="num">—</td>
                     <td><span class="chip" style="--c:#1c1a16"></span>#1c1a16</td>
                     <td class="num">—</td>
-                    <td class="role">Row hover, code field</td>
+                    <td class="prose">Row hover, code field</td>
                   </tr>
                   <tr>
                     <th scope="row"><code>--rule</code></th>
@@ -433,7 +433,7 @@
                     <td class="num">—</td>
                     <td><span class="chip" style="--c:#302c25"></span>#302c25</td>
                     <td class="num">—</td>
-                    <td class="role">Hairlines</td>
+                    <td class="prose">Hairlines</td>
                   </tr>
                   <tr>
                     <th scope="row"><code>--ink</code></th>
@@ -441,7 +441,7 @@
                     <td class="num">16.13</td>
                     <td><span class="chip" style="--c:#ece7dc"></span>#ece7dc</td>
                     <td class="num">14.64</td>
-                    <td class="role">Body, titles, 2px rules</td>
+                    <td class="prose">Body, titles, 2px rules</td>
                   </tr>
                   <tr>
                     <th scope="row"><code>--muted</code></th>
@@ -449,7 +449,7 @@
                     <td class="num">7.11</td>
                     <td><span class="chip" style="--c:#a8a296"></span>#a8a296</td>
                     <td class="num">7.11</td>
-                    <td class="role">Ledes, descriptions</td>
+                    <td class="prose">Ledes, descriptions</td>
                   </tr>
                   <tr>
                     <th scope="row"><code>--faint</code></th>
@@ -457,7 +457,7 @@
                     <td class="num">5.06</td>
                     <td><span class="chip" style="--c:#8b8578"></span>#8b8578</td>
                     <td class="num">4.92</td>
-                    <td class="role">Mono labels, meta</td>
+                    <td class="prose">Mono labels, meta</td>
                   </tr>
                   <tr>
                     <th scope="row"><code>--accent</code></th>
@@ -465,7 +465,7 @@
                     <td class="num">5.37</td>
                     <td><span class="chip" style="--c:#d98b62"></span>#d98b62</td>
                     <td class="num">6.72</td>
-                    <td class="role">Links, rail numbers</td>
+                    <td class="prose">Links, rail numbers</td>
                   </tr>
                   <tr>
                     <th scope="row"><code>--accent-deep</code></th>
@@ -473,7 +473,7 @@
                     <td class="num">7.33</td>
                     <td><span class="chip" style="--c:#eba57e"></span>#eba57e</td>
                     <td class="num">8.78</td>
-                    <td class="role">Link hover</td>
+                    <td class="prose">Link hover</td>
                   </tr>
                 </tbody>
               </table>
@@ -508,16 +508,16 @@
                 <tr><th scope="col">Role</th><th scope="col">Face</th><th scope="col">Size</th><th scope="col">Detail</th></tr>
               </thead>
               <tbody>
-                <tr><th scope="row">Page title</th><td>Display</td><td class="num">clamp(2.5rem, 8vw, 4rem)</td><td class="role">lh 1.02 · ls &minus;0.032em</td></tr>
-                <tr><th scope="row">Row title</th><td>Display</td><td class="num">clamp(1.15rem, 3vw, 1.45rem)</td><td class="role">lh 1.2 · ls &minus;0.02em</td></tr>
-                <tr><th scope="row">Intro</th><td>Language</td><td class="num">1.125rem</td><td class="role">--muted · max 32em</td></tr>
-                <tr><th scope="row">Lede</th><td>Language</td><td class="num">1.1rem</td><td class="role">--muted · max --measure</td></tr>
-                <tr><th scope="row">Body</th><td>Language</td><td class="num">1.0625rem</td><td class="role">lh 1.6</td></tr>
-                <tr><th scope="row">Row description</th><td>Language</td><td class="num">0.97rem</td><td class="role">--muted · lh 1.5</td></tr>
-                <tr><th scope="row">Section head</th><td>Mono 500</td><td class="num">0.7rem</td><td class="role">ls 0.13em · uppercase</td></tr>
-                <tr><th scope="row">Label / meta</th><td>Mono 400</td><td class="num">0.7rem</td><td class="role">ls 0.11em · uppercase · --faint</td></tr>
-                <tr><th scope="row">Rail number</th><td>Mono 400</td><td class="num">0.7rem</td><td class="role">tabular-nums · --accent</td></tr>
-                <tr><th scope="row">Code</th><td>Mono 400</td><td class="num">0.8125rem</td><td class="role">lh 1.65 · --sunk field</td></tr>
+                <tr><th scope="row">Page title</th><td>Display</td><td class="num">clamp(2.5rem, 8vw, 4rem)</td><td class="prose">lh 1.02 · ls &minus;0.032em</td></tr>
+                <tr><th scope="row">Row title</th><td>Display</td><td class="num">clamp(1.15rem, 3vw, 1.45rem)</td><td class="prose">lh 1.2 · ls &minus;0.02em</td></tr>
+                <tr><th scope="row">Intro</th><td>Language</td><td class="num">1.125rem</td><td class="prose">--muted · max 32em</td></tr>
+                <tr><th scope="row">Lede</th><td>Language</td><td class="num">1.1rem</td><td class="prose">--muted · max --measure</td></tr>
+                <tr><th scope="row">Body</th><td>Language</td><td class="num">1.0625rem</td><td class="prose">lh 1.6</td></tr>
+                <tr><th scope="row">Row description</th><td>Language</td><td class="num">0.97rem</td><td class="prose">--muted · lh 1.5</td></tr>
+                <tr><th scope="row">Section head</th><td>Mono 500</td><td class="num">0.7rem</td><td class="prose">ls 0.13em · uppercase</td></tr>
+                <tr><th scope="row">Label / meta</th><td>Mono 400</td><td class="num">0.7rem</td><td class="prose">ls 0.11em · uppercase · --faint</td></tr>
+                <tr><th scope="row">Rail number</th><td>Mono 400</td><td class="num">0.7rem</td><td class="prose">tabular-nums · --accent</td></tr>
+                <tr><th scope="row">Code</th><td>Mono 400</td><td class="num">0.8125rem</td><td class="prose">lh 1.65 · --sunk field</td></tr>
               </tbody>
             </table>
           </div>
@@ -532,6 +532,7 @@
         <div class="rail">
           <p class="n">05</p>
           <h2>Components</h2>
+          <p class="note"><b>This is a margin note.</b>Mono, faint, and in the rail beside the thing it glosses — the same column the section number lives in.</p>
         </div>
         <div class="body">
           <p class="lede">Every component below is live. Hover a row to see Rule 05, press the toggle in the masthead to see Rule 06, and print the page to see Rule 09.</p>
@@ -560,11 +561,24 @@
           <pre class="code">.row:hover::after { transform: scaleX(1); }</pre>
           <p class="small">The one bordered, filled object in the system. It earns the exception in Rule 02 by genuinely being a different surface, rather than being a card drawn around ordinary content.</p>
 
-          <p class="label footnote">The rail</p>
-          <p class="small">You are looking at it. The number and the section name to the left of this text are sticky, and stay beside their content for as long as that content is on screen. On a narrow viewport they collapse into a single line above the content &mdash; resize the window and watch the grid change rather than the type shrink.</p>
+          <p class="label footnote">The rail, and the margin note</p>
+          <p class="small">You are looking at both. The number and the section name are sticky and stay beside their content for as long as that content is on screen; the mono paragraph under them is a margin note, which is the same column carrying prose instead of metadata. Narrow the window &mdash; or the <em>container</em>, which is what the system actually measures now &mdash; and the whole rail collapses to a line above the content.</p>
 
-          <p class="label footnote">Not in v1</p>
-          <p class="small">Margin notes are the obvious next component &mdash; they exist on Working Notes and are worth keeping &mdash; but they have shipped on one build rather than two, so they are a candidate for v1.1 rather than part of v1. The rule that keeps this system honest is the same one that keeps it small: two independent builds, or it is a preference rather than a rule.</p>
+          <h3>The sub-heading</h3>
+          <p class="small">That is one, and it is the only one. An <code>h3</code> used to arrive at 19.89px against 17px body text at the same weight, which is a difference no reader sees. It is mono and tracked instead, matching the rail&rsquo;s own heading, because a sub-heading names the part of the document you are in rather than saying something &mdash; which is Rule 01&rsquo;s test. One treatment, not a scale.</p>
+
+          <h3>Lists and quotations</h3>
+          <ul>
+            <li>A list item, with the marker in <code>--faint</code> because a bullet is punctuation rather than content.</li>
+            <li>The gap between items is smaller than the gap between blocks, so a list reads as one object.</li>
+          </ul>
+          <blockquote>
+            <p>A quotation is opened by the document weight &mdash; the same 2px in ink that opens the page under the masthead. No fill and no italic: the rule and the indent are the whole treatment.</p>
+            <cite>The system, about itself</cite>
+          </blockquote>
+
+          <h3>The table and the text control</h3>
+          <p class="small">Both are above, in section 03. The table is hairlines and one 2px head rule, with no zebra fill &mdash; the system has one fill and it is the row hover, so a striped table would be the second. The skin buttons are the text form of Rule 08: a border, never a fill, and the pressed state deepens the border to ink rather than filling the box.</p>
         </div>
       </section>
 
@@ -576,8 +590,8 @@
         <div class="body">
           <p class="lede">There is no install step, no package to configure and nothing to initialise. Link one file and use the class names.</p>
 
-          <pre class="code">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://chapbook.page/v1.1.1/chapbook.css&quot;&gt;</pre>
-          <p class="small">Two version paths, and they are not the same promise. <code>/v1.1.1/</code> is exact: it never changes, and it is cached for a year. <code>/v1/</code> follows the major line and picks up additive releases, cached for a day. Link the exact one unless you specifically want the updates.</p>
+          <pre class="code">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://chapbook.page/v1.2.0/chapbook.css&quot;&gt;</pre>
+          <p class="small">Two version paths, and they are not the same promise. <code>/v1.2.0/</code> is exact: it never changes, and it is cached for a year. <code>/v1/</code> follows the major line and picks up additive releases, cached for a day. Link the exact one unless you specifically want the updates.</p>
 
           <p class="label footnote">Or vendor it, which is better</p>
           <pre class="code">curl -O https://chapbook.page/chapbook.css</pre>
@@ -694,7 +708,7 @@
           <h2>Version</h2>
         </div>
         <div class="body">
-          <p class="lede">The <em>system</em> carries the version, not the site. <code>/v1.1.1/</code> never changes, so a page that links it never breaks.</p>
+          <p class="lede">The <em>system</em> carries the version, not the site. <code>/v1.2.0/</code> never changes, so a page that links it never breaks.</p>
 
           <p class="small">One rule decides a major bump: <b>a token rename or a removed primitive</b>. Those are the only two changes that can break a site downstream &mdash; everything else is additive, and additions ship as a minor version at the same URL.</p>
 
@@ -705,7 +719,7 @@
           <nav class="index" aria-label="Version">
 
             <a class="row" href="https://github.com/aarontaylor-dev/chapbook/blob/main/CHANGELOG.md" rel="noopener">
-              <span class="row-label">v1.1.1</span>
+              <span class="row-label">v1.2.0</span>
               <span class="row-title">Changelog</span>
               <span class="row-mark" aria-hidden="true">&#8599;</span>
               <span class="row-desc">What changed, when, and the reasoning that produced it.</span>
@@ -718,7 +732,7 @@
 
     <footer class="wrap">
       <div class="foot">
-        <b>chapbook v1.1.1</b>
+        <b>chapbook v1.2.0</b>
         <span>MIT. Take it, change it, do not credit me. <a href="/colophon">Colophon</a>.</span>
       </div>
     </footer>

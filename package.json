@@ -1,6 +1,6 @@
 {
   "name": "chapbook",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "A small CSS system for documents that want to read like documents. Monospace carries structure, a second face carries language, and separation comes from rules and space rather than from cards. Nine rules, no dependencies, no build step.",
   "keywords": [
     "css",

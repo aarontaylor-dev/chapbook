@@ -42,6 +42,7 @@
  * as a reviewable diff rather than as a mystery at deploy time.
  */
 
+import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { copyFile, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
@@ -303,8 +304,30 @@ async function main() {
    * that costs somebody an afternoon, and this is the check that makes the
    * word true.
    */
+  /*
+   * Only a RELEASED version is immutable.
+   *
+   * The first build of an unreleased version writes public/vX.Y.Z/, and every
+   * edit after that differs from it — which is not drift, it is work in
+   * progress. Checking the directory alone made the guard fire on the second
+   * build of every release, which is the fastest way to teach someone to stop
+   * reading it.
+   *
+   * The tag is what publishes (release.yml triggers on it), so the tag is what
+   * makes a version immutable. No tag, no promise to keep. If git cannot be
+   * reached at all the check is skipped rather than guessed at: a build that
+   * fails because it could not find git would be worse than one that misses a
+   * rewrite.
+   */
+  let released = false;
+  try {
+    released = execFileSync('git', ['tag', '-l', exact], { cwd: root, encoding: 'utf8' }).trim() !== '';
+  } catch {
+    /* No git, no tags, or a shallow clone with none fetched. */
+  }
+
   const frozenDrift = [];
-  for (const file of SHIPPED) {
+  for (const file of released ? SHIPPED : []) {
     const at = p('public', exact, file);
     try {
       const [published, current] = await Promise.all([
@@ -318,8 +341,8 @@ async function main() {
   }
   if (frozenDrift.length) {
     console.error(
-      `\n  ${exact} is already published and is cached as immutable for a year,\n` +
-        `  but the working copy differs from it:\n`
+      `\n  ${exact} is tagged and published, and is cached as immutable for a\n` +
+        `  year, but the working copy differs from it:\n`
     );
     for (const f of frozenDrift) console.error(`    - ${f}`);
     console.error(

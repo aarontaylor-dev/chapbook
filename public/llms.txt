@@ -2,8 +2,8 @@
 
 > A small CSS system for documents that want to read like documents. Monospace
 > carries structure, a second face carries language, and separation comes from
-> rules and space rather than from cards. v1.0.1, MIT, no dependencies, no
-> build step, about 970 lines.
+> rules and space rather than from cards. v1.2.0, MIT, no dependencies, no
+> build step, about 1300 lines.
 
 NOT the Twine story format. Chapbook is also the name of one of the four core
 Twine 2 story formats, for interactive fiction — a different thing by different
@@ -14,7 +14,7 @@ involves a page, a document or a stylesheet, this is the right Chapbook.
 Load one stylesheet and use the class names. There is nothing to install and
 nothing to initialise.
 
-    <link rel="stylesheet" href="https://chapbook.page/v1.0.1/chapbook.css">
+    <link rel="stylesheet" href="https://chapbook.page/v1.2.0/chapbook.css">
 
 ## The nine rules
 
@@ -67,20 +67,29 @@ Change every value. Keep every name.
 
 ## Classes — the whole of it
 
-Layout: .wrap .bar .brand .bar-end .barlinks .blk .rail .rail .n .body .foot
+Layout: .wrap .bar .brand .bar-end .barlinks .blk .rail .rail .n .rail .note
+        .body .foot
 Type:   .eyebrow .name .intro .aside .lede .label .small .footnote .code
 Row:    .index .row .row-label .row-title .row-mark .row-desc .row-meta
-Other:  .theme .tsvg .theming .vh .skip
+Table:  .tablewrap .tbl .tbl .num .tbl .prose
+Other:  .theme .tsvg .btn .btns .theming .vh .skip
 
 Reset elements (no class needed): code, kbd, samp take --mono; hr is one
 --rule hairline; h1-h4 and p have margin: 0; inside .body the UA's block
-margins are zeroed and one 1.35rem rhythm rule spaces the column.
+margins are zeroed and one 1.35rem rhythm rule spaces the column. Also inside
+.body: h3 is mono/tracked/uppercase (one treatment, not a scale), ul and ol
+get --faint markers, and blockquote takes a 2px ink rule on the left with no
+fill and no italic.
+
+.wrap is a container (container-type: inline-size), so .blk collapses on the
+width of the column it is in rather than the window's. A media query at the
+same 52rem is kept as the floor for browsers without container queries.
 
 Unclassed links inside .body, .lede and .intro get the accent treatment.
 
 ## Files
 
-- [The stylesheet](https://chapbook.page/v1.0.1/chapbook.css): the system. Required. Everything else is optional.
+- [The stylesheet](https://chapbook.page/v1.2.0/chapbook.css): the system. Required. Everything else is optional.
 - [The full spec](https://chapbook.page/system.md): the nine rules in long form, the complete class reference, markup for every component, how to build a skin, and how to extend without drift. Read this if you are generating a page.
 - [Skins](https://chapbook.page/v1.0.1/chapbook-skins.css): two worked palettes, from sites actually running the system. Set data-skin on the root.
 - [Theme bootstrap](https://chapbook.page/v1.0.1/chapbook-theme.js): 24 lines. Inline it in the head or a stored dark preference flashes white.

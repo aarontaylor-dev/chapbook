@@ -31,13 +31,13 @@ export const ROW_PARTS = ['row-label', 'row-title', 'row-mark', 'row-desc', 'row
    thing you are looking at, or does it say something? */
 export const MONO_BEARING = [
   'eyebrow', 'label', 'n', 'rule-n', 'rule-spec', 'row-label', 'row-meta',
-  'row-mark', 'small', 'brand', 'foot', 'skinbtn', 'aside',
+  'row-mark', 'small', 'brand', 'foot', 'btn', 'note', 'aside',
 ];
 
 /* Rule 08: a control that does something is bordered. These are the bordered
    forms the system ships. A <button> outside this set is a word pretending
    not to be a control. */
-export const BORDERED_CONTROLS = ['theme', 'skinbtn'];
+export const BORDERED_CONTROLS = ['theme', 'btn'];
 
 const classesOf = (tag) => {
   const m = tag.match(/class="([^"]*)"/);
