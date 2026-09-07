@@ -13,7 +13,12 @@ section is published *as part of* the release above it, where it reads as a
 promise the tarball does not keep. Work that is queued rather than shipped
 belongs in an issue.
 
-## Unreleased
+## 1.2.1 — 7 September 2026
+
+Release plumbing only. `chapbook.css`, `chapbook-skins.css` and
+`chapbook-theme.js` are byte-identical to 1.2.0, which is why this is a patch —
+and cutting it is itself the test, because the two things fixed below only run
+on a tag push and had therefore never run.
 
 ### A tag is not a release
 

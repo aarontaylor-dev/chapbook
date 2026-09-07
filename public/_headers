@@ -53,6 +53,9 @@
 /v1.2.0/*
   Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=31536000, immutable
+/v1.2.1/*
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=31536000, immutable
 /v1/*
   Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=86400
