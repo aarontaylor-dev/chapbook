@@ -13,6 +13,41 @@ section is published *as part of* the release above it, where it reads as a
 promise the tarball does not keep. Work that is queued rather than shipped
 belongs in an issue.
 
+## 1.1.1 — 7 September 2026
+
+Documentation only. No CSS changed, no class name added or removed, and the
+three shipped files are byte-identical to 1.1.0 — which is why this is a patch.
+
+### Rule 05 said more than it meant
+
+**"One row anatomy, everywhere."** The body never matched the title. Every
+clause of it is about a link: the row *is* the anchor, the mark points at a
+destination, the hover is navigational affordance, and `↗` against `→`
+distinguishes leaving the site from staying on it. The rule governs the index
+row. The word *everywhere* claimed the whole page.
+
+That gap cost a full review pass. `.forrow`, added to the specimen in 1.1.0,
+was flagged as a possible violation, and only re-reading the rule's body
+settled that it is outside the rule's scope rather than an exception to it —
+the same standing `.rule` has held since v1.0.0 without anyone calling it a
+breach. A rule whose name has to be argued past is a rule that will be
+re-derived by whoever reads it next.
+
+Now **"One row anatomy, and the row is a link."** `system.md` gains a section
+saying what the rule covers and, more usefully, what it does not: the rule is
+that there is *one* such anatomy, not that every repeated block must adopt it.
+
+### The audit was pointing at the wrong hole
+
+`audit.js` warned that its row count matches `.row` only, and told the reader
+to look at "the repeated structures this table does not name" — which, under
+the corrected scope, are not violations and never were. The genuine blind spot
+is narrower and worth stating precisely: **a second link row built without the
+`.row` class** is navigational, in scope, and reported as nothing.
+
+`skill/chapbook/AUDIT.md` gains a scope gate ahead of its rubric, so an agent
+settles what is in scope before it starts scoring rather than after.
+
 ## 1.1.0 — 7 September 2026
 
 The additive release, and it turned out not to be about components at all.

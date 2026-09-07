@@ -32,7 +32,7 @@ nothing to initialise.
 04. The numbered rail. A sticky left column with a number and a mono section
     name; content on the right. `align-self: start` is required or it will not
     stick, silently.
-05. One row anatomy everywhere. Mono label, display title, mark, optional
+05. One row anatomy, and the row is a link. Mono label, display title, mark, optional
     description, optional mono destination. The whole row is the link. Use the
     up-right arrow to leave the site and the right arrow to stay.
 06. Tokens declared three times: `:root`, then the dark media query guarded

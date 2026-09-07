@@ -1,0 +1,129 @@
+/*
+ * Chapbook — skins (optional)
+ * https://chapbook.page
+ *
+ * Two worked examples of Upgrade 2, both taken from sites actually running
+ * this system. Load this file after chapbook.css and set data-skin on the
+ * root element:
+ *
+ *   <html data-skin="green">
+ *
+ * WHAT A SKIN IS ALLOWED TO CHANGE
+ *   The eight colour tokens, --grain, and the two face tokens. That is all.
+ *   A skin that reaches for a layout token, a spacing value or a component
+ *   rule is not a skin — it is a fork, and it will drift.
+ *
+ * WHY THE STRUCTURE IS NOT IN HERE
+ *   Because the structure is the shared part and the colour is not. Three
+ *   sites run this system: the hub stays monochrome so it reads as the
+ *   neutral index, weindie.com is warm paper and green, Working Notes is
+ *   warm paper and clay. Siblings in structure, strangers in colour.
+ *
+ * EVERY RATIO BELOW IS MEASURED, not estimated, against the worst-case grain
+ * pixel rather than against --paper. build.js recomputes them on every build
+ * and fails if any text token drops under 4.5:1, so these numbers cannot
+ * quietly go stale.
+ */
+
+/* ========================================================================
+   GREEN — weindie.com. Warm paper, deep green.
+   ========================================================================
+   Shipped. Grain 0, so the ratios are against --paper directly.
+     light   ink 17.05  muted 7.05  faint 4.97  accent 5.66  deep 8.53
+     dark    ink 15.26  muted 7.73  faint 4.99  accent 7.70  deep 10.18
+   ------------------------------------------------------------------------ */
+
+:root[data-skin="green"] {
+  --paper: #fbfaf7;
+  --sunk: #f2f0ea;
+  --rule: #d9d7ce;
+  --ink: #16181a;
+  --muted: #54574f;
+  --faint: #6b6e66;
+  --accent: #27705a;
+  --accent-deep: #1a5342;
+  --grain: 0;
+  --language: "Newsreader", Georgia, "Times New Roman", serif;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-skin="green"]:not([data-theme="light"]) {
+    --paper: #121412;
+    --sunk: #1a1d1a;
+    --rule: #2d312c;
+    --ink: #ece9e1;
+    --muted: #a9a89d;
+    --faint: #83867c;
+    --accent: #5cb894;
+    --accent-deep: #7fd0af;
+    color-scheme: dark;
+  }
+}
+
+:root[data-skin="green"][data-theme="dark"] {
+  --paper: #121412;
+  --sunk: #1a1d1a;
+  --rule: #2d312c;
+  --ink: #ece9e1;
+  --muted: #a9a89d;
+  --faint: #83867c;
+  --accent: #5cb894;
+  --accent-deep: #7fd0af;
+  color-scheme: dark;
+}
+
+/* ========================================================================
+   CLAY — Working Notes. Warmer paper, clay accent.
+   ========================================================================
+   Clay is the colour of a correction, and the site is a notebook of them.
+
+     light   ink 16.10  muted 7.10  faint 5.05  accent 5.36  deep 7.32
+     dark    ink 14.64  muted 7.11  faint 4.92  accent 6.72  deep 8.78
+
+   --faint in dark is 4.92:1 — the tightest number anywhere in the system.
+   It clears AA, but it is the token to re-measure first if the dark grain
+   is ever raised above 0.016.
+   ------------------------------------------------------------------------ */
+
+:root[data-skin="clay"] {
+  --paper: #faf8f3;
+  --sunk: #f1ede3;
+  --rule: #ddd7c9;
+  --ink: #191714;
+  --muted: #55514a;
+  --faint: #6c675e;
+  --accent: #9a4f2b;
+  --accent-deep: #7d3e20;
+  --grain: 0.022;
+  --language: "Source Serif 4", Georgia, "Times New Roman", serif;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-skin="clay"]:not([data-theme="light"]) {
+    --paper: #14120f;
+    --sunk: #1c1a16;
+    --rule: #302c25;
+    --ink: #ece7dc;
+    --muted: #a8a296;
+    --faint: #8b8578;
+    --accent: #d98b62;
+    --accent-deep: #eba57e;
+    --grain: 0.016;
+    color-scheme: dark;
+  }
+}
+
+:root[data-skin="clay"][data-theme="dark"] {
+  --paper: #14120f;
+  --sunk: #1c1a16;
+  --rule: #302c25;
+  --ink: #ece7dc;
+  --muted: #a8a296;
+  --faint: #8b8578;
+  --accent: #d98b62;
+  --accent-deep: #eba57e;
+  --grain: 0.016;
+  color-scheme: dark;
+}

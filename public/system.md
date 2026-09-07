@@ -112,7 +112,7 @@ line and the rail silently stops moving, with no error anywhere.
 Omit the number on a single-section page. A section number is a promise that
 another one follows.
 
-### Rule 05 — One row anatomy, everywhere
+### Rule 05 — One row anatomy, and the row is a link
 
 Mono label left, title in the display face, mark right, then an optional
 description and a mono line carrying the destination. The whole row is the
@@ -123,6 +123,15 @@ right.
 
 Use `↗` for a destination that leaves the site and `→` for one that does not,
 so the mark keeps meaning something.
+
+**What the rule covers.** The index row — the one that navigates. Every clause
+above is about a link: the row *is* the anchor, the mark points at a
+destination, the hover is navigational affordance. A repeated block that does
+not link is a different object and does not owe this anatomy. `.rule` on the
+specimen has had its own shape since v1.0.0 for exactly that reason.
+
+The rule is that there is **one** such anatomy, not that every repeated thing
+on the page must adopt it.
 
 ### Rule 06 — Tokens declared three times
 

@@ -57,7 +57,7 @@ footer. Never a third weight.
 section name, content on the right. `align-self: start` is required, or it
 silently does not stick.
 
-**05 — One row anatomy, everywhere.** Mono label, display title, mark, optional
+**05 — One row anatomy, and the row is a link.** Mono label, display title, mark, optional
 description, optional mono destination. The whole row is the link. `↗` leaves
 the site, `→` stays.
 
