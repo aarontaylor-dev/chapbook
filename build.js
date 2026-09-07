@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /*
- * Plain Text System — build.
+ * Chapbook — build.
  *
  * Three jobs, in order of how much they matter:
  *
@@ -41,7 +41,7 @@ const p = (...parts) => join(root, ...parts);
 
 /* The distributable. These three files are the product; everything else in
    the repo exists to document, measure or serve them. */
-const SHIPPED = ['plain-text.css', 'plain-text-skins.css', 'plain-text-theme.js'];
+const SHIPPED = ['chapbook.css', 'chapbook-skins.css', 'chapbook-theme.js'];
 
 /* What each token is for. Kept here rather than in content.js because it is a
    property of the contract, and the contract lives with the measuring code. */
@@ -57,7 +57,7 @@ const ROLES = {
 };
 
 /* Which selector holds each skin. Neutral is the absence of a skin — it is
-   the default palette in plain-text.css itself. */
+   the default palette in chapbook.css itself. */
 const selectorFor = (id) => (id === 'neutral' ? ':root' : `:root[data-skin="${id}"]`);
 
 /* ------------------------------------------------------------- measuring -- */
@@ -138,9 +138,9 @@ function readPalettes(baseCss, skinCss) {
 
 async function main() {
   const [baseCss, skinCss, themeScript, demoScript, headerTpl] = await Promise.all([
-    readFile(p('plain-text.css'), 'utf8'),
-    readFile(p('plain-text-skins.css'), 'utf8'),
-    readFile(p('plain-text-theme.js'), 'utf8'),
+    readFile(p('chapbook.css'), 'utf8'),
+    readFile(p('chapbook-skins.css'), 'utf8'),
+    readFile(p('chapbook-theme.js'), 'utf8'),
     readFile(p('src', 'demo.js'), 'utf8'),
     readFile(p('src', 'headers.txt'), 'utf8'),
   ]);

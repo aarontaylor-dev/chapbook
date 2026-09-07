@@ -36,6 +36,29 @@ width", and a third build was about to be done by eye.
 | `--measure` | — | `34em` |
 | units | rem / px | rem everywhere |
 
+### The name
+
+A chapbook was a small, cheaply printed booklet sold by pedlars — plain type,
+cheap paper, no ornament, bought for a penny and passed on. The system is the
+same object: small, plainly set, and meant to be taken.
+
+The working name during the extraction was "Plain Text System", which was
+wrong in a way worth recording. "Plain text" means *unformatted*, and this is
+the most typographically opinionated thing in the family — three ink weights, a
+display face, tracked mono at four sizes, a grain overlay and a measured
+palette. The name described the restraint and denied the craft.
+
+It also failed the test in note 002: a name is a filter on what can join the
+thing later, and "plain text" filters out anything visually considered, which
+the system already is.
+
+Ruled, hairline and house style were the runners-up, and all three lost for one
+reason: each is a phrase somebody might reasonably type meaning something else.
+"Hairline" is an established CSS technique, "ruled" is an ordinary adjective,
+and "follow the house style" already means an organisation's own conventions.
+A name that doubles as an instruction cannot work as a retrieval key — which
+matters more than usual here, because half the intended audience is agents.
+
 ### Token names
 
 Standardised on the names weindie.com already shipped: `--paper`, `--sunk`,
@@ -48,11 +71,11 @@ the only reason it is safe to freeze them in a v1.
 
 ### What ships
 
-- `plain-text.css` — the system. Tokens, primitives, components, print.
-- `plain-text-skins.css` — two worked palettes, from real sites.
-- `plain-text-theme.js` — the theme bootstrap, 24 lines.
+- `chapbook.css` — the system. Tokens, primitives, components, print.
+- `chapbook-skins.css` — two worked palettes, from real sites.
+- `chapbook-theme.js` — the theme bootstrap, 24 lines.
 - `system.md` and `llms.txt` — the specification, for people and for agents.
-- `skill/plain-text/` — the same system as an agent skill.
+- `skill/chapbook/` — the same system as an agent skill.
 
 ### Decisions worth recording
 

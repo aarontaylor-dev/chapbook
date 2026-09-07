@@ -7,13 +7,13 @@
 # The distributable. People are meant to fetch these from other origins and
 # from scripts, so they carry CORS — a <link> would not need it, but an agent
 # reading the system with fetch() does.
-/plain-text.css
+/chapbook.css
   Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=3600
-/plain-text-skins.css
+/chapbook-skins.css
   Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=3600
-/plain-text-theme.js
+/chapbook-theme.js
   Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=3600
 /system.md
@@ -46,4 +46,4 @@
   # Two inline scripts: the theme bootstrap and the specimen's skin picker.
   # Both are admitted by hash rather than by 'unsafe-inline', so the policy
   # still refuses every other script on the page.
-  Content-Security-Policy: default-src 'self'; script-src 'sha256-aw7JrsLlza0KBr9IZ96YU+wcN7j4OZxa2WAs3TZiQuM=' 'sha256-C9J3jtO+FYKXPwY00KF3zMZpQ/nWHFpKgrJDak1FgnI='; style-src 'self'; img-src 'self' data:; font-src 'self'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'sha256-aw7JrsLlza0KBr9IZ96YU+wcN7j4OZxa2WAs3TZiQuM=' 'sha256-ZvcdCPAn4m5jiNsnqotK7pXl89qVsHHtiIxBC68hR6o='; style-src 'self'; img-src 'self' data:; font-src 'self'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'

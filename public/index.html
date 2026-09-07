@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Plain Text System — a small CSS system</title>
+<title>Chapbook — a small CSS system</title>
 <meta name="description" content="A small CSS system for documents that want to read like documents. Monospace carries structure, a second face carries language, and separation comes from rules and space rather than from cards. Nine rules, about 500 lines, no build step, MIT.">
 <link rel="canonical" href="https://style.aarontaylor.me/">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Plain Text System">
-<meta property="og:title" content="Plain Text System — a small CSS system">
+<meta property="og:site_name" content="Chapbook">
+<meta property="og:title" content="Chapbook — a small CSS system">
 <meta property="og:description" content="A small CSS system for documents that want to read like documents. Monospace carries structure, a second face carries language, and separation comes from rules and space rather than from cards. Nine rules, about 500 lines, no build step, MIT.">
 <meta property="og:url" content="https://style.aarontaylor.me/">
 <meta name="twitter:card" content="summary">
@@ -51,8 +51,8 @@
 })();
 </script>
 
-<link rel="stylesheet" href="/plain-text.css">
-<link rel="stylesheet" href="/plain-text-skins.css">
+<link rel="stylesheet" href="/chapbook.css">
+<link rel="stylesheet" href="/chapbook-skins.css">
 <link rel="stylesheet" href="/specimen.css">
 </head>
 <body>
@@ -60,7 +60,7 @@
 <a class="skip" href="#main">Skip to content</a>
 
     <header class="wrap bar">
-      <a class="brand" href="/">plain text system</a>
+      <a class="brand" href="/">chapbook</a>
       <div class="bar-end">
         <nav class="barlinks" aria-label="Sections">
           <a href="#rules">Rules</a>
@@ -83,7 +83,7 @@
 
       <div class="hero">
         <p class="eyebrow">v1.0.0 · MIT · no dependencies</p>
-        <h1 class="name">Plain&nbsp;Text System</h1>
+        <h1 class="name">Chapbook</h1>
         <p class="intro">A small CSS system for documents that want to read like documents. Monospace carries structure, a second face carries language, and separation comes from rules and space rather than from cards.</p>
         <p class="aside"><b>This page is the specimen.</b> It is set in the system it documents, using the same stylesheet you are invited to take &mdash; so every component below is the real implementation rather than a picture of one. The theme toggle is real. So is the print stylesheet. Change the skin in section 02 and watch nothing structural move.</p>
       </div>
@@ -493,12 +493,12 @@
               <span class="row-meta">the mark is &#8594; because this one does not leave</span>
             </a>
 
-            <a class="row" href="https://github.com/aarontaylor-dev/plain-text-system" rel="noopener">
+            <a class="row" href="https://github.com/aarontaylor-dev/chapbook" rel="noopener">
               <span class="row-label">External</span>
               <span class="row-title">A row that leaves</span>
               <span class="row-mark" aria-hidden="true">&#8599;</span>
               <span class="row-desc">Same anatomy. Only the mark changes, so the mark keeps meaning something rather than being decoration that happens to point.</span>
-              <span class="row-meta">github.com/aarontaylor-dev/plain-text-system</span>
+              <span class="row-meta">github.com/aarontaylor-dev/chapbook</span>
             </a>
           </nav>
 
@@ -522,15 +522,15 @@
         <div class="body">
           <p class="lede">There is no install step, no package to configure and nothing to initialise. Link one file and use the class names.</p>
 
-          <pre class="code">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://style.aarontaylor.me/v1.0.0/plain-text.css&quot;&gt;</pre>
+          <pre class="code">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://style.aarontaylor.me/v1.0.0/chapbook.css&quot;&gt;</pre>
           <p class="small">Two version paths, and they are not the same promise. <code>/v1.0.0/</code> is exact: it never changes, and it is cached for a year. <code>/v1/</code> follows the major line and picks up additive releases, cached for a day. Link the exact one unless you specifically want the updates.</p>
 
           <p class="label footnote">Or vendor it, which is better</p>
-          <pre class="code">curl -O https://style.aarontaylor.me/plain-text.css</pre>
+          <pre class="code">curl -O https://style.aarontaylor.me/chapbook.css</pre>
           <p class="small">Copying the file into your own repo costs one request less, survives this domain disappearing, and lets you edit it &mdash; which you are meant to do. A system you cannot change is a dependency.</p>
 
           <p class="label footnote">Or from npm</p>
-          <pre class="code">npm i plain-text-system</pre>
+          <pre class="code">npm i chapbook</pre>
 
           <p class="label footnote">The minimum page</p>
           <pre class="code">&lt;!doctype html&gt;
@@ -539,7 +539,7 @@
   &lt;meta charset=&quot;utf-8&quot;&gt;
   &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
   &lt;title&gt;A page&lt;/title&gt;
-  &lt;link rel=&quot;stylesheet&quot; href=&quot;/plain-text.css&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;/chapbook.css&quot;&gt;
 &lt;/head&gt;
 &lt;body&gt;
   &lt;header class=&quot;wrap bar&quot;&gt;
@@ -583,28 +583,28 @@
 
           <nav class="index" aria-label="Files">
 
-            <a class="row" href="/plain-text.css">
+            <a class="row" href="/chapbook.css">
               <span class="row-label">Required</span>
-              <span class="row-title">plain-text.css</span>
+              <span class="row-title">chapbook.css</span>
               <span class="row-mark" aria-hidden="true">&#8594;</span>
               <span class="row-desc">The system. Tokens, primitives, components, print. Around 500 lines, and you are expected to read them.</span>
-              <span class="row-meta">style.aarontaylor.me/plain-text.css</span>
+              <span class="row-meta">style.aarontaylor.me/chapbook.css</span>
             </a>
 
-            <a class="row" href="/plain-text-skins.css">
+            <a class="row" href="/chapbook-skins.css">
               <span class="row-label">Optional</span>
-              <span class="row-title">plain-text-skins.css</span>
+              <span class="row-title">chapbook-skins.css</span>
               <span class="row-mark" aria-hidden="true">&#8594;</span>
               <span class="row-desc">Two worked palettes, taken from sites actually running this system. Load after the base file and set data-skin.</span>
-              <span class="row-meta">style.aarontaylor.me/plain-text-skins.css</span>
+              <span class="row-meta">style.aarontaylor.me/chapbook-skins.css</span>
             </a>
 
-            <a class="row" href="/plain-text-theme.js">
+            <a class="row" href="/chapbook-theme.js">
               <span class="row-label">Optional</span>
-              <span class="row-title">plain-text-theme.js</span>
+              <span class="row-title">chapbook-theme.js</span>
               <span class="row-mark" aria-hidden="true">&#8594;</span>
               <span class="row-desc">The theme bootstrap in 24 lines. Inline it in the head, or the stored preference flashes the wrong colour on every load.</span>
-              <span class="row-meta">style.aarontaylor.me/plain-text-theme.js</span>
+              <span class="row-meta">style.aarontaylor.me/chapbook-theme.js</span>
             </a>
 
             <a class="row" href="/system.md">
@@ -623,12 +623,12 @@
               <span class="row-meta">style.aarontaylor.me/llms.txt</span>
             </a>
 
-            <a class="row" href="https://github.com/aarontaylor-dev/plain-text-system" rel="noopener">
+            <a class="row" href="https://github.com/aarontaylor-dev/chapbook" rel="noopener">
               <span class="row-label">Source</span>
               <span class="row-title">GitHub</span>
               <span class="row-mark" aria-hidden="true">&#8599;</span>
               <span class="row-desc">The repository. Everything on this page is in it, including the build that measures the contrast and refuses to publish a failing token.</span>
-              <span class="row-meta">github.com/aarontaylor-dev/plain-text-system</span>
+              <span class="row-meta">github.com/aarontaylor-dev/chapbook</span>
             </a>
           </nav>
         </div>
@@ -650,7 +650,7 @@
 
           <nav class="index" aria-label="Version">
 
-            <a class="row" href="https://github.com/aarontaylor-dev/plain-text-system/blob/main/CHANGELOG.md" rel="noopener">
+            <a class="row" href="https://github.com/aarontaylor-dev/chapbook/blob/main/CHANGELOG.md" rel="noopener">
               <span class="row-label">v1.0.0</span>
               <span class="row-title">Changelog</span>
               <span class="row-mark" aria-hidden="true">&#8599;</span>
@@ -664,13 +664,13 @@
 
     <footer class="wrap">
       <div class="foot">
-        <b>plain text system v1.0.0</b>
+        <b>chapbook v1.0.0</b>
         <span>MIT. Take it, change it, do not credit me.</span>
       </div>
     </footer>
 
 <script>/* The skin picker. Specimen-only — it is not part of the system, and it is
-   not in plain-text.css. It swaps one attribute on the root element and shows
+   not in chapbook.css. It swaps one attribute on the root element and shows
    the matching panel; every visible change after that is the stylesheet's. */
 (function () {
   var d = document.documentElement;
@@ -679,7 +679,7 @@
   if (!btns.length) return;
 
   function show(id) {
-    /* "neutral" is the default palette in plain-text.css itself, so it is the
+    /* "neutral" is the default palette in chapbook.css itself, so it is the
        absence of a skin rather than a skin. */
     if (id === 'neutral') d.removeAttribute('data-skin');
     else d.setAttribute('data-skin', id);

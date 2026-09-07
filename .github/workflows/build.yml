@@ -52,7 +52,7 @@ jobs:
           # Not named "status": that is read-only in zsh, and this snippet is
           # worth being able to paste into a local shell.
           failed=0
-          for f in plain-text.css plain-text-skins.css plain-text-theme.js; do
+          for f in chapbook.css chapbook-skins.css chapbook-theme.js; do
             for dir in public "public/v1" "public/v$(node -p "require('./package.json').version")"; do
               if ! cmp -s "$f" "$dir/$f"; then
                 echo "::error::$dir/$f differs from $f"

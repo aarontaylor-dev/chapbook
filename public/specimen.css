@@ -3,11 +3,11 @@
  *
  * This file exists to be honest about a thing every design system elides: the
  * documentation page always needs more than the system provides. Rather than
- * quietly growing plain-text.css until it covers tables, tab groups and
+ * quietly growing chapbook.css until it covers tables, tab groups and
  * swatches that no real site needs, the extras live here, scoped to this page.
  *
  * That is also the recommended pattern for using the system. Take
- * plain-text.css unchanged, add a file like this one beside it, and keep the
+ * chapbook.css unchanged, add a file like this one beside it, and keep the
  * two separate so you can always see what you added.
  *
  * Everything below obeys the nine rules. No radius, no shadow, no fill except

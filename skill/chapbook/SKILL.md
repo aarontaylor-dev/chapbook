@@ -1,17 +1,17 @@
 ---
-name: plain-text
-description: Build or review a web page in the Plain Text System — monospace carries structure, a second face carries language, and separation comes from rules and space rather than from cards.
+name: chapbook
+description: Build or review a web page in the Chapbook — monospace carries structure, a second face carries language, and separation comes from rules and space rather than from cards.
 license: MIT
 metadata:
   version: "1.0.0"
   source: https://style.aarontaylor.me
 ---
 
-# /plain-text
+# /chapbook
 
 **Does this page follow the system, or does it just resemble it?**
 
-The Plain Text System is nine rules and about 500 lines of CSS. The rules are
+The Chapbook is nine rules and about 500 lines of CSS. The rules are
 the system; the CSS is only their implementation. A page can link the
 stylesheet and still be off-system — cards creep in, a third rule weight
 appears, a sans-serif starts doing the monospace's job — and none of that
@@ -23,7 +23,7 @@ it.
 ## Useful when
 
 - Building a site, page or document that should read like a document.
-- A page links `plain-text.css` but does not look like the specimen.
+- A page links `chapbook.css` but does not look like the specimen.
 - Adding a component the system does not have, without forking it.
 - Choosing a palette, and needing the contrast to be right rather than close.
 - Porting an existing design onto the system.
@@ -79,7 +79,7 @@ pressed state is a border in ink, never a fill.
 ## How to build a page
 
 1. **Link the stylesheet and nothing else.**
-   `https://style.aarontaylor.me/v1.0.0/plain-text.css`, or vendor the file.
+   `https://style.aarontaylor.me/v1.0.0/chapbook.css`, or vendor the file.
 2. **Use only the documented classes.** They are listed in `system.md` and the
    list is exhaustive. An invented class name is the first sign of a fork.
 3. **Structure before colour.** Masthead, hero, numbered blocks, index rows,
@@ -143,6 +143,6 @@ repository, and it is about 80 lines with no dependencies.
 - **Strictness.** Report every deviation from the nine rules, including ones
   that are invisible at a glance.
 - **Scope.** Review the page's own CSS and markup; leave vendored copies of
-  `plain-text.css` alone unless they have been edited.
+  `chapbook.css` alone unless they have been edited.
 - **Additions.** Treat a component the system does not have as a gap to be
   filled in a separate stylesheet, not as a reason to change the base file.

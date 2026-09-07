@@ -1,5 +1,5 @@
 /*
- * Plain Text System — theme bootstrap (optional)
+ * Chapbook — theme bootstrap (optional)
  * https://style.aarontaylor.me
  *
  * Rule 08: the toggle ships hidden and script reveals it, so a visitor

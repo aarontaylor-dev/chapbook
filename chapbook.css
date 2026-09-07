@@ -1,5 +1,5 @@
 /*
- * Plain Text System — v1.0.0
+ * Chapbook — v1.0.0
  * https://style.aarontaylor.me
  *
  * A small CSS system for documents that want to read like documents. Monospace
@@ -93,7 +93,7 @@
      monochrome page has no hue to spend, so a link announces itself by
      decoration rather than by colour, and hover changes the underline
      rather than the colour. A coloured skin separates the two — see
-     plain-text-skins.css, where they are 5.66:1 and 8.53:1 apart. */
+     chapbook-skins.css, where they are 5.66:1 and 8.53:1 apart. */
   --accent: #111;
   --accent-deep: #111;
 
@@ -411,7 +411,7 @@ footer { position: relative; z-index: 1; }
 
    Ship it with the `hidden` attribute set and let script reveal it, so a
    visitor without JavaScript is never offered a button that cannot work.
-   plain-text-theme.js beside this file does that in 24 lines.
+   chapbook-theme.js beside this file does that in 24 lines.
    ------------------------------------------------------------------------ */
 
 .theme {
@@ -869,7 +869,7 @@ footer {
    UPGRADE 2 — your own palette
    ----------------------------------------------------------------------
    Redefine the eight colour tokens in all three blocks. Keep the names.
-   plain-text-skins.css has two worked examples, and system.md has the
+   chapbook-skins.css has two worked examples, and system.md has the
    measuring procedure — every text token must clear 4.5:1 against the
    worst-case grain pixel, not against --paper.
    ======================================================================== */

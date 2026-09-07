@@ -1,5 +1,5 @@
 {
-  "name": "plain-text-system",
+  "name": "chapbook",
   "version": "1.0.0",
   "description": "A small CSS system for documents that want to read like documents. Monospace carries structure, a second face carries language, and separation comes from rules and space rather than from cards. Nine rules, no dependencies, no build step.",
   "keywords": [
@@ -17,10 +17,10 @@
   "homepage": "https://style.aarontaylor.me",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aarontaylor-dev/plain-text-system.git"
+    "url": "git+https://github.com/aarontaylor-dev/chapbook.git"
   },
   "bugs": {
-    "url": "https://github.com/aarontaylor-dev/plain-text-system/issues"
+    "url": "https://github.com/aarontaylor-dev/chapbook/issues"
   },
   "license": "MIT",
   "author": {
@@ -37,22 +37,22 @@
   "sideEffects": [
     "*.css"
   ],
-  "style": "plain-text.css",
+  "style": "chapbook.css",
   "exports": {
-    ".": "./plain-text.css",
-    "./plain-text.css": "./plain-text.css",
-    "./skins": "./plain-text-skins.css",
-    "./plain-text-skins.css": "./plain-text-skins.css",
-    "./theme": "./plain-text-theme.js",
-    "./plain-text-theme.js": "./plain-text-theme.js",
+    ".": "./chapbook.css",
+    "./chapbook.css": "./chapbook.css",
+    "./skins": "./chapbook-skins.css",
+    "./chapbook-skins.css": "./chapbook-skins.css",
+    "./theme": "./chapbook-theme.js",
+    "./chapbook-theme.js": "./chapbook-theme.js",
     "./measure": "./src/measure.js",
     "./system.md": "./system.md",
     "./package.json": "./package.json"
   },
   "files": [
-    "plain-text.css",
-    "plain-text-skins.css",
-    "plain-text-theme.js",
+    "chapbook.css",
+    "chapbook-skins.css",
+    "chapbook-theme.js",
     "src/measure.js",
     "system.md",
     "llms.txt",

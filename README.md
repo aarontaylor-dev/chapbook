@@ -1,4 +1,4 @@
-# Plain Text System
+# Chapbook
 
 A small CSS system for documents that want to read like documents.
 
@@ -14,14 +14,14 @@ MIT. Take it, change it, no credit needed.
 ## Use it
 
 ```html
-<link rel="stylesheet" href="https://style.aarontaylor.me/v1.0.0/plain-text.css">
+<link rel="stylesheet" href="https://style.aarontaylor.me/v1.0.0/chapbook.css">
 ```
 
 Or vendor it, which is better — one request less, it survives this domain
 disappearing, and you can edit it, which you are meant to do:
 
 ```bash
-curl -O https://style.aarontaylor.me/plain-text.css
+curl -O https://style.aarontaylor.me/chapbook.css
 ```
 
 Or from npm — published from CI with
@@ -29,7 +29,7 @@ Or from npm — published from CI with
 tarball is cryptographically tied to the commit that built it:
 
 ```bash
-npm i plain-text-system
+npm i chapbook
 ```
 
 There is no build step, no configuration and nothing to initialise. Link one
@@ -101,9 +101,9 @@ No dependencies. Node's standard library and nothing else.
 ## Layout
 
 ```txt
-plain-text.css          THE PRODUCT — tokens, primitives, components, print
-plain-text-skins.css    two worked palettes, from real sites
-plain-text-theme.js     the theme bootstrap, 24 lines
+chapbook.css          THE PRODUCT — tokens, primitives, components, print
+chapbook-skins.css    two worked palettes, from real sites
+chapbook-theme.js     the theme bootstrap, 24 lines
 
 build.js                measures, checks, renders
 src/
@@ -112,7 +112,7 @@ src/
   page.js               the specimen template
   demo.js               the skin picker — specimen only
   headers.txt           _headers template, with slots for the script hashes
-skill/plain-text/       the same system as an agent skill
+skill/chapbook/       the same system as an agent skill
 public/                 the deployed site
   index.html            generated
   system.md             the specification — hand-written
@@ -143,6 +143,22 @@ A **token rename or a removed primitive** bumps the major. Those are the only
 two changes that can break a site downstream; everything else is additive.
 
 [CHANGELOG.md](CHANGELOG.md) records why a thing changed, not only that it did.
+
+## Why "Chapbook"
+
+A chapbook was a small, cheaply printed booklet sold by pedlars from the
+sixteenth century onward — plain type on cheap paper, no ornament and no gilt,
+bought for a penny and passed on. It is the democratised print object: made to
+be cheap, read, and given away.
+
+That is the whole brief for this system, including the licence. It is small,
+it is plainly set, it has no ornament, and you are meant to take it.
+
+The name is also deliberately *not* an instruction. "Ruled", "hairline" and
+"house style" were all considered and all rejected for the same reason: each
+is a phrase you might reasonably type at an agent meaning something else
+entirely. A name that doubles as an ordinary instruction cannot work as a
+retrieval key.
 
 ## Where it came from
 

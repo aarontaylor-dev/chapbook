@@ -1,4 +1,4 @@
-# Plain Text System v1.0.0
+# Chapbook v1.0.0
 
 A small CSS system for documents that want to read like documents.
 
@@ -7,11 +7,11 @@ comes from rules and space rather than from cards.**
 
 MIT. Take it, change it, no credit needed.
 
-- Stylesheet: <https://style.aarontaylor.me/v1.0.0/plain-text.css>
-- Skins: <https://style.aarontaylor.me/v1.0.0/plain-text-skins.css>
-- Theme bootstrap: <https://style.aarontaylor.me/v1.0.0/plain-text-theme.js>
+- Stylesheet: <https://style.aarontaylor.me/v1.0.0/chapbook.css>
+- Skins: <https://style.aarontaylor.me/v1.0.0/chapbook-skins.css>
+- Theme bootstrap: <https://style.aarontaylor.me/v1.0.0/chapbook-theme.js>
 - Specimen: <https://style.aarontaylor.me>
-- Source: <https://github.com/aarontaylor-dev/plain-text-system>
+- Source: <https://github.com/aarontaylor-dev/chapbook>
 
 This file is the complete specification. If you are an agent building a page
 in this system, you need nothing else.
@@ -300,7 +300,7 @@ sentence from a link that *is* a component.
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>A page</title>
-  <link rel="stylesheet" href="https://style.aarontaylor.me/v1.0.0/plain-text.css">
+  <link rel="stylesheet" href="https://style.aarontaylor.me/v1.0.0/chapbook.css">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -367,7 +367,7 @@ Goes inside `.bar-end`. Ships `hidden`; script reveals it.
 </button>
 ```
 
-Inline `plain-text-theme.js` in `<head>`, before the stylesheet. Fetching it
+Inline `chapbook-theme.js` in `<head>`, before the stylesheet. Fetching it
 as a file costs a round trip, and a round trip here is a flash of the wrong
 colour on every load for anyone who chose dark.
 
@@ -395,7 +395,7 @@ source repo, and `build.js` fails the build on a token below AA.
 
 ## Extending without drift
 
-- **Put additions in a separate stylesheet** loaded after `plain-text.css`.
+- **Put additions in a separate stylesheet** loaded after `chapbook.css`.
   Keep the two apart so you can always see what you added. The specimen site
   does exactly this in `specimen.css`.
 - **Reuse the tokens.** A new component that hard-codes a colour is a

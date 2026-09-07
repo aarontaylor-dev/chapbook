@@ -8,9 +8,9 @@
 
 export const site = {
   url: 'https://style.aarontaylor.me/',
-  repo: 'https://github.com/aarontaylor-dev/plain-text-system',
-  title: 'Plain Text System',
-  brand: 'plain text system',
+  repo: 'https://github.com/aarontaylor-dev/chapbook',
+  title: 'Chapbook',
+  brand: 'chapbook',
   version: '1.0.0',
   description:
     'A small CSS system for documents that want to read like documents. Monospace carries structure, a second face carries language, and separation comes from rules and space rather than from cards. Nine rules, about 500 lines, no build step, MIT.',
@@ -18,7 +18,7 @@ export const site = {
 
 export const hero = {
   eyebrow: `v${site.version} · MIT · no dependencies`,
-  name: 'Plain&nbsp;Text System',
+  name: 'Chapbook',
   intro:
     'A small CSS system for documents that want to read like documents. Monospace carries structure, a second face carries language, and separation comes from rules and space rather than from cards.',
   aside: {
@@ -132,24 +132,24 @@ export const typeScale = [
 export const files = [
   {
     status: 'Required',
-    title: 'plain-text.css',
-    href: '/plain-text.css',
+    title: 'chapbook.css',
+    href: '/chapbook.css',
     desc: 'The system. Tokens, primitives, components, print. Around 500 lines, and you are expected to read them.',
-    meta: 'style.aarontaylor.me/plain-text.css',
+    meta: 'style.aarontaylor.me/chapbook.css',
   },
   {
     status: 'Optional',
-    title: 'plain-text-skins.css',
-    href: '/plain-text-skins.css',
+    title: 'chapbook-skins.css',
+    href: '/chapbook-skins.css',
     desc: 'Two worked palettes, taken from sites actually running this system. Load after the base file and set data-skin.',
-    meta: 'style.aarontaylor.me/plain-text-skins.css',
+    meta: 'style.aarontaylor.me/chapbook-skins.css',
   },
   {
     status: 'Optional',
-    title: 'plain-text-theme.js',
-    href: '/plain-text-theme.js',
+    title: 'chapbook-theme.js',
+    href: '/chapbook-theme.js',
     desc: 'The theme bootstrap in 24 lines. Inline it in the head, or the stored preference flashes the wrong colour on every load.',
-    meta: 'style.aarontaylor.me/plain-text-theme.js',
+    meta: 'style.aarontaylor.me/chapbook-theme.js',
   },
   {
     status: 'For agents',
@@ -170,6 +170,6 @@ export const files = [
     title: 'GitHub',
     href: site.repo,
     desc: 'The repository. Everything on this page is in it, including the build that measures the contrast and refuses to publish a failing token.',
-    meta: 'github.com/aarontaylor-dev/plain-text-system',
+    meta: 'github.com/aarontaylor-dev/chapbook',
   },
 ];

@@ -35,7 +35,7 @@ cleanly instead of serving a 522. A new subdomain must be added explicitly.
 ### 1. Create the repository, public
 
 ```bash
-gh repo create aarontaylor-dev/plain-text-system --public \
+gh repo create aarontaylor-dev/chapbook --public \
   --source . --remote origin --push \
   --description "A small CSS system for documents that want to read like documents."
 ```
@@ -58,8 +58,8 @@ ticked, which looks finished, but nothing persists until Save.
 Workers & Pages → Create → Pages → Connect to Git.
 
 ```txt
-Repository:              aarontaylor-dev/plain-text-system
-Project name:            plain-text-system
+Repository:              aarontaylor-dev/chapbook
+Project name:            chapbook
 Production branch:       main
 Framework preset:        None
 Build command:           node build.js
@@ -77,11 +77,11 @@ on the tokens. Without it, a contrast regression deploys without complaint.
 ### 4. Prove the deployment on its own URL
 
 ```bash
-curl -sS -o /dev/null -w "root   %{http_code}\n" https://plain-text-system.pages.dev/
-curl -sS -o /dev/null -w "css    %{http_code}\n" https://plain-text-system.pages.dev/plain-text.css
-curl -sS -o /dev/null -w "frozen %{http_code}\n" https://plain-text-system.pages.dev/v1.0.0/plain-text.css
-curl -sSI https://plain-text-system.pages.dev/plain-text.css | grep -i 'access-control\|cache-control'
-curl -sS -o /dev/null -w "404    %{http_code}\n" https://plain-text-system.pages.dev/nope
+curl -sS -o /dev/null -w "root   %{http_code}\n" https://chapbook.pages.dev/
+curl -sS -o /dev/null -w "css    %{http_code}\n" https://chapbook.pages.dev/chapbook.css
+curl -sS -o /dev/null -w "frozen %{http_code}\n" https://chapbook.pages.dev/v1.0.0/chapbook.css
+curl -sSI https://chapbook.pages.dev/chapbook.css | grep -i 'access-control\|cache-control'
+curl -sS -o /dev/null -w "404    %{http_code}\n" https://chapbook.pages.dev/nope
 ```
 
 Expect `200` throughout, `404` last, and the CSS carrying
@@ -99,7 +99,7 @@ DNS → Records → Add record.
 ```txt
 Type:    CNAME
 Name:    style
-Target:  plain-text-system.pages.dev
+Target:  chapbook.pages.dev
 Proxy:   Proxied
 TTL:     Auto
 ```
@@ -115,8 +115,8 @@ at the edge is answering for that hostname first.
 
 ```bash
 curl -sS -o /dev/null -w "site    %{http_code}\n" https://style.aarontaylor.me/
-curl -sS -o /dev/null -w "css     %{http_code}\n" https://style.aarontaylor.me/plain-text.css
-curl -sS -o /dev/null -w "frozen  %{http_code}\n" https://style.aarontaylor.me/v1.0.0/plain-text.css
+curl -sS -o /dev/null -w "css     %{http_code}\n" https://style.aarontaylor.me/chapbook.css
+curl -sS -o /dev/null -w "frozen  %{http_code}\n" https://style.aarontaylor.me/v1.0.0/chapbook.css
 curl -sS -o /dev/null -w "spec    %{http_code}\n" https://style.aarontaylor.me/system.md
 curl -sS -o /dev/null -w "llms    %{http_code}\n" https://style.aarontaylor.me/llms.txt
 curl -sS -o /dev/null -w "404     %{http_code}\n" https://style.aarontaylor.me/nope
@@ -221,10 +221,10 @@ much larger, something has been added to `files` that should not be there.
 ### Verifying provenance after a release
 
 ```bash
-npm view plain-text-system dist.attestations
+npm view chapbook dist.attestations
 ```
 
-The package page at <https://www.npmjs.com/package/plain-text-system> should
+The package page at <https://www.npmjs.com/package/chapbook> should
 show a **Provenance** panel naming this repository and the building commit.
 
 ## Continuous integration
