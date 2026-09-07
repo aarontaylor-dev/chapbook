@@ -3,7 +3,7 @@
  *
  * build.js enforces six of the nine rules against the STYLESHEET. Rules 04, 05
  * and 08 are about markup and meaning — whether a rail actually carries the
- * section, whether every list shares one row anatomy, whether a control that
+ * section, whether every index row shares one anatomy, whether a control that
  * does something is bordered — and none of that is visible in CSS. Until now
  * they were documented and nothing ran them.
  *
@@ -182,8 +182,10 @@ export function inspect(section) {
 export function scan(html) {
   const found = sections(html).map(inspect);
 
-  /* Rule 05 is "one row anatomy, EVERYWHERE" — so the cross-section check is
-     the one that matters, and it is the one a per-section reading misses. */
+  /* Rule 05 asks for ONE index-row anatomy, and one section reading correctly
+     says nothing about the next. This cross-section check is the one that
+     matters and the one a per-section reading misses: two sections can each be
+     internally consistent and still disagree with each other. */
   const all = [...new Set(found.flatMap((s) => s.rowShapes))].filter(Boolean);
   const global = [];
   if (all.length > 1) {

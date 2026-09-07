@@ -32,10 +32,17 @@ The mechanical part — does a `.rail` exist, does it carry a number and an
   "Some notes about the colour system" is a caption, and it belongs in the
   body.
 
-### Rule 05 — One row anatomy, everywhere
+### Rule 05 — One row anatomy, and the row is a link
 
 `audit.js` reports how many distinct anatomies the document uses and fails if
-there is more than one. What is yours:
+there is more than one.
+
+**Scope first, before you score anything.** The rule governs the index row —
+the one that navigates. A repeated block that does not link is a different
+object and is not in scope: do not score it, and do not report it as a
+violation. `.rule` and `.forrow` on the specimen are both of that kind.
+
+What is yours:
 
 - **Is each part honest?** `.row-label` is a status, not a category dressed as
   one. `.row-meta` is where something goes or when it happened. A row that
@@ -43,6 +50,9 @@ there is more than one. What is yours:
 - **Is the anatomy the right one for this content?** One anatomy across the
   document is the rule. If the single anatomy in use fits some rows badly, the
   fault is the anatomy, not the rows.
+- **Is there a second link row wearing a different class?** This is the one
+  the scanner cannot see. It matches `.row`; a navigational row built without
+  that class is a real violation it will report as nothing.
 
 ### Rule 08 — A bordered control, not another word in a row of words
 

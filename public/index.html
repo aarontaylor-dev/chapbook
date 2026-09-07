@@ -83,7 +83,7 @@
     <main class="wrap" id="main">
 
       <div class="hero">
-        <p class="eyebrow">v1.1.0 · MIT · no dependencies</p>
+        <p class="eyebrow">v1.1.1 · MIT · no dependencies</p>
         <h1 class="name">Chapbook</h1>
         <p class="intro">A small CSS system for documents that want to read like documents. Monospace carries structure, a second face carries language, and separation comes from rules and space rather than from cards.</p>
         <p class="aside"><b>This page is the specimen.</b> It is set in the system it documents, using the same stylesheet you are invited to take &mdash; so every component below is the real implementation rather than a picture of one. The theme toggle is real. So is the print stylesheet &mdash; <b>press print and read the result</b>, because paper is a target here rather than a courtesy. Change the skin in section 03 and watch nothing structural move.</p>
@@ -176,8 +176,8 @@
             </article>
             <article class="rule">
               <p class="rule-n">Rule 05</p>
-              <h3 class="rule-title">One row anatomy, everywhere</h3>
-              <p class="rule-body">Mono label left, title in the display face, mark right, then an optional description and a mono line carrying the destination. The whole row is the link and the mark is decorative. On hover the hairline redraws in ink from the left and the mark nudges up and right. Use <b>&#8599;</b> for a destination that leaves the site and <b>&#8594;</b> for one that does not, so the mark keeps meaning something.</p>
+              <h3 class="rule-title">One row anatomy, and the row is a link</h3>
+              <p class="rule-body">Mono label left, title in the display face, mark right, then an optional description and a mono line carrying the destination. The whole row is the link and the mark is decorative. On hover the hairline redraws in ink from the left and the mark nudges up and right. Use <b>&#8599;</b> for a destination that leaves the site and <b>&#8594;</b> for one that does not, so the mark keeps meaning something. The rule governs <em>this</em> row &mdash; the one that navigates. A repeated block that does not link is a different object and does not owe it an anatomy.</p>
               <p class="rule-spec">rules bleed 0.75rem past the text so the hover fill has somewhere to sit</p>
             </article>
             <article class="rule">
@@ -576,8 +576,8 @@
         <div class="body">
           <p class="lede">There is no install step, no package to configure and nothing to initialise. Link one file and use the class names.</p>
 
-          <pre class="code">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://chapbook.page/v1.1.0/chapbook.css&quot;&gt;</pre>
-          <p class="small">Two version paths, and they are not the same promise. <code>/v1.1.0/</code> is exact: it never changes, and it is cached for a year. <code>/v1/</code> follows the major line and picks up additive releases, cached for a day. Link the exact one unless you specifically want the updates.</p>
+          <pre class="code">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://chapbook.page/v1.1.1/chapbook.css&quot;&gt;</pre>
+          <p class="small">Two version paths, and they are not the same promise. <code>/v1.1.1/</code> is exact: it never changes, and it is cached for a year. <code>/v1/</code> follows the major line and picks up additive releases, cached for a day. Link the exact one unless you specifically want the updates.</p>
 
           <p class="label footnote">Or vendor it, which is better</p>
           <pre class="code">curl -O https://chapbook.page/chapbook.css</pre>
@@ -694,7 +694,7 @@
           <h2>Version</h2>
         </div>
         <div class="body">
-          <p class="lede">The <em>system</em> carries the version, not the site. <code>/v1.1.0/</code> never changes, so a page that links it never breaks.</p>
+          <p class="lede">The <em>system</em> carries the version, not the site. <code>/v1.1.1/</code> never changes, so a page that links it never breaks.</p>
 
           <p class="small">One rule decides a major bump: <b>a token rename or a removed primitive</b>. Those are the only two changes that can break a site downstream &mdash; everything else is additive, and additions ship as a minor version at the same URL.</p>
 
@@ -705,7 +705,7 @@
           <nav class="index" aria-label="Version">
 
             <a class="row" href="https://github.com/aarontaylor-dev/chapbook/blob/main/CHANGELOG.md" rel="noopener">
-              <span class="row-label">v1.1.0</span>
+              <span class="row-label">v1.1.1</span>
               <span class="row-title">Changelog</span>
               <span class="row-mark" aria-hidden="true">&#8599;</span>
               <span class="row-desc">What changed, when, and the reasoning that produced it.</span>
@@ -718,7 +718,7 @@
 
     <footer class="wrap">
       <div class="foot">
-        <b>chapbook v1.1.0</b>
+        <b>chapbook v1.1.1</b>
         <span>MIT. Take it, change it, do not credit me. <a href="/colophon">Colophon</a>.</span>
       </div>
     </footer>

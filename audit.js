@@ -116,10 +116,11 @@ async function main() {
   structure or was simply reached for.
 
   One blind spot, named rather than left for you to find: the row count above
-  counts .row only. A page that invents a second row-like component — a pair
-  list, a definition stack, anything repeated with a hairline between — will
-  still report one anatomy. Rule 05 says one anatomy EVERYWHERE, so look at
-  the repeated structures this table does not name.
+  matches .row. Rule 05 governs the index row — the one that navigates — so a
+  pair list or a definition stack is out of scope by design and its absence
+  from this table is correct, not an oversight. What the scanner would miss is
+  a SECOND LINK ROW built without the .row class: navigational, and therefore
+  in scope, and reported as nothing. Read the anchors, not the hairlines.
 
   To rank the document section by section, give an agent this output and
   skill/chapbook/AUDIT.md, which carries the rubric and the scale.

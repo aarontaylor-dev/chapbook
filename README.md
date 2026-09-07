@@ -85,7 +85,8 @@ The rules are the system; the CSS is only their implementation.
 3. **Two weights of rule.** 1px separates peers; 2px opens and closes the
    document. Never a third.
 4. **The numbered rail.** Sticky left column, content on the right.
-5. **One row anatomy, everywhere.**
+5. **One row anatomy, and the row is a link.** It governs the index row;
+   a non-interactive repeated block is a different object.
 6. **Tokens declared three times**, so system-default, explicit light and
    explicit dark all resolve.
 7. **Contrast is measured, and the measurement is written down** — against the

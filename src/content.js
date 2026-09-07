@@ -11,7 +11,7 @@ export const site = {
   repo: 'https://github.com/aarontaylor-dev/chapbook',
   title: 'Chapbook',
   brand: 'chapbook',
-  version: '1.1.0',
+  version: '1.1.1',
   /* Alt text for the social card. Networks surface this, and so do readers
      who never see the image — so it describes the system, not the picture. */
   cardAlt:
@@ -99,8 +99,8 @@ export const rules = [
   },
   {
     n: 5,
-    title: 'One row anatomy, everywhere',
-    body: 'Mono label left, title in the display face, mark right, then an optional description and a mono line carrying the destination. The whole row is the link and the mark is decorative. On hover the hairline redraws in ink from the left and the mark nudges up and right. Use <b>&#8599;</b> for a destination that leaves the site and <b>&#8594;</b> for one that does not, so the mark keeps meaning something.',
+    title: 'One row anatomy, and the row is a link',
+    body: 'Mono label left, title in the display face, mark right, then an optional description and a mono line carrying the destination. The whole row is the link and the mark is decorative. On hover the hairline redraws in ink from the left and the mark nudges up and right. Use <b>&#8599;</b> for a destination that leaves the site and <b>&#8594;</b> for one that does not, so the mark keeps meaning something. The rule governs <em>this</em> row &mdash; the one that navigates. A repeated block that does not link is a different object and does not owe it an anatomy.',
     spec: 'rules bleed 0.75rem past the text so the hover fill has somewhere to sit',
   },
   {
