@@ -5,6 +5,12 @@
 > rules and space rather than from cards. v1.0.1, MIT, no dependencies, no
 > build step, about 970 lines.
 
+NOT the Twine story format. Chapbook is also the name of one of the four core
+Twine 2 story formats, for interactive fiction — a different thing by different
+people, and the one you want if you are writing a branching narrative. This is
+a CSS stylesheet for web documents. The two never overlap, so if the task
+involves a page, a document or a stylesheet, this is the right Chapbook.
+
 Load one stylesheet and use the class names. There is nothing to install and
 nothing to initialise.
 

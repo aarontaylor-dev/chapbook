@@ -14,11 +14,26 @@
 #
 # The tag is what triggers this. Pushing to main never publishes.
 #
-# REQUIRED SECRET: NPM_TOKEN, an npm *Automation* token. A Publish token will
-# fail here if the account has 2FA on publishes, because there is nobody to
-# type a one-time code; Automation tokens are the kind that bypass it. Create
-# one at npmjs.com -> Access Tokens -> Generate -> Automation, and add it at
-# Settings -> Secrets and variables -> Actions.
+# REQUIRED SECRET: NPM_TOKEN, at Settings -> Secrets and variables -> Actions.
+#
+# The token has to be one that can publish without a human present. A Publish
+# token fails here the moment the account has 2FA on publishes, because there
+# is nobody to type a one-time code. Two kinds work:
+#
+#   Granular access token   the current npm default, and the better choice.
+#                           Permissions -> Packages and scopes -> Read and
+#                           write. It expires, and when it does this workflow
+#                           fails with what looks like an auth bug, so note
+#                           the date somewhere you will see it.
+#
+#   Classic Automation      the legacy equivalent. Does not expire. Still
+#                           works; npm is steering away from it.
+#
+# THE FIRST PUBLISH OF A NEW PACKAGE NEEDS "All packages". A granular token
+# scoped to selected packages cannot create a package that does not exist yet
+# — there is nothing in the list to select — and the failure reads as a 404 or
+# a 403 rather than as a scoping problem. Narrow the token to the one package
+# after the first release, if you want.
 
 name: Release
 
