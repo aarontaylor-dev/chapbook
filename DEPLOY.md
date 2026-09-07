@@ -264,18 +264,38 @@ produced by a trusted CI system with an OIDC identity, which is why
 
 ### One-time setup
 
-1. **Create an npm Automation token.** npmjs.com → Access Tokens → Generate →
-   **Automation**.
+**There is no secret to configure.** Publishing is authenticated by OpenID
+Connect: npm trusts this repository and this workflow filename, and mints a
+short-lived credential for the length of the run. Nothing to store, rotate,
+leak or let expire.
 
-   It must be Automation rather than Publish. A Publish token still prompts for
-   a one-time code when the account has 2FA on publishes, and there is nobody
-   in CI to type one.
+The trust lives on the package rather than in this repository: npmjs.com →
+chapbook → Settings → **Trusted Publisher** → GitHub Actions, naming the
+organisation, the repository and the workflow **filename**. Renaming
+`release.yml` stops publishing until that connection is updated to match, which
+is the one non-obvious way to break it.
 
-2. **Add it as a repository secret** named `NPM_TOKEN`, at Settings → Secrets
-   and variables → Actions → New repository secret.
+`Allow npm publish` is enabled on the connection, so a tag publishes on its
+own. Leaving it off is the stricter posture: the workflow would be limited to
+`npm stage publish` and a human would promote the release from npm's Staged
+Packages page.
 
-That is the whole setup. Nothing else needs configuring, and the token is the
-only secret this repository has.
+### How the package came to exist
+
+Worth recording, because it cost an afternoon and the reason is not
+discoverable from the outside.
+
+npm cannot add a trusted publisher to a package that does not yet exist, and by
+September 2026 no token npm still issues could create one either: classic
+tokens had been removed from both the website and the CLI, and a granular token
+resolves "all packages" to the packages you already own — so it cannot claim a
+new **unscoped** name. Publishing also requires 2FA on the account, or a
+granular token with bypass-2FA.
+
+So `chapbook@0.0.0` was published by hand, purely to create the package, and is
+deprecated on the registry. Every release since has gone out through CI with
+provenance. If this package is ever recreated from scratch, that placeholder
+step is unavoidable and comes first.
 
 ### Releasing
 
