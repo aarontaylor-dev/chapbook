@@ -244,6 +244,43 @@ npm view chapbook dist.attestations
 The package page at <https://www.npmjs.com/package/chapbook> should
 show a **Provenance** panel naming this repository and the building commit.
 
+## The first push did not deploy, and why
+
+Immediately after the project was created the dashboard showed **"This project
+is disconnected from your Git account."** The settings page contradicted it:
+the repository was attached, automatic deployments were enabled, and the first
+build had run from the repo without trouble.
+
+The banner was right and the settings page was misleading. A push to `main`
+produced no deployment at all — confirmed by polling the live page for four
+minutes and by the deployments list, which still showed only the build from
+project creation.
+
+**The cause was the GitHub App's repository scope, not a broken connection.**
+The Cloudflare Workers and Pages app is installed with **Only select
+repositories**, and `chapbook` was not one of them.
+
+The confusing part is why it half-worked. That setting carries the note *"Also
+includes public repositories (read-only)"*, and this repo is public — so
+Cloudflare could list it in the create-project flow and clone it for the first
+build. What read-only access does **not** give is the push webhook. Hence a
+project that builds once, on demand, and then never again.
+
+The fix is one checkbox:
+
+```txt
+github.com/settings/installations
+  -> Cloudflare Workers and Pages -> Configure
+  -> Only select repositories -> add aarontaylor-dev/chapbook
+  -> Save
+```
+
+The `aarontaylor.me` deploy notes already warned that the Save button is easy
+to miss. The sharper lesson is the one above it: **a public repository will
+appear in the Pages create flow whether or not the app has been granted it**,
+and the first build will succeed either way. Do not treat a successful first
+deployment as proof that the integration is wired up. Push something and watch.
+
 ## Continuous integration
 
 `.github/workflows/build.yml` runs on every push to `main` and every pull
@@ -269,13 +306,6 @@ back — publish a patch instead.
 
 ## Known loose ends
 
-- **The dashboard shows "This project is disconnected from your Git account".**
-  It appeared immediately after the project was created and may be spurious:
-  the repository is attached, the settings page shows
-  `aarontaylor-dev/chapbook`, automatic deployments are enabled, and the first
-  build ran from the repo without trouble. The honest test is whether a push
-  to `main` triggers a deployment on its own. If it does not, reconnect at
-  Settings → Build → Git repository.
 - **`style.aarontaylor.me` is not set up.** Canonical is `chapbook.page`.
   Whether the personal-site route becomes a redirect here, or a page of its
   own, is undecided. It is a `CNAME` plus a redirect rule on the
