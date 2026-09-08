@@ -59,9 +59,23 @@ jobs:
         run: |
           # Not named "status": that is read-only in zsh, and this snippet is
           # worth being able to paste into a local shell.
+
+          # src/content.js, because that is the file build.js names the frozen
+          # directory from. This read package.json — a different file asked the
+          # same question, correct only for as long as the two agreed, and
+          # nothing checked that they did. build.js refuses to run when they
+          # disagree now, but a check should read the source rather than a copy
+          # that happens to match it. Hoisted out of the loop, which ran it
+          # once per file to get the same answer three times.
+          version=$(node -e "import('./src/content.js').then(m => process.stdout.write(m.site.version))")
+          if [ -z "$version" ]; then
+            echo "::error::could not read site.version from src/content.js"
+            exit 1
+          fi
+
           failed=0
           for f in chapbook.css chapbook-skins.css chapbook-theme.js; do
-            for dir in public "public/v1" "public/v$(node -p "require('./package.json').version")"; do
+            for dir in public "public/v1" "public/v$version"; do
               if ! cmp -s "$f" "$dir/$f"; then
                 echo "::error::$dir/$f differs from $f"
                 failed=1
