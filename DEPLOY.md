@@ -133,7 +133,8 @@ the apex. It went **Active** in under two minutes.
 ```bash
 curl -sS -o /dev/null -w "site    %{http_code}\n" https://chapbook.page/
 curl -sS -o /dev/null -w "css     %{http_code}\n" https://chapbook.page/chapbook.css
-curl -sS -o /dev/null -w "current %{http_code}\n" https://chapbook.page/v1.2.1/chapbook.css
+curl -sS -o /dev/null -w "current %{http_code}\n" https://chapbook.page/v1.2.2/chapbook.css
+curl -sS -o /dev/null -w "v1.2.1  %{http_code}\n" https://chapbook.page/v1.2.1/chapbook.css
 curl -sS -o /dev/null -w "v1.2.0  %{http_code}\n" https://chapbook.page/v1.2.0/chapbook.css
 curl -sS -o /dev/null -w "v1.1.1  %{http_code}\n" https://chapbook.page/v1.1.1/chapbook.css
 curl -sS -o /dev/null -w "v1.1.0  %{http_code}\n" https://chapbook.page/v1.1.0/chapbook.css
@@ -431,7 +432,7 @@ request. It is the same build, and it enforces three things:
   deploy works whether or not the build has run — an invariant that only holds
   if what is committed matches what the build produces. A dirty tree after
   `node build.js` means someone edited a source file and did not rebuild.
-- **The current frozen directory matches its source.** `/v1.2.1/` is written
+- **The current frozen directory matches its source.** `/v1.2.2/` is written
   by the build from the working copy and is served `immutable` for a year; it
   had better be what it claims to be.
 - **Every older frozen directory is byte-for-byte unchanged.** `/v1.0.0/` is a

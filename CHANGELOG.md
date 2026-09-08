@@ -13,6 +13,73 @@ section is published *as part of* the release above it, where it reads as a
 promise the tarball does not keep. Work that is queued rather than shipped
 belongs in an issue.
 
+## 1.2.2 — 8 September 2026
+
+The stylesheet's own header said v1.0.1 for three releases. Correcting it is
+the whole of the product change — one line of a comment, no rule, no token, no
+primitive — and it could not be corrected without cutting this release, because
+a shipped file cannot move while its version is tagged. Everything else here
+is the machinery that let a version string rot in the open, and the reason it
+could.
+
+### The spec now says which of its claims are measured
+
+Rule 04 says `align-self: start` is required and names what happens when it
+goes: the rail silently stops moving. The reset in `.body` fails in exactly
+that way and the spec never mentioned it. `:is()` takes the specificity of its
+most specific argument and outranks the rhythm rule where `:where()` ties and
+loses on source order, so swapping one for the other collapses every gap in the
+column to zero, in every engine, with no console warning.
+
+This was measured rather than assumed. Three readers given the spec as it stood
+and asked to review that swap: one of the three would have merged it.
+
+The second finding was the opposite one, and it is the more useful half. All
+three refused a harmless `--grain` change, because "Lower `--grain` in dark"
+sits in the skin checklist as an imperative with nothing marking it a
+preference. One of them refused on a genuinely good argument — raising dark
+grain moves the worst-case pixel, so the documented dark ratios go stale —
+which is a reason to re-measure and not a reason to say no. A specification
+that cannot tell a measurement from a judgement does not only let bad changes
+through. It makes a careful reader refuse changes that were always free,
+confidently, and for reasons that sound right.
+
+So the palette ratios are now written down as measurements taken against one
+`--paper` on one date and re-measured rather than carried, and the grain split
+is named as the untested judgement it is.
+
+An earlier draft marked every claim with a formal witness — measured,
+judgement, carried, rejected — in the manner of a critical apparatus. It scored
+no better than plain sentences carrying the same facts, so the facts shipped
+and the notation did not.
+
+### The version is checked now
+
+Five files name it and nothing read any of them, which is how three of them
+came to sit a year behind while the build measured every colour token to two
+decimal places. `build.js` fails when `package.json`, `public/system.md`'s
+heading or the skill's frontmatter disagree with `src/content.js`, which is the
+source because it is what names the frozen directory.
+
+`chapbook.css` is checked only while the version is unreleased. Once the tag
+exists the header cannot be corrected without a bump, so failing on it then
+would be a build nobody could make pass. This release is the moment that check
+was waiting for.
+
+### The freeze guard had never run in CI
+
+It refuses to rewrite a release that is already tagged and published, and it
+asks git which versions are tagged. `actions/checkout` fetches no tags, so
+every version looked new and the check quietly skipped — for three releases, on
+the two paths where rewriting a published file actually matters. It failed
+open, which is why nothing broke and nothing said so. `build.yml` and
+`release.yml` now fetch tags, as `release-drift.yml` already did.
+
+The frozen-copy check in `build.yml` also built its directory name from
+`package.json` while `build.js` names that directory from `src/content.js` —
+two files asked the same question, correct only for as long as they agreed, and
+nothing verified that they did. It reads the source now.
+
 ## 1.2.1 — 7 September 2026
 
 Release plumbing only. `chapbook.css`, `chapbook-skins.css` and
