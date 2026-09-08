@@ -1,4 +1,4 @@
-# Chapbook v1.2.1
+# Chapbook v1.2.2
 
 A small CSS system for documents that want to read like documents.
 
@@ -7,9 +7,9 @@ comes from rules and space rather than from cards.**
 
 MIT. Take it, change it, no credit needed.
 
-- Stylesheet: <https://chapbook.page/v1.2.1/chapbook.css>
-- Skins: <https://chapbook.page/v1.2.1/chapbook-skins.css>
-- Theme bootstrap: <https://chapbook.page/v1.2.1/chapbook-theme.js>
+- Stylesheet: <https://chapbook.page/v1.2.2/chapbook.css>
+- Skins: <https://chapbook.page/v1.2.2/chapbook-skins.css>
+- Theme bootstrap: <https://chapbook.page/v1.2.2/chapbook-theme.js>
 - Specimen: <https://chapbook.page>
 - Source: <https://github.com/aarontaylor-dev/chapbook>
 
@@ -405,7 +405,7 @@ sentence from a link that *is* a component.
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>A page</title>
-  <link rel="stylesheet" href="https://chapbook.page/v1.2.1/chapbook.css">
+  <link rel="stylesheet" href="https://chapbook.page/v1.2.2/chapbook.css">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -530,7 +530,7 @@ rule that quietly stopped being followed.
 
 ## Versioning
 
-- `/v1.2.1/` — exact. Never changes. Cached for a year. Older exact paths stay
+- `/v1.2.2/` — exact. Never changes. Cached for a year. Older exact paths stay
   served forever, unchanged.
 - `/v1/` — the major line. Picks up additive releases. Cached for a day.
 - A **token rename or a removed primitive** bumps the major. Those are the

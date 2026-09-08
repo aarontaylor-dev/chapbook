@@ -14,7 +14,7 @@ MIT. Take it, change it, no credit needed.
 ## Use it
 
 ```html
-<link rel="stylesheet" href="https://chapbook.page/v1.2.1/chapbook.css">
+<link rel="stylesheet" href="https://chapbook.page/v1.2.2/chapbook.css">
 ```
 
 Or vendor it, which is better — one request less, it survives this domain
@@ -152,8 +152,8 @@ node build.js
 ```
 
 ```txt
-  system   v1.2.1
-  size     chapbook.css 1314 lines  skins 130  theme 62
+  system   v1.2.2  released — the stylesheet header is frozen
+  size     chapbook.css 1327 lines  skins 130  theme 62
   measure  neutral light surface #f5f5f5  tightest 5.27:1  sunk 1.07:1  AA
   measure  neutral dark  surface #161616  tightest 5.24:1  sunk 1.07:1  AA
   measure  green   light surface #fbfaf7  tightest 4.97:1  sunk 1.09:1  AA
@@ -189,7 +189,7 @@ public/                 the deployed site
   system.md             the specification — hand-written
   llms.txt              the short brief for agents — hand-written
   specimen.css          the specimen's own CSS, and nothing else's
-  v1/  v1.0.0/ … v1.2.1/ frozen copies, written by the build
+  v1/  v1.0.0/ … v1.2.2/ frozen copies, written by the build
 ```
 
 Generated files are committed, so a deploy or a local static server works
@@ -207,7 +207,7 @@ the CSP is only exercised on Pages.
 
 ## Versioning
 
-- `/v1.2.1/` — exact. Never changes. Cached for a year, and the build now
+- `/v1.2.2/` — exact. Never changes. Cached for a year, and the build now
   **proves** it: editing a shipped file without a version bump fails the build.
 - `/v1/` — the major line. Picks up additive releases. Cached for a day.
 
