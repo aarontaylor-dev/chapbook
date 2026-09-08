@@ -3,7 +3,7 @@ name: chapbook
 description: Build or review a web page in the Chapbook — monospace carries structure, a second face carries language, and separation comes from rules and space rather than from cards.
 license: MIT
 metadata:
-  version: "1.0.1"
+  version: "1.2.1"
   source: https://chapbook.page
 ---
 
@@ -81,7 +81,7 @@ headings. If you write a print block without those three, the build fails.
 ## How to build a page
 
 1. **Link the stylesheet and nothing else.**
-   `https://chapbook.page/v1.2.0/chapbook.css`, or vendor the file.
+   `https://chapbook.page/v1.2.1/chapbook.css`, or vendor the file.
 2. **Use only the documented classes.** They are listed in `system.md` and the
    list is exhaustive. An invented class name is the first sign of a fork.
 3. **Structure before colour.** Masthead, hero, numbered blocks, index rows,
