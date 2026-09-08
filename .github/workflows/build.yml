@@ -24,6 +24,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          # build.js asks git which versions are tagged, and answers that
+          # question two ways: the freeze guard refuses to rewrite a published
+          # release, and the version check reads the stylesheet's own header
+          # only while a release can still be corrected. The default checkout
+          # fetches no tags, so every version looked unreleased and the freeze
+          # guard has never actually run here. release-drift.yml already knew.
+          fetch-depth: 0
 
       - uses: actions/setup-node@v7
         with:

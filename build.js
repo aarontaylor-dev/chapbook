@@ -208,12 +208,21 @@ function readPalettes(baseCss, skinCss) {
    exactly when it can be fixed, and therefore when it must be.
    ------------------------------------------------------------------------ */
 
-function tagExists(tag) {
+function knownTags() {
   try {
-    return execFileSync('git', ['tag', '-l', tag], { cwd: root, encoding: 'utf8' }).trim() !== '';
+    /* stderr ignored: outside a repository git is loud about it, and the
+       empty list below is already the answer. */
+    return execFileSync('git', ['tag', '-l'], {
+      cwd: root,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    })
+      .split('\n')
+      .map((t) => t.trim())
+      .filter(Boolean);
   } catch {
-    /* No git, no tags, or a shallow clone with none fetched. */
-    return false;
+    /* No git, or not a repository at all. */
+    return [];
   }
 }
 
@@ -223,10 +232,10 @@ const VERSION_SITES = [
   { file: 'skill/chapbook/SKILL.md', re: /^\s*version:\s*"([^"]+)"/m },
 ];
 
-async function checkVersions(version, released) {
-  const sites = released
-    ? VERSION_SITES
-    : VERSION_SITES.concat({ file: 'chapbook.css', re: /^ \* Chapbook — v(\S+)/m });
+async function checkVersions(version, checkStylesheet) {
+  const sites = checkStylesheet
+    ? VERSION_SITES.concat({ file: 'chapbook.css', re: /^ \* Chapbook — v(\S+)/m })
+    : VERSION_SITES;
 
   const problems = [];
   for (const where of sites) {
@@ -265,10 +274,23 @@ async function main() {
 
   const { palettes, problems } = readPalettes(baseCss, skinCss);
 
-  /* Cheap, and it runs before anything else is reported, because a build
-     that publishes the wrong version number in its own documentation is
-     wrong in a way no contrast measurement will catch. */
-  problems.push(...(await checkVersions(site.version, tagExists(`v${site.version}`))));
+  /* Tag state has three answers and not two, and the difference is
+     load-bearing. A clone with no tags fetched — which is what
+     actions/checkout gives by default — reports every version as untagged.
+     Read as "unreleased" that makes the stylesheet check STRICTER in the
+     environment that knows least, and fails a build nobody can fix from what
+     is in front of them. So absence is believed only when some tag is present
+     to prove tags were fetched at all. The freeze guard below fails open for
+     the same reason, and for three versions it did so in CI without anyone
+     noticing, because there were never any tags for it to find. */
+  const tags = knownTags();
+  const released = tags.includes(`v${site.version}`);
+  const checkStylesheet = tags.length > 0 && !released;
+
+  /* Runs before anything else is reported, because a build that publishes the
+     wrong version in its own documentation is wrong in a way no contrast
+     measurement will catch. */
+  problems.push(...(await checkVersions(site.version, checkStylesheet)));
 
   /* Job 2, the static half. Rules 01, 02, 03 and 09 read the shipped CSS the
      same way the audit reads the palette, and fail the build the same way. */
@@ -288,7 +310,14 @@ async function main() {
   if (cardInfo.problem) problems.push(cardInfo.problem);
   const og = cardInfo.width ? { ...cardInfo, alt: site.cardAlt } : null;
 
-  console.log(`  system   v${site.version}`);
+  console.log(
+    `  system   v${site.version}  ` +
+      (checkStylesheet
+        ? 'unreleased — the stylesheet header is checked'
+        : released
+          ? 'released — the stylesheet header is frozen'
+          : 'no tags fetched — the stylesheet header is not checked')
+  );
   /* Printed rather than asserted. The header tells a reader the file is about
      900 lines and asks them to read all of them, so the number is a promise
      and it should be visible on every build rather than checked once. */
@@ -380,7 +409,6 @@ async function main() {
    * fails because it could not find git would be worse than one that misses a
    * rewrite.
    */
-  const released = tagExists(exact);
 
   const frozenDrift = [];
   for (const file of released ? SHIPPED : []) {
