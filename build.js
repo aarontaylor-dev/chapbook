@@ -190,6 +190,62 @@ function readPalettes(baseCss, skinCss) {
   return { palettes, problems };
 }
 
+/* ========================================================================
+   VERSION AGREEMENT
+   ========================================================================
+   Five files name the version and nothing read any of them, which is how the
+   stylesheet header, system.md's title and the skill's frontmatter came to sit
+   three releases behind while package.json, content.js, the changelog and the
+   site all agreed. Drift here is invisible rather than broken, so it survives
+   every other check in this file and is found by a reader instead.
+
+   src/content.js is the source. It is what the build prints and what the
+   frozen directory is named after.
+
+   chapbook.css is checked ONLY while the version is unreleased. Once the tag
+   exists the file is frozen, the header cannot be corrected without a bump,
+   and failing on it would be a build nobody can make pass. Before the tag is
+   exactly when it can be fixed, and therefore when it must be.
+   ------------------------------------------------------------------------ */
+
+function tagExists(tag) {
+  try {
+    return execFileSync('git', ['tag', '-l', tag], { cwd: root, encoding: 'utf8' }).trim() !== '';
+  } catch {
+    /* No git, no tags, or a shallow clone with none fetched. */
+    return false;
+  }
+}
+
+const VERSION_SITES = [
+  { file: 'package.json', re: /"version":\s*"([^"]+)"/ },
+  { file: 'public/system.md', re: /^# Chapbook v(\S+)/m },
+  { file: 'skill/chapbook/SKILL.md', re: /^\s*version:\s*"([^"]+)"/m },
+];
+
+async function checkVersions(version, released) {
+  const sites = released
+    ? VERSION_SITES
+    : VERSION_SITES.concat({ file: 'chapbook.css', re: /^ \* Chapbook — v(\S+)/m });
+
+  const problems = [];
+  for (const where of sites) {
+    let text;
+    try {
+      text = await readFile(p(where.file), 'utf8');
+    } catch {
+      problems.push(`${where.file}: missing, and it names the version`);
+      continue;
+    }
+    const found = text.match(where.re)?.[1];
+    if (!found) problems.push(`${where.file}: no version string where one is expected`);
+    else if (found !== version) {
+      problems.push(`${where.file}: says ${found}, src/content.js says ${version}`);
+    }
+  }
+  return problems;
+}
+
 /* ----------------------------------------------------------------- build -- */
 
 async function main() {
@@ -208,6 +264,11 @@ async function main() {
   const themeInline = themeScript.replace(/^\/\*[\s\S]*?\*\/\s*/, '');
 
   const { palettes, problems } = readPalettes(baseCss, skinCss);
+
+  /* Cheap, and it runs before anything else is reported, because a build
+     that publishes the wrong version number in its own documentation is
+     wrong in a way no contrast measurement will catch. */
+  problems.push(...(await checkVersions(site.version, tagExists(`v${site.version}`))));
 
   /* Job 2, the static half. Rules 01, 02, 03 and 09 read the shipped CSS the
      same way the audit reads the palette, and fail the build the same way. */
@@ -319,12 +380,7 @@ async function main() {
    * fails because it could not find git would be worse than one that misses a
    * rewrite.
    */
-  let released = false;
-  try {
-    released = execFileSync('git', ['tag', '-l', exact], { cwd: root, encoding: 'utf8' }).trim() !== '';
-  } catch {
-    /* No git, no tags, or a shallow clone with none fetched. */
-  }
+  const released = tagExists(exact);
 
   const frozenDrift = [];
   for (const file of released ? SHIPPED : []) {
