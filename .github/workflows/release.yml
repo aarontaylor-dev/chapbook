@@ -65,6 +65,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          # Tags, so build.js's freeze guard can see that this version is
+          # published and refuse to rewrite it. Without them it fails open
+          # on the one path where rewriting a release actually matters.
+          fetch-depth: 0
 
       # v7 matters here rather than being merely current: it removed the dummy
       # NODE_AUTH_TOKEN export that earlier versions wrote into .npmrc. That
