@@ -1,0 +1,15 @@
+{
+  "name": "chapbook-apparatus-eval",
+  "private": true,
+  "type": "module",
+  "description": "Pilot eval for the generation-first apparatus question. Kept out of the root package so the published system stays dependency-free.",
+  "scripts": {
+    "validate": "node validate.js",
+    "dry": "node run.js --dry-run",
+    "run": "node run.js",
+    "report": "node report.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.70.0"
+  }
+}

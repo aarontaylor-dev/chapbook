@@ -20,3 +20,6 @@ node_modules/
 # Copied from public/ at pack time by scripts/sync-dist.js
 /system.md
 /llms.txt
+
+# Eval run output. node_modules/ is already covered above.
+evals/apparatus/runs/
