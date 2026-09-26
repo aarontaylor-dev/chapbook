@@ -187,10 +187,14 @@ So `www` is a proxied `CNAME` to the apex, and a redirect rule sends it there:
 ```txt
 DNS     www   CNAME   chapbook.page          Proxied
 Rule    www to apex
-        match    URI Full wildcard  "https://www.*"
-        action   301 -> https://${1}
+        match    URI Full wildcard  "http*://www.*"
+        action   301 -> https://${2}
         preserve query string
 ```
+
+The first `*` takes the optional `s`, so `${2}` is the host and path. Cloudflare
+refuses a pattern that does not start with a protocol, so `*://www.*` is not
+an option.
 
 301 rather than 302: this canonicalisation is genuinely permanent, which is
 the distinction the apex notes draw. Reserve 302 for a redirect you expect to
@@ -209,6 +213,36 @@ https://www.chapbook.page/                   301 -> https://chapbook.page/
 https://www.chapbook.page/system.md          301 -> https://chapbook.page/system.md
 https://www.chapbook.page/llms.txt?ref=test  301 -> https://chapbook.page/llms.txt?ref=test
 ```
+
+### http://www served a 522 until 26 September 2026
+
+The rule originally matched `"https://www.*"` only. A plain-HTTP request to
+`www` matched nothing, went on to the origin, and got a Cloudflare **522** —
+found by the monthly four-sites check. Nothing at the zone upgrades HTTP to
+HTTPS before the rules run; if it did, the request would have been upgraded
+rather than timing out.
+
+No browser ever saw it: `.page` is on the HSTS preload list, so browsers
+upgrade to HTTPS before sending anything. `curl`, crawlers and other clients
+that ignore preload did. The HTTPS verification above could not have caught it,
+because it only asked about HTTPS.
+
+Widened to `"http*://www.*"` the same day, so both schemes take a single 301 to
+the apex. Verified over four rounds:
+
+```txt
+http://www.chapbook.page/                    301 -> https://chapbook.page/
+http://www.chapbook.page/system.md           301 -> https://chapbook.page/system.md
+http://www.chapbook.page/llms.txt?ref=test   301 -> https://chapbook.page/llms.txt?ref=test
+http://www.chapbook.page/v1/chapbook.css     301 -> https://chapbook.page/v1/chapbook.css
+https://www.chapbook.page/…                  unchanged, as above
+```
+
+The deploy showed the same stale *may not apply to your traffic* warning, this
+time for `http`, and *Ignore and deploy rule anyway* was correct again.
+
+**When verifying a redirect, ask about every scheme it should handle**, not
+only the one visitors use.
 
 ## Mail: a domain that receives but never sends
 
